@@ -134,19 +134,34 @@ class ActionlogsTransformer
         }
 
         $file_url = '';
+        $inline_file_url = '';
         if($actionlog->filename!='') {
             if ($actionlog->action_type == 'accepted') {
                 $file_url = route('log.storedeula.download', ['filename' => $actionlog->filename]);
             } else {
                 if ($actionlog->item) {
+                    // TODO: Various private_uploads/* paths should probably be constants or known by the model
+                    // TODO: This area repeats itself a lot, can this be simplified more like filestable.blade.php does?
                     if ($actionlog->itemType() == 'asset') {
                         $file_url = route('show/assetfile', ['asset' => $actionlog->item->id, 'fileId' => $actionlog->id]);
+                        if (StorageHelper::allowSafeInline("private_uploads/assets/".$actionlog->filename)) {
+                            $inline_file_url = route('show/assetfile', ['asset' => $actionlog->item->id, 'fileId' => $actionlog->id, 'inline' => 'true']) ;
+                        }
                     } elseif ($actionlog->itemType() == 'accessory') {
                         $file_url = route('show.accessoryfile', ['accessoryId' => $actionlog->item->id, 'fileId' => $actionlog->id]);
+                        if (StorageHelper::allowSafeInline("private_uploads/accessories/".$actionlog->filename)) {
+                            $inline_file_url = route('show.accessoryfile', ['accessoryId' => $actionlog->item->id, 'fileId' => $actionlog->id, 'inline' => 'true']);
+                        }
                     } elseif ($actionlog->itemType() == 'license') {
                         $file_url = route('show.licensefile', ['licenseId' => $actionlog->item->id, 'fileId' => $actionlog->id]);
+                        if (StorageHelper::allowSafeInline("private_uploads/licenses/".$actionlog->filename)) {
+                            $inline_file_url = route('show.licensefile', ['licenseId' => $actionlog->item->id, 'fileId' => $actionlog->id, 'inline' => 'true']);
+                        }
                     } elseif ($actionlog->itemType() == 'user') {
                         $file_url = route('show/userfile', ['user' => $actionlog->item->id, 'fileId' => $actionlog->id]);
+                        if (StorageHelper::allowSafeInline("private_uploads/users/".$actionlog->filename)) {
+                            $inline_file_url = route('show/userfile', ['user' => $actionlog->item->id, 'fileId' => $actionlog->id, 'inline' => 'true']);
+                        }
                     }
                 }
             }
@@ -159,6 +174,7 @@ class ActionlogsTransformer
                 ?
                 [
                     'url' => $file_url,
+                    'inline_url' => $inline_file_url,
                     'filename' => $actionlog->filename,
                 ] : null,
 
