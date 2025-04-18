@@ -24,11 +24,12 @@ final class Company extends SnipeModel
 
     // Declare the rules for the model validation
     protected $rules = [
-        'name' => 'required|min:1|max:255|unique:companies,name',
-        'fax' => 'min:7|max:35|nullable',
-        'phone' => 'min:7|max:35|nullable',
-        'email' => 'email|max:150|nullable',
-        'url' => 'url|nullable|max:191'
+        'name'     => 'required|min:1|max:255|unique:companies,name',
+        'fax'      => 'min:7|max:35|nullable',
+        'phone'    => 'min:7|max:35|nullable',
+        'email'    => 'email|max:150|nullable',
+        'url'      => 'url|nullable|max:191',
+        'wikidata' => 'string|nullable|starts_with:Q'
     ];
 
     protected $presenter = \App\Presenters\CompanyPresenter::class;
@@ -50,7 +51,7 @@ final class Company extends SnipeModel
      *
      * @var array
      */
-    protected $searchableAttributes = ['name', 'phone', 'fax', 'email', 'created_at', 'updated_at'];
+    protected $searchableAttributes = ['name', 'phone', 'fax', 'email', 'created_at', 'updated_at', 'wikidata'];
 
     /**
      * The relations and their attributes that should be included when searching the model.
@@ -70,7 +71,9 @@ final class Company extends SnipeModel
         'fax',
         'email',
         'created_by',
-        'notes',
+	'notes',
+	'url',
+	'wikidata'
     ];
 
     private static function isFullMultipleCompanySupportEnabled()
