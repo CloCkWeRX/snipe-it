@@ -24,6 +24,7 @@ class CreateDepartmentsTest extends TestCase
             ->postJson(route('api.departments.store'), [
                 'name' => 'Test Department',
                 'notes' => 'Test Note',
+                'wikidata' => 'Q12345'
             ])
             ->assertOk()
             ->assertStatusMessageIs('success')
@@ -35,5 +36,6 @@ class CreateDepartmentsTest extends TestCase
         $department = Department::find($response['payload']['id']);
         $this->assertEquals('Test Department', $department->name);
         $this->assertEquals('Test Note', $department->notes);
+        $this->assertEquals('Q12345', $department->wikidata);
     }
 }
