@@ -36,6 +36,7 @@ class CreateDepartmentsTest extends TestCase
                 'name' => 'Test Department',
                 'company_id' => Company::factory()->create()->id,
                 'notes' => 'Test Note',
+                'wikidata' => 'Q12345'
             ])
             ->assertRedirect(route('departments.index'));
 
