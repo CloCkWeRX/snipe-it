@@ -23,6 +23,7 @@ class CreateManufacturerTest extends TestCase
             ->post(route('manufacturers.store'), [
                 'name' => 'Test Manufacturer',
                 'notes' => 'Test Note',
+                'wikidata' => 'Q12345'
             ])
             ->assertRedirect(route('manufacturers.index'));
 
