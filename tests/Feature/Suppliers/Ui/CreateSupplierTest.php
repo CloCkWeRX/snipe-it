@@ -13,4 +13,19 @@ class CreateSupplierTest extends TestCase
             ->get(route('suppliers.create'))
             ->assertOk();
     }
+
+    public function testUserCanCreateManufacturer()
+    {
+        $this->assertFalse(Supplier::where('name', 'Test Supplier')->exists());
+
+        $this->actingAs(User::factory()->superuser()->create())
+            ->post(route('suppliers.store'), [
+                'name' => 'Test Supplier',
+                'notes' => 'Test Note',
+                'wikidata' => 'Q12345'
+            ])
+            ->assertRedirect(route('suppliers.index'));
+
+        $this->assertTrue(Supplier::where('name', 'Test Supplier')->where('notes', 'Test Note')->exists());
+    }
 }
