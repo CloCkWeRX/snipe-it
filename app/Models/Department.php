@@ -54,10 +54,10 @@ class Department extends SnipeModel
         'location_id',
         'company_id',
         'manager_id',
-	'notes',
-	'email',
-	'url',
-	'wikidata'
+        'notes',
+        'email',
+        'url',
+        'wikidata'
     ];
 
     use Searchable;
