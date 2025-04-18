@@ -26,7 +26,8 @@ class Manufacturer extends SnipeModel
         'support_email'   => 'email|nullable',
         'support_url'   => 'nullable|starts_with:http://,https://,afp://,facetime://,irc://',
         'warranty_lookup_url' => 'nullable|starts_with:http://,https://,afp://,facetime://,irc://',
-        'support_phone' => 'min:7|max:35|nullable',
+	'support_phone' => 'min:7|max:35|nullable',
+        'wikidata' => 'string|nullable|starts_with:Q'
     ];
 
     protected $hidden = ['user_id'];
@@ -54,7 +55,8 @@ class Manufacturer extends SnipeModel
         'support_url',
         'url',
         'warranty_lookup_url',
-        'notes',
+	'notes',
+	'wikidata'
     ];
 
     use Searchable;
@@ -64,7 +66,7 @@ class Manufacturer extends SnipeModel
      *
      * @var array
      */
-    protected $searchableAttributes = ['name', 'created_at', 'notes'];
+    protected $searchableAttributes = ['name', 'created_at', 'notes', 'support_email', 'support_phone', 'wikidata'];
 
     /**
      * The relations and their attributes that should be included when searching the model.

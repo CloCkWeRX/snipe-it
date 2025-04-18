@@ -37,7 +37,8 @@ class Department extends SnipeModel
         'fax'                   => 'min:7|max:35|nullable',
         'phone'                 => 'min:7|max:35|nullable',
         'email'                 => 'email|max:150|nullable',
-        'url'                   => 'url|nullable|max:191'
+	'url'                   => 'url|nullable|max:191',
+	'wikidata'              => 'string|nullable|starts_with:Q'
     ];
 
     /**
