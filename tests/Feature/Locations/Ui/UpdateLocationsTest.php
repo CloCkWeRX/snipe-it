@@ -81,7 +81,4 @@ class UpdateLocationsTest extends TestCase
         $this->followRedirects($response)->assertSee(trans('general.error'));
         $this->assertFalse(Location::where('name', 'Test Location')->exists());
     }
-
-
-
 }

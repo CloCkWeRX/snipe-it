@@ -53,7 +53,9 @@ class Setting extends Model
     protected $rules = [
           'brand'                               => 'required|min:1|numeric',
           'thumbnail_max_h'                     => 'numeric|max:500|min:25',
-          'google_client_id'                    => 'nullable|ends_with:apps.googleusercontent.com'
+          'google_client_id'                    => 'nullable|ends_with:apps.googleusercontent.com',
+          'next_auto_tag_base'                  => 'integer|nullable|min:1',
+          'zerofill_count'                      => 'integer|nullable|min:0'
     ];
 
     protected $fillable = [
@@ -143,7 +145,7 @@ class Setting extends Model
     }
 
     /**
-     * Check wether to show in model dropdowns.
+     * Check whether to show in model dropdowns.
      *
      * @param string $element
      *
