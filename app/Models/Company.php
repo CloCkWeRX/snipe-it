@@ -26,7 +26,8 @@ final class Company extends SnipeModel
         'name' => 'required|min:1|max:255|unique:companies,name',
         'fax' => 'min:7|max:35|nullable',
         'phone' => 'min:7|max:35|nullable',
-		'email' => 'email|max:150|nullable',
+	'email' => 'email|max:150|nullable',
+	'url' => 'url|nullable|max:191'
     ];
 
     protected $presenter = \App\Presenters\CompanyPresenter::class;

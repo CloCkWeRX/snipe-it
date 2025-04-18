@@ -33,7 +33,11 @@ class Department extends SnipeModel
         'name'                  => 'required|max:255|is_unique_department',
         'location_id'           => 'numeric|nullable',
         'company_id'            => 'numeric|nullable',
-        'manager_id'            => 'numeric|nullable',
+	'manager_id'            => 'numeric|nullable',
+        'fax'                   => 'min:7|max:35|nullable',
+        'phone'                 => 'min:7|max:35|nullable',
+        'email'                 => 'email|max:150|nullable',
+        'url'                   => 'url|nullable|max:191'
     ];
 
     /**
@@ -49,7 +53,10 @@ class Department extends SnipeModel
         'location_id',
         'company_id',
         'manager_id',
-        'notes',
+	'notes',
+	'email',
+	'url',
+	'wikidata'
     ];
 
     use Searchable;
@@ -59,7 +66,7 @@ class Department extends SnipeModel
      *
      * @var array
      */
-    protected $searchableAttributes = ['name', 'notes', 'phone', 'fax'];
+    protected $searchableAttributes = ['name', 'notes', 'phone', 'fax', 'email', 'wikidata'];
 
     /**
      * The relations and their attributes that should be included when searching the model.
