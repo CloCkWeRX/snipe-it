@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Watson\Validating\ValidatingTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+
 /**
  * Model for Companies.
  *
@@ -26,8 +27,8 @@ final class Company extends SnipeModel
         'name' => 'required|min:1|max:255|unique:companies,name',
         'fax' => 'min:7|max:35|nullable',
         'phone' => 'min:7|max:35|nullable',
-	'email' => 'email|max:150|nullable',
-	'url' => 'url|nullable|max:191'
+        'email' => 'email|max:150|nullable',
+        'url' => 'url|nullable|max:191'
     ];
 
     protected $presenter = \App\Presenters\CompanyPresenter::class;
@@ -43,20 +44,20 @@ final class Company extends SnipeModel
     protected $injectUniqueIdentifier = true;
     use ValidatingTrait;
     use Searchable;
-    
+
     /**
      * The attributes that should be included when searching the model.
-     * 
+     *
      * @var array
      */
     protected $searchableAttributes = ['name', 'phone', 'fax', 'email', 'created_at', 'updated_at'];
 
     /**
      * The relations and their attributes that should be included when searching the model.
-     * 
+     *
      * @var array
      */
-    protected $searchableRelations = [];   
+    protected $searchableRelations = [];
 
     /**
      * The attributes that are mass assignable.
@@ -153,7 +154,6 @@ final class Company extends SnipeModel
                 if (!$companyable instanceof Company && !Schema::hasColumn($company_table, 'company_id')) {
                     return true;
                 }
-
             } catch (\Exception $e) {
                 Log::warning($e);
             }
@@ -161,12 +161,11 @@ final class Company extends SnipeModel
 
 
         if (auth()->user()) {
-            Log::warning('Companyable is '.$companyable);
+            Log::warning('Companyable is ' . $companyable);
             $current_user_company_id = auth()->user()->company_id;
             $companyable_company_id = $companyable->company_id;
             return $current_user_company_id == null || $current_user_company_id == $companyable_company_id || auth()->user()->isSuperUser();
         }
-
     }
 
     public static function isCurrentUserAuthorized()
@@ -291,13 +290,11 @@ final class Company extends SnipeModel
 
         // If the column exists in the table, use it to scope the query
         if ((($query) && ($query->getModel()) && (Schema::hasColumn($query->getModel()->getTable(), $column)))) {
-
             // Dynamically get the table name if it's not passed in, based on the model we're querying against
-            $table = ($table_name) ? $table_name."." : $query->getModel()->getTable().".";
+            $table = ($table_name) ? $table_name . "." : $query->getModel()->getTable() . ".";
 
-            return $query->where($table.$column, '=', $company_id);
+            return $query->where($table . $column, '=', $company_id);
         }
-
     }
 
     public function adminuser()
@@ -349,5 +346,4 @@ final class Company extends SnipeModel
     {
         return $query->leftJoin('users as admin_sort', 'companies.created_by', '=', 'admin_sort.id')->select('companies.*')->orderBy('admin_sort.first_name', $order)->orderBy('admin_sort.last_name', $order);
     }
-
 }
