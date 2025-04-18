@@ -16,8 +16,10 @@
         <input id="hidden_company_id" type="hidden" name="company_id" value="{{ Auth::user()->company_id }}">
     @endif
 
+    @include ('partials.forms.edit.email')
     @include ('partials.forms.edit.phone')
     @include ('partials.forms.edit.fax')
+    @include ('partials.forms.edit.url')
 
     <!-- Manager -->
     @include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/users/table.manager'), 'fieldname' => 'manager_id'])
