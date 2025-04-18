@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('url')->nullable();
         });
+        Schema::table('suppliers', function (Blueprint $table) {
+            $table->string('wikidata')->nullable();
+        });
     }
 
     /**
@@ -41,6 +44,9 @@ return new class extends Migration
             $table->dropColumn('wikidata');
             $table->dropColumn('email');
             $table->dropColumn('url');
+        });
+        Schema::table('suppliers', function (Blueprint $table) {
+            $table->dropColumn('wikidata');
         });
     }
 };
