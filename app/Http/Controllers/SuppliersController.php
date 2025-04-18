@@ -63,7 +63,8 @@ class SuppliersController extends Controller
         $supplier->fax = request('fax');
         $supplier->email = request('email');
         $supplier->notes = request('notes');
-        $supplier->url = $supplier->addhttp(request('url'));
+        $supplier->url = $supplier->addhttp(request('url')); // TODO: This is now redundant with UI controls?
+        $supplier->wikidata = request('wikidata');
         $supplier->created_by = auth()->id();
         $supplier = $request->handleImages($supplier);
 
@@ -109,6 +110,7 @@ class SuppliersController extends Controller
         $supplier->email = request('email');
         $supplier->url = $supplier->addhttp(request('url'));
         $supplier->notes = request('notes');
+        $supplier->wikidata = request('wikidata')
         $supplier = $request->handleImages($supplier);
 
         if ($supplier->save()) {

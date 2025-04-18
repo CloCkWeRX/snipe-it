@@ -60,7 +60,9 @@ final class CompaniesController extends Controller
         $company->phone = $request->input('phone');
         $company->fax = $request->input('fax');
         $company->email = $request->input('email');
-        $company->notes = $request->input('notes');
+	$company->notes = $request->input('notes');
+	$company->url = $request->input('url');
+	$company->wikidata = $request->input('wikidata');
         $company->created_by = auth()->id();
 
         $company = $request->handleImages($company);
@@ -103,6 +105,8 @@ final class CompaniesController extends Controller
         $company->fax = $request->input('fax');
         $company->email = $request->input('email');
         $company->notes = $request->input('notes');
+	$company->url = $request->input('url');
+	$company->wikidata = $request->input('wikidata');
 
         $company = $request->handleImages($company);
 
