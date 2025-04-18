@@ -71,9 +71,9 @@ final class Company extends SnipeModel
         'fax',
         'email',
         'created_by',
-    'notes',
-    'url',
-    'wikidata'
+        'notes',
+        'url',
+        'wikidata'
     ];
 
     private static function isFullMultipleCompanySupportEnabled()
