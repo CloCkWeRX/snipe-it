@@ -15,9 +15,7 @@ class AccessoryTest extends TestCase
     {
         $accessory = Accessory::factory()
         ->create(
-            [
-                'company_id' =>
-            Company::factory()->create()->id]
+            ['company_id' => Company::factory()->create()->id]
         );
         $this->assertInstanceOf(Company::class, $accessory->company);
     }
