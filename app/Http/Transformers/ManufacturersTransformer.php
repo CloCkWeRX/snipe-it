@@ -27,6 +27,7 @@ class ManufacturersTransformer
                 'id' => (int) $manufacturer->id,
                 'name' => e($manufacturer->name),
                 'url' => e($manufacturer->url),
+                'wikidata' => e($manufacturer->wikidata),
                 'image' =>   ($manufacturer->image) ? Storage::disk('public')->url('manufacturers/'.e($manufacturer->image)) : null,
                 'support_url' => e($manufacturer->support_url),
                 'warranty_lookup_url' => e($manufacturer->warranty_lookup_url),
