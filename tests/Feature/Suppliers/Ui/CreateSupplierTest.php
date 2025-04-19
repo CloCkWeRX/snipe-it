@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Suppliers\Ui;
 
+use App\Models\Supplier;
 use App\Models\User;
 use Tests\TestCase;
 
