@@ -49,6 +49,10 @@ class DepartmentsController extends Controller
             $departments->where('name', '=', $request->input('name'));
         }
 
+        if ($request->filled('wikidata')) {
+            $departments->where('wikidata', '=', $request->input('wikidata'));
+        }
+
         if ($request->filled('company_id')) {
             $departments->where('company_id', '=', $request->input('company_id'));
         }
