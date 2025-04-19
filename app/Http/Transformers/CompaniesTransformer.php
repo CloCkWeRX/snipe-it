@@ -17,7 +17,7 @@ class CompaniesTransformer
             $array[] = self::transformCompany($company);
         }
 
-        return (new DatatablesTransformer)->transformDatatables($array, $total);
+        return (new DatatablesTransformer())->transformDatatables($array, $total);
     }
 
     public function transformCompany(Company $company = null)
@@ -26,9 +26,11 @@ class CompaniesTransformer
             $array = [
                 'id' => (int) $company->id,
                 'name' => e($company->name),
-                'phone' => ($company->phone!='') ? e($company->phone): null,
-                'fax' => ($company->fax!='') ? e($company->fax): null,
-                'email' => ($company->email!='') ? e($company->email): null,
+                'phone' => ($company->phone != '') ? e($company->phone) : null,
+                'fax' => ($company->fax != '') ? e($company->fax) : null,
+                'email' => ($company->email != '') ? e($company->email) : null,
+                'url' => ($company->url != '') ? e($company->url) : null,
+                'wikidata' => e($company->wikidata),
                 'image' =>   ($company->image) ? Storage::disk('public')->url('companies/'.e($company->image)) : null,
                 'assets_count' => (int) $company->assets_count,
                 'licenses_count' => (int) $company->licenses_count,
