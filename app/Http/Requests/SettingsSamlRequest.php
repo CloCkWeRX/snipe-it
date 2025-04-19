@@ -86,7 +86,7 @@ class SettingsSamlRequest extends FormRequest
                     }
                 }
 
-                $this->merge(['saml_custom_settings' => implode(PHP_EOL, $custom_settings).PHP_EOL]);
+                $this->merge(['saml_custom_settings' => implode(PHP_EOL, $custom_settings) . PHP_EOL]);
             }
 
             $cert_updated = false;

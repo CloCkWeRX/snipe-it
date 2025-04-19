@@ -7,20 +7,18 @@ use Illuminate\Support\Facades\Gate;
 
 class AccessoryCheckoutRequest extends ImageUploadRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('checkout', new Accessory);
+        return Gate::allows('checkout', new Accessory());
     }
 
     public function prepareForValidation(): void
     {
 
         if ($this->accessory) {
-
             $this->diff = ($this->accessory->numRemaining() - $this->checkout_qty);
             $this->merge([
                 'checkout_qty' => $this->checkout_qty ?? 1,
@@ -31,7 +29,6 @@ class AccessoryCheckoutRequest extends ImageUploadRequest
 
             \Log::debug('---------------------------------------------');
         }
-
     }
 
     /**
@@ -47,7 +44,7 @@ class AccessoryCheckoutRequest extends ImageUploadRequest
                 'assigned_user'         => 'required_without_all:assigned_asset,assigned_location',
                 'assigned_asset'        => 'required_without_all:assigned_user,assigned_location',
                 'assigned_location'     => 'required_without_all:assigned_user,assigned_asset',
-                
+
                 'number_remaining_after_checkout' => [
                     'min:0',
                     'required',

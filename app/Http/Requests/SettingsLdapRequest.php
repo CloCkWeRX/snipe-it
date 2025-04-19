@@ -41,7 +41,7 @@ class SettingsLdapRequest extends Request
 
     public function response(array $errors)
     {
-        $this->session()->flash('errors', Session::get('errors', new \Illuminate\Support\ViewErrorBag)
+        $this->session()->flash('errors', Session::get('errors', new \Illuminate\Support\ViewErrorBag())
             ->put('default', new \Illuminate\Support\MessageBag($errors)));
         \Input::flash();
 

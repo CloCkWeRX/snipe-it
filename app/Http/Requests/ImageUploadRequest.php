@@ -33,7 +33,7 @@ class ImageUploadRequest extends Request
      */
     public function rules()
     {
-       
+
             return [
                 'image' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,avif',
                 'avatar' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,avif',
@@ -45,8 +45,8 @@ class ImageUploadRequest extends Request
     {
         return $this->redirector->back()->withInput()->withErrors($errors, $this->errorBag);
     }
-    
-    /** 
+
+    /**
      * Fields that should be traited from base64 to files
      */
     protected function base64FileKeys(): array
@@ -54,7 +54,7 @@ class ImageUploadRequest extends Request
         /**
          * image_source is here just legacy reasons. Api\AssetController
          * had it once to allow encoded image uploads.
-        */ 
+        */
         return [
             'image' => 'auto',
             'image_source' => 'auto'
@@ -73,7 +73,6 @@ class ImageUploadRequest extends Request
         $type = strtolower(class_basename(get_class($item)));
 
         if (is_null($path)) {
-
             $path = str_plural($type);
 
             if ($type == 'assetmodel') {
@@ -86,24 +85,21 @@ class ImageUploadRequest extends Request
         }
 
         if ($this->offsetGet($form_fieldname) instanceof UploadedFile) {
-           $image = $this->offsetGet($form_fieldname);
+            $image = $this->offsetGet($form_fieldname);
         } elseif ($this->hasFile($form_fieldname)) {
             $image = $this->file($form_fieldname);
         }
 
         if (isset($image)) {
-
             if (!config('app.lock_passwords')) {
-
                 $ext = $image->guessExtension();
-                $file_name = $type.'-'.$form_fieldname.'-'.$item->id.'-'.str_random(10).'.'.$ext;
-                
+                $file_name = $type . '-' . $form_fieldname . '-' . $item->id . '-' . str_random(10) . '.' . $ext;
+
                 if (($image->getMimeType() == 'image/vnd.microsoft.icon') || ($image->getMimeType() == 'image/x-icon') || ($image->getMimeType() == 'image/avif') || ($image->getMimeType() == 'image/webp')) {
                     // If the file is an icon, webp or avif, we need to just move it since gd doesn't support resizing
                     // icons or avif, and webp support and needs to be compiled into gd for resizing to be available
-                    Storage::disk('public')->put($path.'/'.$file_name, file_get_contents($image));
-
-                } elseif($image->getMimeType() == 'image/svg+xml') {
+                    Storage::disk('public')->put($path . '/' . $file_name, file_get_contents($image));
+                } elseif ($image->getMimeType() == 'image/svg+xml') {
                     // If the file is an SVG, we need to clean it and NOT encode it
                     $sanitizer = new Sanitizer();
                     $dirtySVG = file_get_contents($image->getRealPath());
@@ -115,14 +111,12 @@ class ImageUploadRequest extends Request
                         Log::debug($e);
                     }
                 } else {
-
                     try {
                         $upload = Image::make($image->getRealPath())->setFileInfoFromPath($image->getRealPath())->resize(null, $w, function ($constraint) {
                             $constraint->aspectRatio();
                             $constraint->upsize();
                         })->orientate();
-
-                    } catch(NotReadableException $e) {
+                    } catch (NotReadableException $e) {
                         Log::debug($e);
                         $validator = Validator::make([], []);
                         $validator->errors()->add($form_fieldname, trans('general.unaccepted_image_type', ['mimetype' => $image->getClientMimeType()]));
@@ -131,8 +125,7 @@ class ImageUploadRequest extends Request
                     }
 
                     // This requires a string instead of an object, so we use ($string)
-                    Storage::disk('public')->put($path.'/'.$file_name, (string) $upload->encode());
-
+                    Storage::disk('public')->put($path . '/' . $file_name, (string) $upload->encode());
                 }
 
                  // Remove Current image if exists
@@ -149,11 +142,12 @@ class ImageUploadRequest extends Request
         return $item;
     }
 
-    public function deleteExistingImage($item, $path = null, $db_fieldname = 'image') {
+    public function deleteExistingImage($item, $path = null, $db_fieldname = 'image')
+    {
 
-        if ($item->{$db_fieldname}!='') {
+        if ($item->{$db_fieldname} != '') {
             try {
-                Storage::disk('public')->delete($path.'/'.$item->{$db_fieldname});
+                Storage::disk('public')->delete($path . '/' . $item->{$db_fieldname});
                 $item->{$db_fieldname} = null;
             } catch (\Exception $e) {
                 Log::debug($e);
@@ -162,5 +156,4 @@ class ImageUploadRequest extends Request
 
         return $item;
     }
-    
 }

@@ -32,5 +32,4 @@ class StoreLdapSettings extends FormRequest
             'custom_forgot_pass_url' => 'nullable|url',
         ];
     }
-
 }

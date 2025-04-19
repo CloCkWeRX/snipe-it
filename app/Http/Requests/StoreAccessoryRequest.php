@@ -8,13 +8,12 @@ use Illuminate\Support\Facades\Gate;
 
 class StoreAccessoryRequest extends ImageUploadRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('create', new Accessory);
+        return Gate::allows('create', new Accessory());
     }
 
     public function prepareForValidation(): void
@@ -27,7 +26,6 @@ class StoreAccessoryRequest extends ImageUploadRequest
                 ]);
             }
         }
-
     }
 
     /**

@@ -29,7 +29,6 @@ class CustomFieldRequest extends FormRequest
         $rules['associate_fieldsets.*'] = 'nullable|integer|exists:custom_fieldsets,id';
 
         switch ($this->method()) {
-
             // Brand new
             case 'POST':
             {
@@ -49,7 +48,8 @@ class CustomFieldRequest extends FormRequest
                 break;
             }
 
-            default:break;
+            default:
+                break;
         }
 
         $rules['custom_format'] = 'valid_regex';
