@@ -39,6 +39,7 @@ class CompaniesController extends Controller
             'consumables_count',
             'components_count',
             'notes',
+            'url'
         ];
 
         $companies = Company::withCount(['assets as assets_count'  => function ($query) {
