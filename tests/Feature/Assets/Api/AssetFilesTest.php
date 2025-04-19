@@ -23,9 +23,7 @@ class AssetFilesTest extends TestCase
         $this->actingAsForApi($user)
             ->post(
                 route('api.assets.files.store', $asset),
-                [
-                'file' => [UploadedFile::fake()->create("test.jpg", 100)]
-                ]
+                ['file' => [UploadedFile::fake()->create("test.jpg", 100)]]
             )
            ->assertOk();
     }
@@ -47,7 +45,7 @@ class AssetFilesTest extends TestCase
                 ->assertJsonStructure([
                     'rows',
                     'total',
-            ]);
+                ]);
     }
 
     public function testAssetApiDownloadsFile()
@@ -87,9 +85,7 @@ class AssetFilesTest extends TestCase
         $this->actingAsForApi($user)
             ->post(
                 route('api.assets.files.store', $asset),
-                [
-                'file' => [UploadedFile::fake()->create("test.jpg", 100)]
-                ]
+                ['file' => [UploadedFile::fake()->create("test.jpg", 100)]]
             )
            ->assertOk();
 
@@ -98,6 +94,6 @@ class AssetFilesTest extends TestCase
             ->getJson(
                 route('api.assets.files.index', $asset)
             )
-                ->assertOk();
+            ->assertOk();
     }
 }
