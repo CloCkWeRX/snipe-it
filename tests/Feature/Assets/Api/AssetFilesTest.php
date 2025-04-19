@@ -22,16 +22,16 @@ class AssetFilesTest extends TestCase
         //Upload a file
         $this->actingAsForApi($user)
             ->post(
-               route('api.assets.files.store', $asset), [
-		       'file' => [UploadedFile::fake()->create("test.jpg", 100)]
-	       ])
-	       ->assertOk();
+                route('api.assets.files.store', $asset),
+                ['file' => [UploadedFile::fake()->create("test.jpg", 100)]]
+            )
+           ->assertOk();
     }
 
     public function testAssetApiListsFiles()
     {
         // List all files on an asset
-        
+
         // Create an asset to work with
         $asset = Asset::factory()->count(1)->create();
 
@@ -42,10 +42,10 @@ class AssetFilesTest extends TestCase
         $this->actingAsForApi($user)
             ->getJson(route('api.assets.files.index', $asset))
                 ->assertOk()
-		        ->assertJsonStructure([
+                ->assertJsonStructure([
                     'rows',
                     'total',
-		    ]);
+                ]);
     }
 
     public function testAssetApiDownloadsFile()
@@ -61,8 +61,8 @@ class AssetFilesTest extends TestCase
         //Upload a file
         $this->actingAsForApi($user)
             ->post(route('api.assets.files.store', $asset), [
-		       'file' => [UploadedFile::fake()->create("test.jpg", 100)]
-	         ])
+               'file' => [UploadedFile::fake()->create("test.jpg", 100)]
+             ])
             ->assertOk();
 
         // List the files to get the file ID
@@ -84,16 +84,16 @@ class AssetFilesTest extends TestCase
         //Upload a file
         $this->actingAsForApi($user)
             ->post(
-               route('api.assets.files.store', $asset), [
-		       'file' => [UploadedFile::fake()->create("test.jpg", 100)]
-	       ])
-	       ->assertOk();
+                route('api.assets.files.store', $asset),
+                ['file' => [UploadedFile::fake()->create("test.jpg", 100)]]
+            )
+           ->assertOk();
 
         // List the files to get the file ID
         $result = $this->actingAsForApi($user)
             ->getJson(
-		    route('api.assets.files.index', $asset))
-                ->assertOk();
-        
+                route('api.assets.files.index', $asset)
+            )
+            ->assertOk();
     }
 }
