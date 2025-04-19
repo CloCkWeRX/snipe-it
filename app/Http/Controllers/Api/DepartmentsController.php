@@ -20,7 +20,7 @@ class DepartmentsController extends Controller
      * @author [Godfrey Martinez] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('view', Department::class);
         $allowed_columns = ['id', 'name', 'image', 'users_count', 'notes'];
@@ -37,6 +37,8 @@ class DepartmentsController extends Controller
             'departments.updated_at',
             'departments.image',
             'departments.notes',
+            'departments.url',
+            'departments.wikidata'
         )->with('users')->with('location')->with('manager')->with('company')->withCount('users as users_count');
 
         if ($request->filled('search')) {
@@ -83,8 +85,7 @@ class DepartmentsController extends Controller
 
         $total = $departments->count();
         $departments = $departments->skip($offset)->take($limit)->get();
-        return (new DepartmentsTransformer)->transformDepartments($departments, $total);
-
+        return (new DepartmentsTransformer())->transformDepartments($departments, $total);
     }
 
     /**
@@ -94,10 +95,10 @@ class DepartmentsController extends Controller
      * @since [v4.0]
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Department::class);
-        $department = new Department;
+        $department = new Department();
         $department->fill($request->all());
         $department = $request->handleImages($department);
 
@@ -108,7 +109,6 @@ class DepartmentsController extends Controller
             return response()->json(Helper::formatStandardApiResponse('success', $department, trans('admin/departments/message.create.success')));
         }
         return response()->json(Helper::formatStandardApiResponse('error', null, $department->getErrors()));
-
     }
 
     /**
@@ -118,11 +118,11 @@ class DepartmentsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function show($id) : array
+    public function show($id): array
     {
         $this->authorize('view', Department::class);
         $department = Department::findOrFail($id);
-        return (new DepartmentsTransformer)->transformDepartment($department);
+        return (new DepartmentsTransformer())->transformDepartment($department);
     }
 
     /**
@@ -133,7 +133,7 @@ class DepartmentsController extends Controller
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      * @param  int  $id
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Department::class);
         $department = Department::findOrFail($id);
@@ -155,7 +155,7 @@ class DepartmentsController extends Controller
      * @param int $locationId
      * @since [v4.0]
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $department = Department::findOrFail($id);
 
@@ -167,7 +167,6 @@ class DepartmentsController extends Controller
 
         $department->delete();
         return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/departments/message.delete.success')));
-
     }
 
     /**
@@ -177,7 +176,7 @@ class DepartmentsController extends Controller
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
 
         $this->authorize('view.selectlists');
@@ -188,7 +187,7 @@ class DepartmentsController extends Controller
         ]);
 
         if ($request->filled('search')) {
-            $departments = $departments->where('name', 'LIKE', '%'.$request->get('search').'%');
+            $departments = $departments->where('name', 'LIKE', '%' . $request->get('search') . '%');
         }
 
         $departments = $departments->orderBy('name', 'ASC')->paginate(50);
@@ -197,9 +196,9 @@ class DepartmentsController extends Controller
         // This lets us have more flexibility in special cases like assets, where
         // they may not have a ->name value but we want to display something anyway
         foreach ($departments as $department) {
-            $department->use_image = ($department->image) ? Storage::disk('public')->url('departments/'.$department->image, $department->image) : null;
+            $department->use_image = ($department->image) ? Storage::disk('public')->url('departments/' . $department->image, $department->image) : null;
         }
 
-        return (new SelectlistTransformer)->transformSelectlist($departments);
+        return (new SelectlistTransformer())->transformSelectlist($departments);
     }
 }
