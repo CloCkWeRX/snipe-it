@@ -41,6 +41,7 @@ class ManufacturersController extends Controller
             'components_count',
             'licenses_count',
             'notes',
+            'wikidata'
         ];
 
         $manufacturers = Manufacturer::select([
@@ -57,6 +58,7 @@ class ManufacturersController extends Controller
                 'image',
                 'deleted_at',
                 'notes',
+                'wikidata'
             ])
             ->with('adminuser')
             ->withCount('assets as assets_count')
@@ -79,6 +81,10 @@ class ManufacturersController extends Controller
 
         if ($request->filled('url')) {
             $manufacturers->where('url', '=', $request->input('url'));
+        }
+
+        if ($request->filled("wikidata")) {
+            $manufacturers->where('wikidata', '=', $request->input('wikidata'));
         }
 
         if ($request->filled('support_url')) {
