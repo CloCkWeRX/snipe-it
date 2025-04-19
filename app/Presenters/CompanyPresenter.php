@@ -54,6 +54,22 @@ class CompanyPresenter extends Presenter
                 'visible' => true,
                 'formatter' => 'emailFormatter',
             ], [
+                'field' => 'url',
+                'searchable' => true,
+                'sortable' => true,
+                'switchable' => true,
+                'title' => trans('general.url'),
+                'visible' => true,
+                'formatter' => 'linkFormatter',
+            ], [
+                'field' => 'wikidata',
+                'searchable' => true,
+                'sortable' => true,
+                'switchable' => true,
+                'title' => 'Wikidata ID',
+                'visible' => false,
+                'formatter' => 'wikidataFormatter',
+            ], [
                 'field' => 'image',
                 'searchable' => false,
                 'sortable' => true,
