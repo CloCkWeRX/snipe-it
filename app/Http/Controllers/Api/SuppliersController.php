@@ -44,7 +44,8 @@ class SuppliersController extends Controller
             'state',
             'zip',
             'latitude',
-            'longitude'
+            'longitude',
+            'wikidata'
         ];
 
         $suppliers = Supplier::select([
@@ -67,7 +68,8 @@ class SuppliersController extends Controller
             'url',
             'zip',
             'latitude',
-            'longitude'
+            'longitude',
+            'wikidata'
         ])
             ->withCount('assets as assets_count')
             ->withCount('licenses as licenses_count')
@@ -118,6 +120,11 @@ class SuppliersController extends Controller
             $suppliers->where('url', '=', $request->input('url'));
         }
 
+        if ($request->filled('wikidata')) {
+            $suppliers->where('wikidata', '=', $request->input('wikidata'));
+        }
+
+        // TODO: Should this be a LIKE search?
         if ($request->filled('notes')) {
             $suppliers->where('notes', '=', $request->input('notes'));
         }
@@ -144,7 +151,7 @@ class SuppliersController extends Controller
      * @since [v4.0]
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Supplier::class);
         $supplier = new Supplier();
@@ -164,7 +171,7 @@ class SuppliersController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function show($id) : array
+    public function show($id): array
     {
         $this->authorize('view', Supplier::class);
         $supplier = Supplier::findOrFail($id);
@@ -181,7 +188,7 @@ class SuppliersController extends Controller
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      * @param  int  $id
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Supplier::class);
         $supplier = Supplier::findOrFail($id);
@@ -202,7 +209,7 @@ class SuppliersController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Supplier::class);
         $supplier = Supplier::with('asset_maintenances', 'assets', 'licenses')->withCount('asset_maintenances as asset_maintenances_count', 'assets as assets_count', 'licenses as licenses_count')->findOrFail($id);
@@ -233,7 +240,7 @@ class SuppliersController extends Controller
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
 
         $this->authorize('view.selectlists');
