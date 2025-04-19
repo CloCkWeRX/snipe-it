@@ -14,7 +14,7 @@ class CreateSupplierTest extends TestCase
             ->assertOk();
     }
 
-    public function testUserCanCreateManufacturer()
+    public function testUserCanCreateSupplier()
     {
         $this->assertFalse(Supplier::where('name', 'Test Supplier')->exists());
 
