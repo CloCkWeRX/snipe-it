@@ -24,8 +24,10 @@ class UpdateSupplierTest extends TestCase
             ->put(route('suppliers.update', ['supplier' => $supplier]), [
                 'name' => 'Test Supplier Edited',
                 'notes' => 'Test Note Edited',
+                'url' => 'http://example.com',
                 'latitude' => '38.7532',
-                'longitude' => '-77.1969'
+                'longitude' => '-77.1969',
+                'wikidata' => 'Q12345'
             ])
             ->assertStatus(302)
             ->assertSessionHasNoErrors()
@@ -37,6 +39,8 @@ class UpdateSupplierTest extends TestCase
                 ->where('notes', 'Test Note Edited')
                 // ->where('latitude', 38.7532)
                 // ->where('longitude', -77.1969)
+                ->where('url', 'http://example.com')
+                ->where('wikidata', 'Q12345')
                 ->exists()
         );
     }
