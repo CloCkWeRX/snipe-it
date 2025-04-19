@@ -8,13 +8,12 @@ use Illuminate\Support\Facades\Gate;
 
 class StoreConsumableRequest extends ImageUploadRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('create', new Consumable);
+        return Gate::allows('create', new Consumable());
     }
 
     public function prepareForValidation(): void
@@ -27,7 +26,6 @@ class StoreConsumableRequest extends ImageUploadRequest
                 ]);
             }
         }
-
     }
 
     /**

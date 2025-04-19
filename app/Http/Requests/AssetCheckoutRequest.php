@@ -39,9 +39,9 @@ class AssetCheckoutRequest extends Request
             ],
             ];
 
-            if($settings->require_checkinout_notes) {
-                $rules['note'] = 'required|string';
-            }
+        if ($settings->require_checkinout_notes) {
+            $rules['note'] = 'required|string';
+        }
 
         return $rules;
     }

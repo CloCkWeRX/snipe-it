@@ -14,6 +14,7 @@ use App\Rules\AssetCannotBeCheckedOutToNondeployableStatus;
 class StoreAssetRequest extends ImageUploadRequest
 {
     use MayContainCustomFields;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -21,7 +22,7 @@ class StoreAssetRequest extends ImageUploadRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('create', new Asset);
+        return Gate::allows('create', new Asset());
     }
 
     public function prepareForValidation(): void
@@ -50,7 +51,7 @@ class StoreAssetRequest extends ImageUploadRequest
      */
     public function rules(): array
     {
-        $modelRules = (new Asset)->getRules();
+        $modelRules = (new Asset())->getRules();
 
         if (Setting::getSettings()->digit_separator === '1.234,56' && is_string($this->input('purchase_cost'))) {
             // If purchase_cost was submitted as a string with a comma separator

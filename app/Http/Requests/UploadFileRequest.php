@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 class UploadFileRequest extends Request
 {
     use ConvertsBase64ToFiles;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,7 +31,7 @@ class UploadFileRequest extends Request
         $max_file_size = \App\Helpers\Helper::file_upload_max_size();
 
         return [
-          'file.*' => 'required|mimes:png,gif,jpg,svg,jpeg,doc,docx,pdf,txt,zip,rar,xls,xlsx,lic,xml,rtf,json,webp,avif|max:'.$max_file_size,
+          'file.*' => 'required|mimes:png,gif,jpg,svg,jpeg,doc,docx,pdf,txt,zip,rar,xls,xlsx,lic,xml,rtf,json,webp,avif|max:' . $max_file_size,
         ];
     }
 
@@ -44,7 +45,7 @@ class UploadFileRequest extends Request
     public function handleFile(string $dirname, string $name_prefix, $file): string
     {
         $extension = $file->getClientOriginalExtension();
-        $file_name = $name_prefix.'-'.str_random(8).'-'.str_slug(basename($file->getClientOriginalName(), '.'.$extension)).'.'.$file->guessExtension();
+        $file_name = $name_prefix . '-' . str_random(8) . '-' . str_slug(basename($file->getClientOriginalName(), '.' . $extension)) . '.' . $file->guessExtension();
 
         // Check for SVG and sanitize it
         if ($file->getMimeType() === 'image/svg+xml') {
@@ -56,14 +57,13 @@ class UploadFileRequest extends Request
             $cleanSVG = $sanitizer->sanitize($dirtySVG);
 
             try {
-                Storage::put($dirname.$file_name, $cleanSVG);
+                Storage::put($dirname . $file_name, $cleanSVG);
             } catch (\Exception $e) {
                 Log::debug('Upload no workie :( ');
                 Log::debug($e);
             }
-
         } else {
-            $put_results = Storage::put($dirname.$file_name, file_get_contents($file));
+            $put_results = Storage::put($dirname . $file_name, file_get_contents($file));
         }
         return $file_name;
     }

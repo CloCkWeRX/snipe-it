@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
-
 class DeleteUserRequest extends FormRequest
 {
-
     protected $redirectRoute = 'users.index';
 
     /**
@@ -66,7 +64,6 @@ class DeleteUserRequest extends FormRequest
         $messages = [];
 
         if ($user_to_delete) {
-
             $messages = array_merge([
 
                 'user.exists' => trans('admin/users/message.user_not_found'),

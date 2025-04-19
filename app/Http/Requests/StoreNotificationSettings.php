@@ -33,5 +33,4 @@ class StoreNotificationSettings extends FormRequest
             'audit_interval'                      => 'numeric|nullable|gt:0',
         ];
     }
-
 }
