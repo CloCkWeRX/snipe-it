@@ -42,6 +42,8 @@ class UpdateCompaniesTest extends TestCase
             ->patchJson(route('api.companies.update', ['company' => $company->id]), [
                 'name' => 'A Changed Name',
                 'notes' => 'A Changed Note',
+                'url' => 'http://example.com',
+                'wikidata' => 'Q12345'
             ])
             ->assertStatus(200)
             ->assertStatusMessageIs('success');
@@ -49,5 +51,7 @@ class UpdateCompaniesTest extends TestCase
         $company->refresh();
         $this->assertEquals('A Changed Name', $company->name);
         $this->assertEquals('A Changed Note', $company->notes);
+        $this->assertEquals('http://example.com', $company->url);
+        $this->assertEquals('Q12345', $company->wikidata);
     }
 }
