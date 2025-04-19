@@ -110,7 +110,7 @@ class SuppliersController extends Controller
         $supplier->email = request('email');
         $supplier->url = $supplier->addhttp(request('url'));
         $supplier->notes = request('notes');
-        $supplier->wikidata = request('wikidata')
+        $supplier->wikidata = request('wikidata');
         $supplier = $request->handleImages($supplier);
 
         if ($supplier->save()) {
