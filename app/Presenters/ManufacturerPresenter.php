@@ -57,7 +57,7 @@ class ManufacturerPresenter extends Presenter
                 'title' => 'Wikidata ID',
                 'visible' => false,
                 'formatter' => 'wikidataFormatter',
-            [
+            ], [
                 'field' => 'support_url',
                 'searchable' => true,
                 'sortable' => true,
