@@ -44,7 +44,8 @@ class SuppliersController extends Controller
             'state',
             'zip',
             'latitude',
-            'longitude'
+            'longitude',
+            'wikidata'
         ];
 
         $suppliers = Supplier::select([
@@ -67,7 +68,8 @@ class SuppliersController extends Controller
             'url',
             'zip',
             'latitude',
-            'longitude'
+            'longitude',
+            'wikidata'
         ])
             ->withCount('assets as assets_count')
             ->withCount('licenses as licenses_count')
@@ -118,6 +120,11 @@ class SuppliersController extends Controller
             $suppliers->where('url', '=', $request->input('url'));
         }
 
+        if ($request->filled('wikidata')) {
+            $suppliers->where('wikidata', '=', $request->input('wikidata'));
+        }
+
+        // TODO: Should this be a LIKE search?
         if ($request->filled('notes')) {
             $suppliers->where('notes', '=', $request->input('notes'));
         }

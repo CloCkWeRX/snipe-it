@@ -26,6 +26,7 @@
 @include ('partials.forms.edit.email')
 @include ('partials.forms.edit.url')
 @include ('partials.forms.edit.notes')
+@include ('partials.forms.edit.wikidata')
 @include ('partials.forms.edit.image-upload', ['image_path' => app('suppliers_upload_path')])
 
 @stop

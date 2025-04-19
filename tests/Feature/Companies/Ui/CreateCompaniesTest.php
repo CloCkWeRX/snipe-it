@@ -47,6 +47,8 @@ class CreateCompaniesTest extends TestCase
             'fax' => '619-666-6666',
             'name' => 'My New Company',
             'phone' => '619-555-5555',
+            'url' => 'http://example.com',
+            'wikidata' => 'Q12345'
         ];
 
         $user = User::factory()->createCompanies()->create();

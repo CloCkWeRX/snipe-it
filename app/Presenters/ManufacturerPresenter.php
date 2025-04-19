@@ -49,8 +49,15 @@ class ManufacturerPresenter extends Presenter
                 'title' => trans('general.url'),
                 'visible' => true,
                 'formatter' => 'externalLinkFormatter',
-            ],
-            [
+            ], [
+                'field' => 'wikidata',
+                'searchable' => true,
+                'sortable' => true,
+                'switchable' => true,
+                'title' => 'Wikidata ID',
+                'visible' => false,
+                'formatter' => 'wikidataFormatter',
+            ], [
                 'field' => 'support_url',
                 'searchable' => true,
                 'sortable' => true,

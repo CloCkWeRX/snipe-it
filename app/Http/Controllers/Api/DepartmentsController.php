@@ -37,6 +37,8 @@ class DepartmentsController extends Controller
             'departments.updated_at',
             'departments.image',
             'departments.notes',
+            'departments.url',
+            'departments.wikidata'
         )->with('users')->with('location')->with('manager')->with('company')->withCount('users as users_count');
 
         if ($request->filled('search')) {
@@ -45,6 +47,10 @@ class DepartmentsController extends Controller
 
         if ($request->filled('name')) {
             $departments->where('name', '=', $request->input('name'));
+        }
+
+        if ($request->filled('wikidata')) {
+            $departments->where('wikidata', '=', $request->input('wikidata'));
         }
 
         if ($request->filled('company_id')) {

@@ -68,6 +68,7 @@ class ManufacturersController extends Controller
         $manufacturer->support_phone = $request->input('support_phone');
         $manufacturer->support_email = $request->input('support_email');
         $manufacturer->notes = $request->input('notes');
+        $manufacturer->wikidata = $request->input('wikidata');
         $manufacturer = $request->handleImages($manufacturer);
 
         if ($manufacturer->save()) {
@@ -111,6 +112,7 @@ class ManufacturersController extends Controller
         $manufacturer->support_phone = $request->input('support_phone');
         $manufacturer->support_email = $request->input('support_email');
         $manufacturer->notes = $request->input('notes');
+        $manufacturer->wikidata = $request->input('wikidata');
 
         // Set the model's image property to null if the image is being deleted
         if ($request->input('image_delete') == 1) {

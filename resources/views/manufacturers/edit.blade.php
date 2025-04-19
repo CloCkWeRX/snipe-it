@@ -53,10 +53,9 @@
         </div>
     </div>
 
-@include ('partials.forms.edit.image-upload', ['image_path' => app('manufacturers_upload_path')])
-
 @include ('partials.forms.edit.notes')
+@include ('partials.forms.edit.wikidata')
 
-
+@include ('partials.forms.edit.image-upload', ['image_path' => app('manufacturers_upload_path')])
 
 @stop

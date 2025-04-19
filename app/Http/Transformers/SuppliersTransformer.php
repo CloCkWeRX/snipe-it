@@ -40,6 +40,8 @@ class SuppliersTransformer
                 'phone' => e($supplier->phone),
                 'email' => e($supplier->email),
                 'contact' => e($supplier->contact),
+                'url' => e($supplier->url),
+                'wikidata' => e($supplier->wikidata),
                 'assets_count' => (int) $supplier->assets_count,
                 'accessories_count' => (int) $supplier->accessories_count,
                 'licenses_count' => (int) $supplier->licenses_count,

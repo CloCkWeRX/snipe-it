@@ -39,6 +39,8 @@ class CompaniesController extends Controller
             'consumables_count',
             'components_count',
             'notes',
+            'url',
+            'wikidata'
         ];
 
         $companies = Company::withCount(['assets as assets_count'  => function ($query) {
@@ -55,6 +57,10 @@ class CompaniesController extends Controller
 
         if ($request->filled('email')) {
             $companies->where('email', '=', $request->input('email'));
+        }
+
+        if ($request->filled('wikidata')) {
+            $companies->where('wikidata', '=', $request->input('wikidata'));
         }
 
         if ($request->filled('created_by')) {

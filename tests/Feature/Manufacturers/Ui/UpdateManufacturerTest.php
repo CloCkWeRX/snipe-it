@@ -24,6 +24,7 @@ class UpdateManufacturerTest extends TestCase
             ->put(route('manufacturers.update', $manufacturer), [
                 'name' => 'Test Manufacturer Edited',
                 'notes' => 'Test Note Edited',
+                'wikidata' => 'Q12345'
             ])
             ->assertStatus(302)
             ->assertSessionHasNoErrors()

@@ -34,6 +34,8 @@ class CreateCompaniesTest extends TestCase implements TestsPermissionsRequiremen
             ->postJson(route('api.companies.store'), [
                 'name' => 'My Cool Company',
                 'notes' => 'A Cool Note',
+                'url' => 'http://example.com',
+                'wikidata' => 'Q12345'
             ])
             ->assertStatus(200)
             ->assertStatusMessageIs('success');
@@ -41,6 +43,8 @@ class CreateCompaniesTest extends TestCase implements TestsPermissionsRequiremen
         $this->assertDatabaseHas('companies', [
             'name' => 'My Cool Company',
             'notes' => 'A Cool Note',
+            'url' => 'http://example.com',
+            'wikidata' => 'Q12345'
         ]);
     }
 }

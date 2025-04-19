@@ -19,21 +19,22 @@ class Supplier extends SnipeModel
     protected $table = 'suppliers';
 
     protected $rules = [
-        'name'               => 'required|min:1|max:255|unique_undeleted',
-        'fax'               => 'min:7|max:35|nullable',
-        'phone'             => 'min:7|max:35|nullable',
-        'contact'           => 'max:100|nullable',
-        'notes'             => 'max:191|nullable', // Default string length is 191 characters..
-        'email'             => 'email|max:150|nullable',
-        'address'            => 'max:250|nullable',
-        'address2'           => 'max:250|nullable',
-        'city'               => 'max:191|nullable',
-        'state'              => 'min:2|max:191|nullable',
-        'country'            => 'min:2|max:191|nullable',
-        'zip'               => 'max:10|nullable',
-        'url'               => 'sometimes|nullable|string|max:250',
-        'latitude' => 'numeric|nullable|min:-90|max:90',
-        'longitude' => 'numeric|nullable|min:-180|max:180'
+        'name'      => 'required|min:1|max:255|unique_undeleted',
+        'fax'       => 'min:7|max:35|nullable',
+        'phone'     => 'min:7|max:35|nullable',
+        'contact'   => 'max:100|nullable',
+        'notes'     => 'max:191|nullable', // Default string length is 191 characters.. TODO: Surely this is TEXT?
+        'email'     => 'email|max:150|nullable',
+        'address'   => 'max:250|nullable',
+        'address2'  => 'max:250|nullable',
+        'city'      => 'max:191|nullable',
+        'state'     => 'min:2|max:191|nullable',
+        'country'   => 'min:2|max:191|nullable',
+        'zip'       => 'max:10|nullable',
+        'url'       => 'sometimes|nullable|string|max:250',
+        'latitude'  => 'numeric|nullable|min:-90|max:90',
+        'longitude' => 'numeric|nullable|min:-180|max:180',
+        'wikidata'  => 'string|nullable|starts_with:Q'
     ];
 
     /**
@@ -50,7 +51,7 @@ class Supplier extends SnipeModel
      *
      * @var array
      */
-    protected $searchableAttributes = ['name'];
+    protected $searchableAttributes = ['name', 'phone', 'email', 'wikidata'];
 
     /**
      * The relations and their attributes that should be included when searching the model.
@@ -79,7 +80,8 @@ class Supplier extends SnipeModel
         'url',
         'notes',
         'latitude',
-        'longitude'
+        'longitude',
+        'wikidata'
     ];
 
     /**
