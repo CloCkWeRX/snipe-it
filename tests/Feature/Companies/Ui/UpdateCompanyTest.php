@@ -6,7 +6,7 @@ use App\Models\Company;
 use App\Models\User;
 use Tests\TestCase;
 
-class EditCompanyTest extends TestCase
+class UpdateCompanyTest extends TestCase
 {
     public function testPageRenders()
     {
