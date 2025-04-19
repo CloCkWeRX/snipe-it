@@ -31,7 +31,7 @@ class CompaniesTransformer
                 'email' => ($company->email != '') ? e($company->email) : null,
                 'url' => ($company->url != '') ? e($company->url) : null,
                 'wikidata' => e($company->wikidata),
-                'image' =>   ($company->image) ? Storage::disk('public')->url('companies/'.e($company->image)) : null,
+                'image' => ($company->image) ? Storage::disk('public')->url('companies/'  .e($company->image)) : null,
                 'assets_count' => (int) $company->assets_count,
                 'licenses_count' => (int) $company->licenses_count,
                 'accessories_count' => (int) $company->accessories_count,
@@ -40,7 +40,7 @@ class CompaniesTransformer
                 'users_count' => (int) $company->users_count,
                 'created_by' => ($company->adminuser) ? [
                     'id' => (int) $company->adminuser->id,
-                    'name'=> e($company->adminuser->present()->fullName()),
+                    'name' => e($company->adminuser->present()->fullName()),
                 ] : null,
                 'notes' => Helper::parseEscapedMarkedownInline($company->notes),
                 'created_at' => Helper::getFormattedDateObject($company->created_at, 'datetime'),
