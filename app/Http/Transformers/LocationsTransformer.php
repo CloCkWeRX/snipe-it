@@ -19,7 +19,7 @@ class LocationsTransformer
             $array[] = self::transformLocation($location);
         }
 
-        return (new DatatablesTransformer)->transformDatatables($array, $total);
+        return (new DatatablesTransformer())->transformDatatables($array, $total);
     }
 
     public function transformLocation(Location $location = null)
@@ -97,7 +97,7 @@ class LocationsTransformer
             $array[] = self::transformCheckedoutAccessory($checkout);
         }
 
-        return (new DatatablesTransformer)->transformDatatables($array, $total);
+        return (new DatatablesTransformer())->transformDatatables($array, $total);
     }
 
 
