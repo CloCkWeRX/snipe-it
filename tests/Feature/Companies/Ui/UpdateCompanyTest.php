@@ -20,7 +20,7 @@ class UpdateCompanyTest extends TestCase
         $company = Company::factory()->create(['name' => 'Test Company']);
         $this->assertTrue(Company::where('name', 'Test Company')->exists());
         $response = $this->actingAs(User::factory()->superuser()->create())
-            ->put(route('companies.update', $manufacturer), [
+            ->put(route('companies.update', $company), [
                 'name' => 'Test Company Edited',
                 'notes' => 'Test Note Edited',
                 'url' => 'http://example.com',
