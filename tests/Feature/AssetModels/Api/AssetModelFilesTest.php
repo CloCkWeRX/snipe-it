@@ -43,11 +43,11 @@ class AssetModelFilesTest extends TestCase
             ->getJson(
                 route('api.models.files.index', ['model_id' => $model[0]["id"]])
             )
-                ->assertOk()
-                ->assertJsonStructure([
-                    'rows',
-                    'total',
-                ]);
+            ->assertOk()
+            ->assertJsonStructure([
+                'rows',
+                'total',
+            ]);
     }
 
     public function testAssetModelApiDownloadsFile()
@@ -148,7 +148,7 @@ class AssetModelFilesTest extends TestCase
             ->getJson(
                 route('api.models.files.index', ['model_id' => $model[0]["id"]])
             )
-                ->assertOk();
+            ->assertOk();
 
         // Delete the file
         $this->actingAsForApi($user)
@@ -160,8 +160,8 @@ class AssetModelFilesTest extends TestCase
             )
            ->assertOk()
             ->assertJsonStructure([
-            'status',
-            'messages',
-        ]);
+                'status',
+                'messages',
+            ]);
     }
 }
