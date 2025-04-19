@@ -793,9 +793,15 @@
         }
     }
 
+    function wikidataFormatter(value) {
+        if (value) {
+            return '<a href="https://www.wikidata.org/wiki/' + value + '" rel="noopener" target="_blank">' + value + '</a>';
+        }
+    }
+
     function linkFormatter(value) {
         if (value) {
-            return '<a href="' + value + '">' + value + '</a>';
+            return '<a href="' + value + '" rel="noopener" target="_blank">' + value + '</a>';
         }
     }
 
@@ -828,7 +834,6 @@
     }
 
     function employeeNumFormatter(value, row) {
-
         if ((row) && (row.assigned_to) && ((row.assigned_to.employee_number))) {
             return '<a href="{{ config('app.url') }}/users/' + row.assigned_to.id + '">' + row.assigned_to.employee_number + '</a>';
         }
@@ -848,7 +853,6 @@
 
 
    function imageFormatter(value, row) {
-
         if (value) {
 
             // This is a clunky override to handle unusual API responses where we're presenting a link instead of an array
