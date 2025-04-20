@@ -279,7 +279,7 @@
 
                       <div class="col-md-9 col-sm-9 col-md-offset-3">
 
-                          <a id="optional_user_info" class="text-primary">
+                          <a id="optional_user_info" href="#optional_user_details" class="text-primary">
                               <i class="fa fa-caret-right fa-2x" id="optional_user_info_icon"></i>
                               <strong>{{ trans('admin/hardware/form.optional_infos') }}</strong>
                           </a>
