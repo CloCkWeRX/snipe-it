@@ -97,8 +97,10 @@
                                     type="text"
                                     value="{{ old('default_currency', $setting->default_currency) }}"
                                     id="default_currency"
+                                    required
                                 >
-
+                                <datalist>
+                                </datalist>
                                 {!! Form::digit_separator('digit_separator', old('digit_separator', $setting->digit_separator), 'select2') !!}
 
                                 {!! $errors->first('default_currency', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
