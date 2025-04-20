@@ -115,6 +115,8 @@ class UsersController extends Controller
         $user->state = $request->input('state', null);
         $user->country = $request->input('country', null);
         $user->zip = $request->input('zip', null);
+        $user->latitude = $request->input('latitude', null);
+        $user->longitude = $request->input('longitude', null);
         $user->remote = $request->input('remote', 0);
         $user->website = $request->input('website', null);
         $user->created_by = auth()->id();
@@ -270,6 +272,8 @@ class UsersController extends Controller
         // if a user is editing themselves we should always keep activated true
         $user->activated = $request->input('activated', $request->user()->is($user) ? 1 : 0);
         $user->zip = $request->input('zip', null);
+        $user->latitude = $request->input('latitude', null);
+        $user->longitude = $request->input('longitude', null);
         $user->remote = $request->input('remote', 0);
         $user->vip = $request->input('vip', 0);
         $user->website = $request->input('website', null);

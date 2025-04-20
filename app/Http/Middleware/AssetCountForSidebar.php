@@ -6,6 +6,7 @@ use App\Models\Asset;
 use Closure;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
+
 class AssetCountForSidebar
 {
     /**

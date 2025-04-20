@@ -65,6 +65,8 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         'state',
         'username',
         'zip',
+        'latitude',
+        'longitude',
         'remote',
         'start_date',
         'end_date',
@@ -111,6 +113,8 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         'vip'                     => 'boolean',
         'remote'                  => 'boolean',
         'activated'               => 'boolean',
+        'latitude'                => 'numeric|nullable|min:-90|max:90',
+        'longitude'               => 'numeric|nullable|min:-180|max:180'
     ];
 
     /**

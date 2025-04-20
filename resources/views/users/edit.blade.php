@@ -279,7 +279,7 @@
 
                       <div class="col-md-9 col-sm-9 col-md-offset-3">
 
-                          <a id="optional_user_info" class="text-primary">
+                          <a id="optional_user_info" href="#optional_user_details" class="text-primary">
                               <i class="fa fa-caret-right fa-2x" id="optional_user_info_icon"></i>
                               <strong>{{ trans('admin/hardware/form.optional_infos') }}</strong>
                           </a>
@@ -412,61 +412,8 @@
                               </div>
                           </div>
 
-                          <!-- Address -->
-                          <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                              <label class="col-md-3 control-label" for="address">{{ trans('general.address') }}</label>
-                              <div class="col-md-6">
-                                  <input class="form-control" type="text" name="address" id="address" value="{{ old('address', $user->address) }}" maxlength="191" />
-                                  {!! $errors->first('address', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
-                              </div>
-                          </div>
-
-                          <!-- City -->
-                          <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
-                              <label class="col-md-3 control-label" for="city">{{ trans('general.city') }}</label>
-                              <div class="col-md-6">
-                                  <input class="form-control" type="text" name="city" id="city" aria-label="city" value="{{ old('city', $user->city) }}" maxlength="191" />
-                                  {!! $errors->first('city', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
-                              </div>
-                          </div>
-
-                          <!-- State -->
-                          <div class="form-group{{ $errors->has('state') ? ' has-error' : '' }}">
-                              <label class="col-md-3 control-label" for="state">{{ trans('general.state') }}</label>
-                              <div class="col-md-6">
-                                  <input class="form-control" type="text" name="state" id="state" value="{{ old('state', $user->state) }}" maxlength="191" />
-                                  {!! $errors->first('state', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
-                              </div>
-                          </div>
-
-                          <!-- Country -->
-                          <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }}">
-                              <label class="col-md-3 control-label" for="country">{{ trans('general.country') }}</label>
-                              <div class="col-md-6">
-                                  {!! Form::countries('country', old('country', $user->country), 'col-md-12 select2') !!}
-
-                                  <p class="help-block">{{ trans('general.countries_manually_entered_help') }}</p>
-                                  {!! $errors->first('country', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
-                              </div>
-                          </div>
-
-                          <!-- Zip -->
-                          <div class="form-group{{ $errors->has('zip') ? ' has-error' : '' }}">
-                              <label class="col-md-3 control-label" for="zip">{{ trans('general.zip') }}</label>
-                              <div class="col-md-3">
-                                  <input class="form-control" type="text" name="zip" id="zip" value="{{ old('zip', $user->zip) }}" maxlength="10" />
-                                  {!! $errors->first('zip', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
-                              </div>
-                          </div>
-
-                          <!-- Notes -->
-                          <div class="form-group{!! $errors->has('notes') ? ' has-error' : '' !!}">
-                              <label for="notes" class="col-md-3 control-label">{{ trans('admin/users/table.notes') }}</label>
-                              <div class="col-md-6">
-                                  <textarea class="form-control" rows="5" id="notes" name="notes">{{ old('notes', $user->notes) }}</textarea>
-                                  {!! $errors->first('notes', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-                              </div>
-                          </div>
+                          @include ('partials.forms.edit.address', ['item' => $user])
+                          @include ('partials.forms.edit.notes', ['item' => $user])
 
                           @if ($snipeSettings->two_factor_enabled!='')
                               @if ($snipeSettings->two_factor_enabled=='1')
@@ -551,7 +498,7 @@
                             </div>
                                  @endif
                            @else
-                                      <p>{{ trans('admin/users/table.nogroup') }} <code>{{ trans('admin/settings/general.admin_settings') }} <i class="fa fa-cogs"></i> > {{ trans('general.groups') }} <i class="fas fa-user-friends"></i></code> </p>
+                                      <p>{{ trans('admin/users/table.nogroup') }} <span class="label label-info">{{ trans('admin/settings/general.admin_settings') }} <i class="fa fa-cogs"></i> > {{ trans('general.groups') }} <i class="fas fa-user-friends"></i></span> </p>
                            @endif
 
                               </div>

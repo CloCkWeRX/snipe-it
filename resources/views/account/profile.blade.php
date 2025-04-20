@@ -7,7 +7,6 @@
 
 {{-- Account page content --}}
 @section('content')
-
 <div class="row">
   <div class="col-md-9">
   <form method="POST" action="{{ route('profile.update') }}" accept-charset="UTF-8" class="form-horizontal" autocomplete="off" enctype="multipart/form-data">
@@ -71,14 +70,7 @@
         </div>
         @endif
 
-        <!-- Phone -->
-        <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
-          <label class="col-md-3 control-label" for="phone">{{ trans('admin/users/table.phone') }}</label>
-          <div class="col-md-4">
-            <input class="form-control" type="text" name="phone" id="phone" value="{{ old('phone', $user->phone) }}" />
-            {!! $errors->first('phone', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
-          </div>
-        </div>
+        @include ('partials.forms.edit.phone', ['item' => $user])
 
         <!-- Website URL -->
         <div class="form-group {{ $errors->has('website') ? ' has-error' : '' }}">
@@ -113,7 +105,7 @@
             <small>(Private)</small>
           </label>
           <div class="col-md-8">
-            <input class="form-control" type="email" name="gravatar" id="gravatar" value="{{ old('gravatar', $user->gravatar) }}" />
+            <input class="form-control" type="email" name="gravatar" id="gravatar" value="{{ old('gravatar', $user->gravatar) }}" placeholder="{{ trans('general.example') . 'email@example.com' }}" />
             {!! $errors->first('gravatar', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
             <p style="padding-top: 3px;">
               <img src="//secure.gravatar.com/avatar/{{ md5(strtolower(trim($user->gravatar))) }}" width="30" height="30" alt="{{ $user->present()->fullName() }} avatar image">

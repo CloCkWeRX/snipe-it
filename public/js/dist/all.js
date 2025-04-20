@@ -91083,14 +91083,14 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 //window.$ = window.jQuery = require('jquery');
 
 /**
- * jQuery UI is loaded here and then the tooltip is assigned another funtion name
+ * jQuery UI is loaded here and then the tooltip is assigned another function name
  * This resolves the issue of jquery-ui & bootstrap tooltip conflict
  */
 __webpack_require__(/*! jquery-ui */ "./node_modules/jquery-ui/ui/widget.js");
 jQuery.fn.uitooltip = jQuery.fn.tooltip;
 
 /**
- * Load boostrap
+ * Load bootstrap
  */
 __webpack_require__(/*! bootstrap-less */ "./node_modules/bootstrap-less/js/bootstrap.js");
 
@@ -91429,7 +91429,7 @@ $(function () {
       var inner_div = $("<div style='width: 30px;'>");
       /******************************************************************
        * 
-       * We are specifically chosing empty alt-text below, because this 
+       * We are specifically choosing empty alt-text below, because this 
        * image conveys no additional information, relative to the text
        * that will *always* be there in any select2 list that is in use
        * in Snipe-IT. If that changes, we would probably want to change
@@ -91805,7 +91805,7 @@ function formatDatalistSafe(datalist) {
     var inner_div = $("<div style='width: 30px;'>");
     /******************************************************************
      * 
-     * We are specifically chosing empty alt-text below, because this 
+     * We are specifically choosing empty alt-text below, because this 
      * image conveys no additional information, relative to the text
      * that will *always* be there in any select2 list that is in use
      * in Snipe-IT. If that changes, we would probably want to change

@@ -45,6 +45,5 @@ class CheckUserIsActivated
         }
 
         return $next($request);
-
     }
 }

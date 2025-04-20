@@ -261,6 +261,50 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 </a>
                                             </li>
                                         @endcan
+                                        <li role="separator" class="divider"></li>
+                                        @can('create', \App\Models\Manufacturer::class)
+                                            <li {!! (Request::is('manufacturers/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('manufacturers.create') }}" tabindex="-1">
+                                                    <x-icon type="manufacturer" />
+                                                    {{ trans('general.manufacturer') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+                                        @can('create', \App\Models\Supplier::class)
+                                            <li {!! (Request::is('suppliers/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('suppliers.create') }}" tabindex="-1">
+                                                    <x-icon type="supplier" />
+                                                    {{ trans('general.supplier') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+                                        @can('create', \App\Models\Department::class)
+                                            <li {!! (Request::is('departments/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('departments.create') }}" tabindex="-1">
+                                                    <x-icon type="department" />
+                                                    {{ trans('general.department') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+                                        @can('create', \App\Models\Location::class)
+                                            <li {!! (Request::is('locations/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('locations.create') }}" tabindex="-1">
+                                                    <x-icon type="location" />
+                                                    {{ trans('general.location') }}
+                                                </a>
+                                            </li>
+                                        @endcan                                                                                                                             
+                                        @can('create', \App\Models\Company::class)
+                                            <li {!! (Request::is('companies/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('companies.create') }}" tabindex="-1">
+                                                    <x-icon type="company" />
+                                                    {{ trans('general.company') }}
+                                                </a>
+                                            </li>
+                                        @endcan
                                     </ul>
                                 </li>
                             @endcan
