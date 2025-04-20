@@ -333,6 +333,10 @@ class LdapSync extends Command
                             try {
                                 // Get the Manager's username
                                 // PHP LDAP returns every LDAP attribute as an array, and 90% of the time it's an array of just one item. But, hey, it's an array.
+                                if (!isset($ldap_manager[0][$ldap_map["username"]])) {
+                                    throw new Exception("Did not find expected username attribute mapping in ldap_manager: " . $ldap_map["username"]);
+                                }
+
                                 $ldapManagerUsername = $ldap_manager[0][$ldap_map["username"]][0];
 
                                 // Get User from Manager username.
