@@ -92,13 +92,19 @@
                                     class="form-control select2-container"
                                     placeholder="USD"
                                     maxlength="3"
-                                    style="width: 60px; display: inline-block; "
+                                    style="width: 6em; display: inline-block; "
                                     name="default_currency"
                                     type="text"
                                     value="{{ old('default_currency', $setting->default_currency) }}"
                                     id="default_currency"
+                                    list="country-codes"
+                                    required
                                 >
-
+                                <datalist id="country-codes">
+                                  @foreach (Helper::$currency_codes as $code)
+                                    <option>{{ $code }}</option>
+                                  @endforeach
+                                </datalist>
                                 {!! Form::digit_separator('digit_separator', old('digit_separator', $setting->digit_separator), 'select2') !!}
 
                                 {!! $errors->first('default_currency', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
