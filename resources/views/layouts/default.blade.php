@@ -952,7 +952,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                 var allows_user_skins = false;
             @endif
 
-            if (window.matchMedia('(prefers-color-scheme: dark').matches && !(skin.includes("dark") || skin.includes("constrast"))) {
+            if (window.matchMedia('(prefers-color-scheme: dark').matches && !(skin.includes("dark") || skin.includes("contrast"))) {
                 if (allows_user_skins) {
                     document.querySelector('.main-footer .pull-left').append(
                         document.createTextNode("Tip: Turn on dark mode in your profile")
@@ -962,7 +962,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                         document.createTextNode("Ask your administrator to allow user skins to enable dark or high constrast mode")
                     );
                 }
-            } else if (window.matchMedia('(prefers-color-scheme: dark').matches && skin.includes("dark")) {
+            } else if (window.matchMedia('(prefers-color-scheme: light').matches && skin.includes("dark")) {
                 if (allows_user_skins) {
                     document.querySelector('.main-footer .pull-left').append(
                         document.createTextNode("Tip: Turn off dark mode in your profile")
