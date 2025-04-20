@@ -34,6 +34,6 @@ class UpdateManufacturerTest extends TestCase
         $this->assertDatabaseHas('manufacturers', [
             'name' => 'Test Manufacturer Edited',
             'notes' => 'Test Note Edited'
-        });
+        ]);
     }
 }
