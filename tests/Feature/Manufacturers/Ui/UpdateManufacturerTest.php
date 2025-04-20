@@ -31,6 +31,9 @@ class UpdateManufacturerTest extends TestCase
             ->assertRedirect(route('manufacturers.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(Manufacturer::where('name', 'Test Manufacturer Edited')->where('notes', 'Test Note Edited')->exists());
+        $this->assertDatabaseHas('manufacturers', [
+            'name' => 'Test Manufacturer Edited',
+            'notes' => 'Test Note Edited'
+        });
     }
 }
