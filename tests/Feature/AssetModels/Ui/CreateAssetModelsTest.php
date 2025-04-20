@@ -28,7 +28,9 @@ class CreateAssetModelsTest extends TestCase
 
     public function testUserCanCreateAssetModels()
     {
-        $this->assertFalse(AssetModel::where('name', 'Test Model')->exists());
+        $this->assertDatabaseMissing('models', [
+            'name' => 'Test Model'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->from(route('models.create'))
@@ -57,7 +59,9 @@ class CreateAssetModelsTest extends TestCase
         $response->assertInvalid(['category_type']);
         $response->assertSessionHasErrors(['category_type']);
         $this->followRedirects($response)->assertSee(trans('general.error'));
-        $this->assertFalse(AssetModel::where('name', 'Test Invalid Model Category')->exists());
+        $this->assertDatabaseMissing('models', [
+            'name' => 'Test Invalid Model Category'
+        ]);
     }
 
     public function testUniquenessAcrossModelNameAndModelNumber()

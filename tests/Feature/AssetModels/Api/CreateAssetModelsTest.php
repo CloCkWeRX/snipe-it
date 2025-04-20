@@ -53,7 +53,9 @@ class CreateAssetModelsTest extends TestCase
             ])
             ->json();
 
-        $this->assertFalse(AssetModel::where('name', 'Test AssetModel')->exists());
+        $this->assertDatabaseMissing('models', [
+            'name' => 'Test AssetModel'
+        ]);
     }
 
     public function testUniquenessAcrossModelNameAndModelNumber()
