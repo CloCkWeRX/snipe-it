@@ -28,7 +28,9 @@ class CreateCategoriesTest extends TestCase
 
     public function testUserCanCreateCategories()
     {
-        $this->assertFalse(Category::where('name', 'Test Category')->exists());
+        $this->assertDatabaseMissing('categories', [
+            'name' => 'Test Category'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('categories.store'), [
@@ -46,7 +48,9 @@ class CreateCategoriesTest extends TestCase
 
     public function testUserCannotCreateCategoriesWithInvalidType()
     {
-        $this->assertFalse(Category::where('name', 'Test Category')->exists());
+        $this->assertDatabaseMissing('categories', [
+            'name' => 'Test Category'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->from(route('categories.create'))
@@ -56,6 +60,8 @@ class CreateCategoriesTest extends TestCase
             ])
             ->assertRedirect(route('categories.create'));
 
-        $this->assertFalse(Category::where('name', 'Test Category')->exists());
+        $this->assertDatabaseMissing('categories', [
+            'name' => 'Test Category'
+        ]);
     }
 }

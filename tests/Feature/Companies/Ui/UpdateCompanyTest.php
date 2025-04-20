@@ -18,7 +18,10 @@ class UpdateCompanyTest extends TestCase
     public function testUserCanEditCompanies()
     {
         $company = Company::factory()->create(['name' => 'Test Company']);
-        $this->assertTrue(Company::where('name', 'Test Company')->exists());
+        $this->assertDatabaseHas('companies', [
+            'name' => 'Test Company'
+        ]);
+
         $response = $this->actingAs(User::factory()->superuser()->create())
             ->put(route('companies.update', $company), [
                 'name' => 'Test Company Edited',
