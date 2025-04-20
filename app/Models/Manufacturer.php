@@ -26,7 +26,7 @@ class Manufacturer extends SnipeModel
         'support_email'   => 'email|nullable',
         'support_url'   => 'nullable|starts_with:http://,https://,afp://,facetime://,irc://',
         'warranty_lookup_url' => 'nullable|starts_with:http://,https://,afp://,facetime://,irc://',
-	'support_phone' => 'min:7|max:35|nullable',
+        'support_phone' => 'min:7|max:35|nullable',
         'wikidata' => 'string|nullable|starts_with:Q'
     ];
 
