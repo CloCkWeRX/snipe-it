@@ -14,7 +14,6 @@ use Tests\TestCase;
 
 class EditAssetTest extends TestCase
 {
-
     public function testPermissionRequiredToViewAsset()
     {
         $asset = Asset::factory()->create();
@@ -37,14 +36,16 @@ class EditAssetTest extends TestCase
 
         $this->actingAs(User::factory()->viewAssets()->editAssets()->create())
             ->from(route('hardware.edit', $asset))
-            ->put(route('hardware.update', $asset),
+            ->put(
+                route('hardware.update', $asset),
                 [
                     'redirect_option' => 'index',
                     'name' => 'New name',
                     'asset_tags' => 'New Asset Tag',
                     'status_id' => StatusLabel::factory()->create()->id,
                     'model_id' => AssetModel::factory()->create()->id,
-                ])
+                ]
+            )
             ->assertStatus(302)
             ->assertRedirect(route('hardware.index'));
         $this->assertDatabaseHas('assets', ['asset_tag' => 'New Asset Tag']);
@@ -82,11 +83,13 @@ class EditAssetTest extends TestCase
 
         $this->actingAs(User::factory()->viewAssets()->editAssets()->create())
             ->from(route('hardware.edit', $asset))
-            ->put(route('hardware.update', $asset), [
+            ->put(
+                route('hardware.update', $asset),
+                [
                     'status_id' => $achived_status->id,
                     'model_id' => $asset->model_id,
                     'asset_tags' => $asset->asset_tag,
-                ],
+                ]
             )
             ->assertStatus(302);
             //->assertRedirect(route('hardware.show', ['hardware' => $asset->id]));;
@@ -124,5 +127,4 @@ class EditAssetTest extends TestCase
         $this->assertEquals('New name', $asset->name);
         $this->assertEquals($currentLocation->id, $asset->location_id);
     }
-
 }
