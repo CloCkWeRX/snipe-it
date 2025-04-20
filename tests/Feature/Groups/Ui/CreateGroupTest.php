@@ -17,7 +17,9 @@ class CreateGroupTest extends TestCase
 
     public function testUserCanCreateGroup()
     {
-        $this->assertFalse(Group::where('name', 'Test Group')->exists());
+        $this->assertDatabaseMissing('groups', [
+            'name' => 'Test Group'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('groups.store'), [
@@ -26,6 +28,9 @@ class CreateGroupTest extends TestCase
             ])
             ->assertRedirect(route('groups.index'));
 
-        $this->assertTrue(Group::where('name', 'Test Group')->where('notes', 'Test Note')->exists());
+        $this->assertDatabaseHas('groups', [
+            'name' => 'Test Group',
+            'notes' => 'Test Note'
+        ]);
     }
 }
