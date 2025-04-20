@@ -413,15 +413,7 @@
                           </div>
 
                           @include ('partials.forms.edit.address', ['item' => $user])
-
-                          <!-- Notes -->
-                          <div class="form-group{!! $errors->has('notes') ? ' has-error' : '' !!}">
-                              <label for="notes" class="col-md-3 control-label">{{ trans('admin/users/table.notes') }}</label>
-                              <div class="col-md-6">
-                                  <textarea class="form-control" rows="5" id="notes" name="notes">{{ old('notes', $user->notes) }}</textarea>
-                                  {!! $errors->first('notes', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-                              </div>
-                          </div>
+                          @include ('partials.forms.edit.notes', ['item' => $user])
 
                           @if ($snipeSettings->two_factor_enabled!='')
                               @if ($snipeSettings->two_factor_enabled=='1')
