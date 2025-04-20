@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Storage;
 use Watson\Validating\ValidatingTrait;
 use Illuminate\Support\Facades\Log;
 
-
 /**
  * Settings model.
  */
 class Setting extends Model
 {
     use HasFactory;
-    use Notifiable, ValidatingTrait;
+    use Notifiable;
+    use ValidatingTrait;
 
     /**
      * The cache property so that multiple invocations of this will only load the Settings record from disk only once
@@ -235,7 +235,7 @@ class Setting extends Model
         foreach ($arBytes as $arItem) {
             if ($bytes >= $arItem['VALUE']) {
                 $result = $bytes / $arItem['VALUE'];
-                $result = round($result, 2).$arItem['UNIT'];
+                $result = round($result, 2) . $arItem['UNIT'];
                 break;
             }
         }
@@ -285,14 +285,14 @@ class Setting extends Model
 
         // Check for any secure password complexity rules that may have been selected
         if ($settings->pwd_secure_complexity != '') {
-            $security_rules .= '|'.$settings->pwd_secure_complexity;
+            $security_rules .= '|' . $settings->pwd_secure_complexity;
         }
 
         if ($action == 'update') {
-            return 'nullable|min:'.$settings->pwd_secure_min.$security_rules;
+            return 'nullable|min:' . $settings->pwd_secure_min . $security_rules;
         }
 
-        return 'required|min:'.$settings->pwd_secure_min.$security_rules;
+        return 'required|min:' . $settings->pwd_secure_min . $security_rules;
     }
 
     /**
@@ -349,7 +349,7 @@ class Setting extends Model
      */
     public static function get_fresh_file_path($attribute, $path)
     {
-        $full_path = storage_path().'/'.$path;
+        $full_path = storage_path() . '/' . $path;
         $file_exists = file_exists($full_path);
         if ($file_exists) {
             $statblock = stat($full_path);
@@ -388,5 +388,4 @@ class Setting extends Model
     {
         return self::get_fresh_file_path('ldap_client_tls_key', 'ldap_client_tls.key');
     }
-
 }
