@@ -40,8 +40,8 @@ class UpdateSupplierTest extends TestCase
             'name' => 'Test Supplier Edited',
             'notes' => 'Test Note Edited',
             'url' => 'http://example.com',
-            'latitude' => '38.7532',
-            'longitude' => '-77.1969',
+            'latitude' => 38.7532,
+            'longitude' => -77.1969,
             'wikidata' => 'Q12345'
         ]);
     }

@@ -27,10 +27,10 @@ class CreateManufacturersTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(Manufacturer::where('name', 'Test Manufacturer')->where('notes', 'Test Note')->exists());
-
-        $manufacturer = Manufacturer::find($response['payload']['id']);
-        $this->assertEquals('Test Manufacturer', $manufacturer->name);
-        $this->assertEquals('Test Note', $manufacturer->notes);
+        $this->assertDatabaseHas('manufacturers', [
+            'id' => $response['payload']['id'],
+            'name' => 'Test Manufacturer',
+            'notes' => 'Test Note'
+        ]);
     }
 }

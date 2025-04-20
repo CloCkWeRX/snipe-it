@@ -17,7 +17,9 @@ class CreateManufacturerTest extends TestCase
 
     public function testUserCanCreateManufacturer()
     {
-        $this->assertFalse(Manufacturer::where('name', 'Test Manufacturer')->exists());
+        $this->assertDatabaseMissing('manufacturers', [
+            'name' => 'Test Manufacturer'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('manufacturers.store'), [
@@ -27,6 +29,10 @@ class CreateManufacturerTest extends TestCase
             ])
             ->assertRedirect(route('manufacturers.index'));
 
-        $this->assertTrue(Manufacturer::where('name', 'Test Manufacturer')->where('notes', 'Test Note')->exists());
+        $this->assertDatabaseMissing('manufacturers', [
+            'name' => 'Test Manufacturer',
+            'notes' => 'Test Note',
+            'wikidata' => 'Q12345'
+        ]);
     }
 }

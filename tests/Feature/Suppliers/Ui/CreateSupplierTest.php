@@ -17,7 +17,9 @@ class CreateSupplierTest extends TestCase
 
     public function testUserCanCreateSupplier()
     {
-        $this->assertFalse(Supplier::where('name', 'Test Supplier')->exists());
+        $this->assertDatabaseMissing('suppliers', [
+            'name' => 'Test Supplier'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('suppliers.store'), [
@@ -27,6 +29,10 @@ class CreateSupplierTest extends TestCase
             ])
             ->assertRedirect(route('suppliers.index'));
 
-        $this->assertTrue(Supplier::where('name', 'Test Supplier')->where('notes', 'Test Note')->exists());
+        $this->assertDatabaseHas('suppliers', [
+            'name' => 'Test Supplier',
+            'notes' => 'Test Note',
+            'wikidata' => 'Q12345'
+        ]);
     }
 }

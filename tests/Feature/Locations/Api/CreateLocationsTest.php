@@ -30,7 +30,9 @@ class CreateLocationsTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(Location::where('name', 'Test Location')->exists());
+        $this->assertDatabasHas('locations', [
+            'name' => 'Test Location'
+        ]);
 
         $location = Location::find($response['payload']['id']);
         $this->assertEquals('Test Location', $location->name);
