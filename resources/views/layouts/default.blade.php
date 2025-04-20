@@ -959,7 +959,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                     );
                 } else {
                     document.querySelector('.main-footer .pull-left').append(
-                        document.createTextNode("Ask your administrator to allow user skins to enable dark or high constrast mode")
+                        document.createTextNode("Ask your administrator to allow user skins to enable dark or high contrast mode")
                     );
                 }
             } else if (window.matchMedia('(prefers-color-scheme: light').matches && skin.includes("dark")) {
@@ -969,7 +969,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                     );
                 } else {
                     document.querySelector('.main-footer .pull-left').append(
-                        document.createTextNode("Ask your administrator to allow user skins to enable light or high constrast mode")
+                        document.createTextNode("Ask your administrator to allow user skins to enable light or high contrast mode")
                     );
                 }
             }
