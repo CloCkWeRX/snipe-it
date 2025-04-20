@@ -29,7 +29,7 @@ class CreateManufacturerTest extends TestCase
             ])
             ->assertRedirect(route('manufacturers.index'));
 
-        $this->assertDatabaseMissing('manufacturers', [
+        $this->assertDatabaseHas('manufacturers', [
             'name' => 'Test Manufacturer',
             'notes' => 'Test Note',
             'wikidata' => 'Q12345'
