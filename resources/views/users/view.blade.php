@@ -734,7 +734,7 @@
                        <div class="col-md-9">
                            {{Helper::formatCurrencyOutput($user->getUserTotalCost()->total_user_cost)}}
 
-                           <a id="optional_info" class="text-primary">
+                           <a id="optional_info" href="#optional_details" class="text-primary">
                                <x-icon type="caret-right" id="optional_info_icon" />
                                <strong>{{ trans('admin/hardware/form.optional_infos') }}</strong>
                            </a>
