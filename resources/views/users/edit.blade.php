@@ -551,7 +551,7 @@
                             </div>
                                  @endif
                            @else
-                                      <p>{{ trans('admin/users/table.nogroup') }} <code>{{ trans('admin/settings/general.admin_settings') }} <i class="fa fa-cogs"></i> > {{ trans('general.groups') }} <i class="fas fa-user-friends"></i></code> </p>
+                                      <p>{{ trans('admin/users/table.nogroup') }} <span class="label label-info">{{ trans('admin/settings/general.admin_settings') }} <i class="fa fa-cogs"></i> > {{ trans('general.groups') }} <i class="fas fa-user-friends"></i></label> </p>
                            @endif
 
                               </div>
