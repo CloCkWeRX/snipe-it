@@ -38,7 +38,9 @@ class UpdateCategoriesTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('categories.index'));
 
-        $this->assertTrue(Category::where('name', 'Test Category')->exists());
+            $this->assertDatabaseHas('categories', [
+                'name' => 'Test Category'
+            ]);
     }
 
     public function testUserCanEditAssetCategory()
@@ -56,7 +58,10 @@ class UpdateCategoriesTest extends TestCase
             ->assertRedirect(route('categories.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(Category::where('name', 'Test Category Edited')->where('notes', 'Test Note Edited')->exists());
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Test Category Edited',
+            'notes' => 'Test Note Edited'
+        ]);
     }
 
     public function testUserCanChangeCategoryTypeIfNoAssetsAssociated()
@@ -76,7 +81,10 @@ class UpdateCategoriesTest extends TestCase
             ->assertRedirect(route('categories.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(Category::where('name', 'Test Category Edited')->where('notes', 'Test Note Edited')->exists());
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Test Category Edited',
+            'notes' => 'Test Note Edited'
+        ]);
     }
 
     public function testUserCannotChangeCategoryTypeIfAssetsAreAssociated()

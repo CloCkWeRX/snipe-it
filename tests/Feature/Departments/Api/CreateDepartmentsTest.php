@@ -31,8 +31,9 @@ class CreateDepartmentsTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(Department::where('name', 'Test Department')->exists());
-
+        $this->assertDatabaseHas('departments', [
+            'name' => 'Test Department'
+        ]);
         $department = Department::find($response['payload']['id']);
         $this->assertEquals('Test Department', $department->name);
         $this->assertEquals('Test Note', $department->notes);

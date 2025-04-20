@@ -38,7 +38,10 @@ class CreateCategoriesTest extends TestCase
             ])
             ->assertRedirect(route('categories.index'));
 
-        $this->assertTrue(Category::where('name', 'Test Category')->where('notes', 'Test Note')->exists());
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Test Category',
+            'notes' => 'Test Note'
+        ]);
     }
 
     public function testUserCannotCreateCategoriesWithInvalidType()

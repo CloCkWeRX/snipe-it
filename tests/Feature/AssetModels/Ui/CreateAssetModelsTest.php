@@ -38,7 +38,9 @@ class CreateAssetModelsTest extends TestCase
             ])
             ->assertRedirect(route('models.index'));
 
-        $this->assertTrue(AssetModel::where('name', 'Test Model')->exists());
+        $this->assertDatabaseHas('asset_models', [
+            'name' => 'Test Model'
+        ]);
     }
 
     public function testUserCannotUseAccessoryCategoryTypeAsAssetModelCategoryType()

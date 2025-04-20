@@ -32,7 +32,9 @@ class CreateCategoriesTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(Category::where('name', 'Test Category')->exists());
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Test Category'
+        ]);
 
         $category = Category::find($response['payload']['id']);
         $this->assertEquals('Test Category', $category->name);

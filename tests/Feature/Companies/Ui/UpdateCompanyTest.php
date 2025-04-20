@@ -30,6 +30,11 @@ class UpdateCompanyTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('companies.index'));
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(Company::where('name', 'Test Company Edited')->where('notes', 'Test Note Edited')->where('url', 'http://example.com')->where('wikidata', 'Q12345')->exists());
+        $this->assertDatabaseHas('companies', [
+            'name' => 'Test Company Edited',
+            'notes' => 'Test Note Edited',
+            'url' => 'http://example.com',
+            'wikidata' => 'Q12345'
+        ]);
     }
 }

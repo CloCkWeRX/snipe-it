@@ -32,7 +32,9 @@ class UpdateAssetModelsTest extends TestCase
     {
         $category = Category::factory()->forAssets()->create();
         $model = AssetModel::factory()->create(['name' => 'Test Model', 'category_id' => $category->id]);
-        $this->assertTrue(AssetModel::where('name', 'Test Model')->exists());
+        $this->assertDatabaseHas('asset_models', [
+            'name' => 'Test Model'
+        ]);
 
         $response = $this->actingAs(User::factory()->superuser()->create())
             ->put(route('models.update', ['model' => $model]), [
@@ -44,14 +46,18 @@ class UpdateAssetModelsTest extends TestCase
             ->assertRedirect(route('models.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(AssetModel::where('name', 'Test Model Edited')->exists());
+        $this->assertDatabaseHas('asset_models', [
+            'name' => 'Test Model Edited'
+        ]);
     }
 
     public function testUserCannotChangeAssetModelCategoryType()
     {
         $category = Category::factory()->forAssets()->create();
         $model = AssetModel::factory()->create(['name' => 'Test Model', 'category_id' => $category->id]);
-        $this->assertTrue(AssetModel::where('name', 'Test Model')->exists());
+        $this->assertDatabaseHas('asset_models', [
+            'name' => 'Test Model'
+        ]);
 
         $response = $this->actingAs(User::factory()->superuser()->create())
             ->from(route('models.edit', $model))

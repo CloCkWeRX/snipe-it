@@ -29,7 +29,9 @@ class CreateAssetModelsTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(AssetModel::where('name', 'Test AssetModel')->exists());
+        $this->assertDatabaseHas('asset_models', [
+            'name' => 'Test AssetModel'
+        ]);
 
         $model = AssetModel::find($response['payload']['id']);
         $this->assertEquals('Test AssetModel', $model->name);
