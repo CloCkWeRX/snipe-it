@@ -650,42 +650,51 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </a>
                             </li>
                         @endcan
-                        @can('view', \App\Models\Manufacturer::class)                                                                                                                   <li>                                                                                                                                                            <a href="{{ route('manufacturers.index') }}" {{ (Request::is('/manufacturers') ? ' class="active"' : '') }}>                                                    {{ trans('general.manufacturers') }}
-                                            </a>
-                                        </li>
-                                    @endcan
+                        @can('view', \App\Models\Manufacturer::class)
+                            <li>
+                                <a href="{{ route('manufacturers.index') }}" {{ (Request::is('/manufacturers') ? ' class="active"' : '') }}>
+                                    <x-icon type="manufacturer" class="fa-fw" />
+                                    {{ trans('general.manufacturers') }}
+                                </a>
+                            </li>
+                        @endcan
 
-                                    @can('view', \App\Models\Supplier::class)
-                                        <li>
-                                            <a href="{{ route('suppliers.index') }}" {{ (Request::is('/suppliers') ? ' class="active"' : '') }}>
-                                                {{ trans('general.suppliers') }}
-                                            </a>
-                                        </li>
-                                    @endcan
+                        @can('view', \App\Models\Supplier::class)
+                            <li>
+                                <a href="{{ route('suppliers.index') }}" {{ (Request::is('/suppliers') ? ' class="active"' : '') }}>
+                                    <x-icon type="supplier" class="fa-fw" />
+                                    {{ trans('general.suppliers') }}
+                                </a>
+                            </li>
+                        @endcan
 
-                                    @can('view', \App\Models\Department::class)
-                                        <li>
-                                            <a href="{{ route('departments.index') }}" {{ (Request::is('/departments') ? ' class="active"' : '') }}>
-                                                {{ trans('general.departments') }}
-                                            </a>
-                                        </li>
-                                    @endcan
+                        @can('view', \App\Models\Department::class)
+                            <li>
+                                <a href="{{ route('departments.index') }}" {{ (Request::is('/departments') ? ' class="active"' : '') }}>
+                                    <x-icon type="department" class="fa-fw" />
+                                    {{ trans('general.departments') }}
+                                </a>
+                            </li>
+                        @endcan
 
-                                    @can('view', \App\Models\Location::class)
-                                        <li>
-                                            <a href="{{ route('locations.index') }}" {{ (Request::is('/locations') ? ' class="active"' : '') }}>
-                                                {{ trans('general.locations') }}
-                                            </a>
-                                        </li>
-                                    @endcan
+                        @can('view', \App\Models\Location::class)
+                            <li>
+                                <a href="{{ route('locations.index') }}" {{ (Request::is('/locations') ? ' class="active"' : '') }}>
+                                    <x-icon type="location" class="fa-fw" />
+                                    {{ trans('general.locations') }}
+                                </a>
+                            </li>
+                        @endcan
 
-                                    @can('view', \App\Models\Company::class)
-                                        <li>
-                                            <a href="{{ route('companies.index') }}" {{ (Request::is('/companies') ? ' class="active"' : '') }}>
-                                                {{ trans('general.companies') }}
-                                            </a>
-                                        </li>
-                                    @endcan
+                        @can('view', \App\Models\Company::class)
+                            <li>
+                                <a href="{{ route('companies.index') }}" {{ (Request::is('/companies') ? ' class="active"' : '') }}>
+                                    <x-icon type="company" class="fa-fw" />
+                                    {{ trans('general.companies') }}
+                                </a>
+                            </li>
+                        @endcan
+
                         @can('backend.interact')
                             <li class="treeview {!! in_array(Request::route()->getName(),App\Helpers\Helper::SettingUrls()) ? ' active': '' !!}">
                                 <a href="#" id="settings">
