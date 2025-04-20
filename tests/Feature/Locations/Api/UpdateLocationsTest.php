@@ -31,10 +31,12 @@ class UpdateLocationsTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $location->refresh();
-        $this->assertEquals('Test Updated Location', $location->name, 'Name was not updated');
-        $this->assertEquals('Test Updated Note', $location->notes, 'Note was not updated');
-        $this->assertEquals(38.7532, $location->latitude, 'Latitude was not updated');
-        $this->assertEquals(-77.1969, $location->longitude, 'Longitude was not updated');
+        $this->assertDatabasHas('locations', [
+            'id' => $location->id,
+            'name' => 'Test Updated Location',
+            'notes' => 'Test Updated Note',
+            'latitude' => 38.7532,
+            'longitude' => -77.1969
+        ]);
     }
 }
