@@ -654,7 +654,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                             <li>
                                 <a href="{{ route('manufacturers.index') }}" {{ (Request::is('/manufacturers') ? ' class="active"' : '') }}>
                                     <x-icon type="manufacturer" class="fa-fw" />
-                                    {{ trans('general.manufacturers') }}
+                                    <span>{{ trans('general.manufacturers') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -663,7 +663,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                             <li>
                                 <a href="{{ route('suppliers.index') }}" {{ (Request::is('/suppliers') ? ' class="active"' : '') }}>
                                     <x-icon type="supplier" class="fa-fw" />
-                                    {{ trans('general.suppliers') }}
+                                    <span>{{ trans('general.suppliers') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -672,7 +672,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                             <li>
                                 <a href="{{ route('departments.index') }}" {{ (Request::is('/departments') ? ' class="active"' : '') }}>
                                     <x-icon type="department" class="fa-fw" />
-                                    {{ trans('general.departments') }}
+                                    <span>{{ trans('general.departments') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -681,7 +681,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                             <li>
                                 <a href="{{ route('locations.index') }}" {{ (Request::is('/locations') ? ' class="active"' : '') }}>
                                     <x-icon type="location" class="fa-fw" />
-                                    {{ trans('general.locations') }}
+                                    <span>{{ trans('general.locations') }}</span>
                                 </a>
                             </li>
                         @endcan
@@ -690,7 +690,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                             <li>
                                 <a href="{{ route('companies.index') }}" {{ (Request::is('/companies') ? ' class="active"' : '') }}>
                                     <x-icon type="company" class="fa-fw" />
-                                    {{ trans('general.companies') }}
+                                    <span>{{ trans('general.companies') }}</span>
                                 </a>
                             </li>
                         @endcan
