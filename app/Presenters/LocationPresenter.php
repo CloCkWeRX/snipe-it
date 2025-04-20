@@ -164,6 +164,14 @@ class LocationPresenter extends Presenter
                 'title' =>  trans('admin/locations/table.country'),
                 'visible' => false,
             ], [
+                'field' => 'coordinates',
+                'searchable' => false,
+                'sortable' => false,
+                'switchable' => true,
+                'title' =>  trans('admin/locations/table.coordinates'),
+                'visible' => false,
+                'formatter' => 'geoFormatter'
+            ], [
                 'field' => 'phone',
                 'searchable' => true,
                 'sortable' => true,
@@ -296,6 +304,14 @@ class LocationPresenter extends Presenter
     public function nameUrl()
     {
         return (string) link_to_route('locations.show', $this->name, $this->id);
+    }
+
+    public function coordinates()
+    {
+        if (empty($this->model->latitude) || empty($this->model->longitude)) {
+            return null;
+        }
+        return $this->model->latitude . "," . $this->model->longitude;
     }
 
     /**
