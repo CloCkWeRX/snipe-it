@@ -32,7 +32,7 @@ class UpdateAssetModelsTest extends TestCase
     {
         $category = Category::factory()->forAssets()->create();
         $model = AssetModel::factory()->create(['name' => 'Test Model', 'category_id' => $category->id]);
-        $this->assertDatabaseHas('asset_models', [
+        $this->assertDatabaseHas('models', [
             'name' => 'Test Model'
         ]);
 
@@ -46,7 +46,7 @@ class UpdateAssetModelsTest extends TestCase
             ->assertRedirect(route('models.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertDatabaseHas('asset_models', [
+        $this->assertDatabaseHas('models', [
             'name' => 'Test Model Edited'
         ]);
     }
@@ -55,7 +55,7 @@ class UpdateAssetModelsTest extends TestCase
     {
         $category = Category::factory()->forAssets()->create();
         $model = AssetModel::factory()->create(['name' => 'Test Model', 'category_id' => $category->id]);
-        $this->assertDatabaseHas('asset_models', [
+        $this->assertDatabaseHas('models', [
             'name' => 'Test Model'
         ]);
 

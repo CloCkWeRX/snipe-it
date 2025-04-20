@@ -29,7 +29,7 @@ class CreateAssetModelsTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertDatabaseHas('asset_models', [
+        $this->assertDatabaseHas('models', [
             'name' => 'Test AssetModel'
         ]);
 

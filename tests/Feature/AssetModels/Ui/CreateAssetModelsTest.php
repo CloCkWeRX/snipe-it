@@ -38,7 +38,7 @@ class CreateAssetModelsTest extends TestCase
             ])
             ->assertRedirect(route('models.index'));
 
-        $this->assertDatabaseHas('asset_models', [
+        $this->assertDatabaseHas('models', [
             'name' => 'Test Model'
         ]);
     }
