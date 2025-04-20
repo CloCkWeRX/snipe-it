@@ -21,7 +21,7 @@ class PreventBackHistory
             'Expires'       => 'Sun, 02 Jan 1990 00:00:00 GMT'
         ];
         $response = $next($request);
-        foreach($headers as $key => $value) {
+        foreach ($headers as $key => $value) {
             $response->headers->set($key, $value);
         }
 
