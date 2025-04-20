@@ -18,7 +18,9 @@ class UpdateSupplierTest extends TestCase
     public function testUserCanEditSuppliers()
     {
         $supplier = Supplier::factory()->create(['name' => 'Test Supplier']);
-        $this->assertTrue(Supplier::where('name', 'Test Supplier')->exists());
+        $this->assertDatabaseHas('suppliers', [
+            'name' => 'Test Supplier'
+        ]);
 
         $response = $this->actingAs(User::factory()->superuser()->create())
             ->put(route('suppliers.update', ['supplier' => $supplier]), [
@@ -34,14 +36,13 @@ class UpdateSupplierTest extends TestCase
             ->assertRedirect(route('suppliers.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(
-            Supplier::where('name', 'Test Supplier Edited')
-                ->where('notes', 'Test Note Edited')
-                // ->where('latitude', 38.7532)
-                // ->where('longitude', -77.1969)
-                ->where('url', 'http://example.com')
-                ->where('wikidata', 'Q12345')
-                ->exists()
-        );
+        $this->assertDatabaseHas('suppliers', [
+            'name' => 'Test Supplier Edited',
+            'notes' => 'Test Note Edited',
+            'url' => 'http://example.com',
+            'latitude' => '38.7532',
+            'longitude' => '-77.1969',
+            'wikidata' => 'Q12345'
+        ]);
     }
 }
