@@ -21,6 +21,7 @@
             :selected="old('category_type', $item->category_type)"
             :disabled="$item->category_type!='' || $item->itemCount() > 0"
             style="min-width:350px"
+            required
             aria-label="category_type"
         />
         {!! $errors->first('category_type', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
@@ -39,21 +40,7 @@
 />
 
 @include ('partials.forms.edit.image-upload', ['image_path' => app('categories_upload_path')])
-
-<div class="form-group{!! $errors->has('notes') ? ' has-error' : '' !!}">
-    <label for="notes" class="col-md-3 control-label">{{ trans('general.notes') }}</label>
-    <div class="col-md-8">
-        <x-input.textarea
-                name="notes"
-                id="notes"
-                :value="old('notes', $item->notes)"
-                placeholder="{{ trans('general.placeholders.notes') }}"
-                aria-label="notes"
-                rows="5"
-        />
-        {!! $errors->first('notes', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-    </div>
-</div>
+@include ('partials.forms.edit.notes')
 
 
 @stop
