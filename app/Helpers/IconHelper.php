@@ -146,6 +146,12 @@ class IconHelper
                 return 'fas fa-lock';
             case 'unlocked':
                 return 'fas fa-lock';
+            case 'manufacturer':
+                return 'fas fa-building';
+            case 'supplier':
+                return 'fas fa-building';
+            case 'company':
+                return 'fas fa-building';
             case 'locations':
                 return 'fas fa-map-marker-alt';
             case 'location':
