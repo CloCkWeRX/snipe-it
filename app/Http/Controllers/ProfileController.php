@@ -49,6 +49,13 @@ class ProfileController extends Controller
         $user->gravatar = $request->input('gravatar');
         $user->skin = $request->input('skin');
         $user->phone = $request->input('phone');
+        $user->address = $request->input('address', null);
+        $user->city = $request->input('city', null);
+        $user->state = $request->input('state', null);
+        $user->country = $request->input('country', null);
+        $user->zip = $request->input('zip', null);
+        $user->latitude = $request->input('latitude', null);
+        $user->longitude = $request->input('longitude', null);
         $user->enable_sounds = $request->input('enable_sounds', false);
         $user->enable_confetti = $request->input('enable_confetti', false);
 
