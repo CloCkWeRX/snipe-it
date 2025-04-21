@@ -12,5 +12,9 @@
     <style>#map { height: 300px !important }/** @todo https://github.com/ginocampra/laravel-leaflet/issues/13 */</style>
     <div>
         <x-laravel-map :initialMarkers="$initialMarkers" :options="$options"/>
+        <a href="geo:{{$item->present()->coordinates}}" onclick="window.open('https://maps.google.com/?q={{$item->present()->coordinates}}')">
+          <i class="fas fa-globe-americas"></i>
+          {{$item->present()->coordinates}}
+        </a>
     </div>
 @endif

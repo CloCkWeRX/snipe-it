@@ -283,33 +283,37 @@
     </div><!--/.col-md-9-->
 
       <!-- side address column -->
-      <div class="col-md-3">
-          @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $supplier])
+      <div class="col-md-3" itemscope itemtype="https://schema.org/Organization">
+          @if ($supplier->image!='')
+              <div class="col-md-12 text-center" style="padding-bottom: 20px;" itemprop="image">
+                  <img src="{{ Storage::disk('public')->url(app('suppliers_upload_url').e($supplier->image)) }}" class="img-responsive img-thumbnail" alt="{{ $supplier->name }}">
+              </div>
+          @endif
 
           <ul class="list-unstyled" style="line-height: 25px; padding-bottom: 20px; padding-top: 20px;">
               @if ($supplier->contact!='')
                   <li><x-icon type="user" /> {{ $supplier->contact }}</li>
               @endif
               @if ($supplier->phone!='')
-                  <li><i class="fas fa-phone"></i>
+                  <li itemprop="telephone"><i class="fas fa-phone"></i>
                       <a href="tel:{{ $supplier->phone }}">{{ $supplier->phone }}</a>
                   </li>
               @endif
               @if ($supplier->fax!='')
-                  <li><i class="fas fa-print"></i> {{ $supplier->fax }}</li>
+                  <li itemprop="faxNumber"><i class="fas fa-print"></i> {{ $supplier->fax }}</li>
               @endif
 
               @if ($supplier->email!='')
                   <li>
                       <i class="far fa-envelope"></i>
-                      <a href="mailto:{{ $supplier->email }}">
+                      <a itemprop="email" href="mailto:{{ $supplier->email }}">
                           {{ $supplier->email }}
                       </a>
                   </li>
               @endif
 
               @if ($supplier->url!='')
-                  <li>
+                  <li itemprop="url">
                       <i class="fas fa-globe-americas"></i>
                       <a href="{{ $supplier->url }}" rel="no-opener" target="_new">{{ $supplier->url }}</a>
                   </li>
@@ -323,22 +327,20 @@
               @endif
 
               @if ($supplier->present()->formattedAddress()!='')
-                  <li style="white-space: pre-line">
+                  <li style="white-space: pre-line" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
                       <a href="https://www.google.com/maps?q{{ urlencode($supplier->present()->formattedAddress(", ")) }}" target="_blank" rel="noopener">{{ $supplier->present()->formattedAddress("\n") }}</a>
                   </li>
               @endif
 
+              <li>
+                @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $supplier])
+              </li>
 
               @if ($supplier->notes!='')
                   <li><i class="fa fa-comment"></i> {!! nl2br(Helper::parseEscapedMarkedownInline($supplier->notes)) !!}</li>
               @endif
 
           </ul>
-          @if ($supplier->image!='')
-              <div class="col-md-12 text-center" style="padding-bottom: 20px;">
-                  <img src="{{ Storage::disk('public')->url(app('suppliers_upload_url').e($supplier->image)) }}" class="img-responsive img-thumbnail" alt="{{ $supplier->name }}">
-              </div>
-          @endif
 
       </div> <!--/col-md-3-->
 
