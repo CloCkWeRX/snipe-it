@@ -801,8 +801,7 @@
 
     function geoFormatter(value) {
         if (value) {
-            // https://github.com/prowestgis/dojo-geo-uri-polyfill but OSM?
-            return '<a href="geo:' + value + '" onclick="window.open()">' + value + '</a>';
+            return '<a href="geo:' + value + '" onclick="window.open("http://maps.google.com?near=" + latvaluelon + "&ll=" + value, "_blank");">' + value + '</a>';
         }
     }
 
