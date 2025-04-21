@@ -317,7 +317,7 @@
 
               @if ($supplier->present()->formattedAddress()!='')
                   <li style="white-space: pre-line">
-                      {{ $supplier->present()->formattedAddress("\n") }}
+                      <a href="https://www.google.com/maps?q{{ urlencode($supplier->present()->formattedAddress(", ")) }}" target="_blank" rel="noopener">{{ $supplier->present()->formattedAddress("\n") }}</a>
                   </li>
               @endif
 

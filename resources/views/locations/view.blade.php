@@ -491,7 +491,7 @@
 
               @if ($location->present()->formattedAddress()!='')
                   <li style="white-space: pre-line">
-                      {{ $location->present()->formattedAddress("\n") }}
+                      <a href="https://www.google.com/maps?q{{ urlencode($location->present()->formattedAddress(", ")) }}" target="_blank" rel="noopener">{{ $location->present()->formattedAddress("\n") }}</a>
                   </li>
               @endif
               @if ($location->manager)
@@ -507,9 +507,7 @@
                   <li>{{ trans('admin/locations/table.ldap_ou') }}: {{ $location->ldap_ou }}</li>
               @endif
 
-
               @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $location])
-
           </ul>
       </div>
 
