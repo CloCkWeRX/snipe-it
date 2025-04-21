@@ -799,6 +799,12 @@
         }
     }
 
+    function geoFormatter(value) {
+        if (value) {
+            return '<a href="geo:' + value + '" onclick="window.open("http://maps.google.com?near=" + latvaluelon + "&ll=" + value, "_blank");">' + value + '</a>';
+        }
+    }
+
     function linkFormatter(value) {
         if (value) {
             return '<a href="' + value + '" rel="noopener" target="_blank">' + value + '</a>';

@@ -433,71 +433,7 @@
       </div><!--/.col-md-9-->
   </div><!--/.col-md-9-->
 
-  <div class="col-md-3">
-
-      @if ($location->image!='')
-          <div class="col-md-12 text-center" style="padding-bottom: 17px;">
-              <img src="{{ Storage::disk('public')->url('locations/'.e($location->image)) }}" class="img-responsive img-thumbnail" style="width:100%" alt="{{ $location->name }}">
-          </div>
-      @endif
-
-      @if (($location->state!='') && ($location->country!='') && (config('services.google.maps_api_key')))
-          <div class="col-md-12 text-center" style="padding-bottom: 10px;">
-              <img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ urlencode($location->address.','.$location->city.' '.$location->state.' '.$location->country.' '.$location->zip) }}&size=700x500&maptype=roadmap&key={{ config('services.google.maps_api_key') }}" class="img-thumbnail" style="width:100%" alt="Map">
-          </div>
-      @endif
-
-      <div class="col-md-12">
-
-          <ul class="list-unstyled" style="line-height: 22px; padding-bottom: 20px;">
-
-              @if ($location->notes)
-                  <li>
-                      <strong>{{ trans('general.notes') }}</strong>:
-                      {!! nl2br(Helper::parseEscapedMarkedownInline($location->notes)) !!}
-                  </li>
-              @endif
-
-              @if ($location->address!='')
-                  <li>{{ $location->address }}</li>
-              @endif
-              @if ($location->address2!='')
-                  <li>{{ $location->address2 }}</li>
-              @endif
-              @if (($location->city!='') || ($location->state!='') || ($location->zip!=''))
-                  <li>{{ $location->city }} {{ $location->state }} {{ $location->zip }}</li>
-              @endif
-              @if ($location->manager)
-                  <li>{{ trans('admin/users/table.manager') }}: {!! $location->manager->present()->nameUrl() !!}</li>
-              @endif
-              @if ($location->company)
-                  <li>{{ trans('admin/companies/table.name') }}: {!! $location->company->present()->nameUrl() !!}</li>
-              @endif
-              @if ($location->parent)
-                  <li>{{ trans('admin/locations/table.parent') }}: {!! $location->parent->present()->nameUrl() !!}</li>
-              @endif
-              @if ($location->ldap_ou)
-                  <li>{{ trans('admin/locations/table.ldap_ou') }}: {{ $location->ldap_ou }}</li>
-              @endif
-
-
-              @if ((($location->address!='') && ($location->city!='')) || ($location->state!='') || ($location->country!=''))
-                      <li>
-                        <a href="https://maps.google.com/?q={{ urlencode($location->address.','. $location->city.','.$location->state.','.$location->country.','.$location->zip) }}" target="_blank">
-                            {!! trans('admin/locations/message.open_map', ['map_provider_icon' => '<i class="fa-brands fa-google" aria-hidden="true"></i>']) !!}
-                            <x-icon type="external-link"/>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://maps.apple.com/?q={{ urlencode($location->address.','. $location->city.','.$location->state.','.$location->country.','.$location->zip) }}" target="_blank">
-                            {!! trans('admin/locations/message.open_map', ['map_provider_icon' => '<i class="fa-brands fa-apple" aria-hidden="true" style="font-size: 18px"></i>']) !!}
-                            <x-icon type="external-link"/></a>
-                  </li>
-              @endif
-
-          </ul>
-      </div>
-
+  <div class="col-md-3" itemscope itemtype="https://schema.org/Organization">
       @can('update', $location)
       <div class="col-md-12">
           <a href="{{ route('locations.edit', ['location' => $location->id]) }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social">
@@ -519,37 +455,103 @@
               {{ trans('admin/locations/table.print_all_assigned') }}
           </a>
       </div>
-
-          @can('delete', $location)
-              <div class="col-md-12 hidden-print" style="padding-top: 10px;">
-
-            @if ($location->deleted_at=='')
-
-                @if ($location->isDeletable())
-                      <button class="btn btn-sm btn-block btn-danger btn-social delete-location" data-toggle="modal" data-title="{{ trans('general.delete') }}" data-content="{{ trans('general.sure_to_delete_var', ['item' => $location->name]) }}" data-target="#dataConfirmModal">
-                          <x-icon type="delete" />
-                          {{ trans('general.delete') }}
-                      </button>
-                @else
-                      <a href="#" class="btn btn-block btn-sm btn-danger btn-social hidden-print disabled" data-tooltip="true"  data-placement="top" data-title="{{ trans('general.cannot_be_deleted') }}">
-                          <x-icon type="delete" />
-                          {{ trans('general.delete') }}
-                      </a>
-                @endif
-
+      @can('delete', $location)
+      <div class="col-md-12 hidden-print" style="padding-top: 10px; margin-bottom: 10px">
+        @if ($location->deleted_at=='')
+            @if ($location->isDeletable())
+                <button class="btn btn-sm btn-block btn-danger btn-social delete-location" data-toggle="modal" data-title="{{ trans('general.delete') }}" data-content="{{ trans('general.sure_to_delete_var', ['item' => $location->name]) }}" data-target="#dataConfirmModal">
+                    <x-icon type="delete" />
+                    {{ trans('general.delete') }}
+                </button>
             @else
-                  <form method="POST" action="{{ route('locations.restore', ['location' => $location->id]) }}">
-                      @csrf
-                      <button class="btn btn-sm btn-block btn-warning btn-social delete-asset">
-                          <x-icon type="restore" />
-                          {{ trans('general.restore') }}
-                      </button>
-                  </form>
+                <a href="#" class="btn btn-block btn-sm btn-danger btn-social hidden-print disabled" data-tooltip="true"  data-placement="top" data-title="{{ trans('general.cannot_be_deleted') }}">
+                    <x-icon type="delete" />
+                    {{ trans('general.delete') }}
+                </a>
             @endif
-              </div>
-    @endcan
+        @else
+            <form method="POST" action="{{ route('locations.restore', ['location' => $location->id]) }}">
+                @csrf
+                <button class="btn btn-sm btn-block btn-warning btn-social delete-asset">
+                    <x-icon type="restore" />
+                    {{ trans('general.restore') }}
+                </button>
+            </form>
+        @endif
+      </div>
+      @endcan
 
+      @if ($location->image!='')
+          <div class="col-md-12 text-center" itemprop="image" style="padding-bottom: 17px;">
+              <img src="{{ Storage::disk('public')->url('locations/'.e($location->image)) }}" class="img-responsive img-thumbnail" style="width:100%" alt="{{ $location->name }}">
+          </div>
+      @endif
 
+      <div class="col-md-12">
+
+          <ul class="list-unstyled sidebar-attribute-list" style="line-height: 22px; padding-bottom: 20px;">
+              @if ($location->manager)
+                  <li title="{{ trans('admin/users/table.manager') }}"><i class="fa fa-user"></i> {!! $location->manager->present()->nameUrl() !!}</li>
+              @endif
+              @if ($location->company)
+                  <li title="{{ trans('admin/companies/table.name') }}"><i class="fa fa-building"></i>{!! $location->company->present()->nameUrl() !!}</li>
+              @endif
+              @if ($location->parent)
+                  <li title="{{ trans('admin/locations/table.parent') }}"><i class="fa fa-building"></i>{!! $location->parent->present()->nameUrl() !!}</li>
+              @endif
+              @if ($location->ldap_ou)
+                  <li title="{{ trans('admin/locations/table.ldap_ou') }}"><i class="fa"></i>{{ $location->ldap_ou }}</li>
+              @endif
+
+              @if ($location->notes)
+                  <li>
+                      <i class="fa fa-comment"></i>
+                      {!! nl2br(Helper::parseEscapedMarkedownInline($location->notes)) !!}
+                  </li>
+              @endif
+
+              @if ($location->phone!='')
+                  <li itemprop="telephone"><i class="fas fa-phone"></i>
+                      <a href="tel:{{ $location->phone }}">{{ $location->phone }}</a>
+                  </li>
+              @endif
+              @if ($location->fax!='')
+                  <li itemprop="faxNumber"><i class="fas fa-print"></i> {{ $location->fax }}</li>
+              @endif
+
+              @if ($location->email!='')
+                  <li>
+                      <i class="far fa-envelope"></i>
+                      <a itemprop="email" href="mailto:{{ $location->email }}">
+                          {{ $location->email }}
+                      </a>                                                                                                                                                    </li>
+              @endif
+
+              @if ($location->url!='')
+                  <li itemprop="url">
+                      <i class="fas fa-globe-americas"></i>
+                      <a href="{{ $location->url }}" rel="no-opener" target="_new">{{ $location->url }}</a>
+                  </li>
+              @endif
+
+              @if ($location->wikidata!='')
+                  <li>
+                      <i class="fas fa-external-link"></i>
+                      <a href="https://www.wikidata.org/wiki/{{ $location->wikidata }}" rel="no-opener" target="_new">{{ $location->wikidata }}</a>
+                  </li>
+              @endif
+
+              @if ($location->present()->formattedAddress()!='')
+                  <li style="white-space: pre-line">
+                      <i class="fas fa-globe-americas"></i>
+                      <a href="https://www.google.com/maps?q{{ urlencode($location->present()->formattedAddress(", ")) }}" target="_blank" rel="noopener">{{ $location->present()->formattedAddress("\n") }}</a>
+                  </li>
+              @endif
+
+              @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $location])
+
+          </ul>
+      </div>
 
 </div>
 </div>

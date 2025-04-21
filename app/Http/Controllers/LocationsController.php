@@ -230,7 +230,33 @@ class LocationsController extends Controller
             ->find($location->id);
 
         if (isset($location->id)) {
-            return view('locations/view', compact('location'));
+            $options = [];
+            $initialMarkers = [];
+            if ($location->latitude && $location->longitude) {
+                $options = [
+                    'center' => [
+                        'lat' => $location->latitude,
+                        'lng' => $location->longitude
+                    ],
+                    'googleview' => false,
+                    'zoom' => 18,
+                    'zoomControl' => false,
+                ];
+    
+    
+                $initialMarkers = [
+                    [
+                        'position' => [
+                            'lat' => $location->latitude,
+                            'lng' => $location->longitude
+                        ],
+                        'draggable' => false,
+                        'title' => $location->name
+                    ]
+                ];
+            }
+
+            return view('locations/view', compact('location', 'options', 'initialMarkers'));
         }
 
         return redirect()->route('locations.index')->with('error', trans('admin/locations/message.does_not_exist'));

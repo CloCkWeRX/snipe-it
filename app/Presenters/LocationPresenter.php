@@ -164,6 +164,14 @@ class LocationPresenter extends Presenter
                 'title' =>  trans('admin/locations/table.country'),
                 'visible' => false,
             ], [
+                'field' => 'coordinates',
+                'searchable' => false,
+                'sortable' => false,
+                'switchable' => true,
+                'title' =>  trans('admin/locations/table.coordinates'),
+                'visible' => false,
+                'formatter' => 'geoFormatter'
+            ], [
                 'field' => 'phone',
                 'searchable' => true,
                 'sortable' => true,
@@ -296,6 +304,44 @@ class LocationPresenter extends Presenter
     public function nameUrl()
     {
         return (string) link_to_route('locations.show', $this->name, $this->id);
+    }
+
+    public function coordinates()
+    {
+        if (empty($this->model->latitude) || empty($this->model->longitude)) {
+            return null;
+        }
+        return $this->model->latitude . "," . $this->model->longitude;
+    }
+
+    /** @todo Refactor a common concern? */
+    public function formattedAddress($separator = ", ")
+    {
+        $lines = [];
+        if ($this->model->address) {
+            $lines[] = $this->model->address;
+        }
+        if ($this->model->address2) {
+            $lines[] = $this->model->address2;
+        }
+        $line3 = [];
+        if ($this->model->city) {
+            $line3[] = $this->model->city;
+        }
+        if ($this->model->state) {
+            $line3[] = $this->model->state;
+        }
+        if ($this->model->zip) {
+            $line3[] = $this->model->zip;
+        }
+        if (!empty($line3)) {
+            $lines[] = implode(" ", $line3);
+        }
+        if ($this->model->country) {
+            $lines[] = strtoupper($this->model->country);
+        }
+
+        return implode($separator, $lines);
     }
 
     /**

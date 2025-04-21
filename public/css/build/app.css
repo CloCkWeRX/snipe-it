@@ -96,6 +96,11 @@ a.accordion-header {
   width: 50px;
   padding-top: 10px;
 }
+.sidebar-attribute-list li {
+  display: flex;
+  justify-content: space-between;
+  text-align: right;
+}
 .main-header .sidebar-toggle:before {
   content: "\f0c9";
 }
