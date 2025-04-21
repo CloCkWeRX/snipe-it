@@ -399,7 +399,7 @@ input[type=search] {
 .input-group,
 .input-group-addon {
   background-color: var(--back-sub) !important;
-  color: var(--text-main) !important;
+  color: var(--text-main);
 }
 #licensesTable > tbody > tr > td > nobr > a > i.fa {
   color: var(--text-main);
