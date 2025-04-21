@@ -446,34 +446,32 @@
               {{ trans('admin/locations/table.print_all_assigned') }}
           </a>
       </div>
-          @can('delete', $location)
-              <div class="col-md-12 hidden-print" style="padding-top: 10px;">
-
-            @if ($location->deleted_at=='')
-
-                @if ($location->isDeletable())
-                      <button class="btn btn-sm btn-block btn-danger btn-social delete-location" data-toggle="modal" data-title="{{ trans('general.delete') }}" data-content="{{ trans('general.sure_to_delete_var', ['item' => $location->name]) }}" data-target="#dataConfirmModal">
-                          <x-icon type="delete" />
-                          {{ trans('general.delete') }}
-                      </button>
-                @else
-                      <a href="#" class="btn btn-block btn-sm btn-danger btn-social hidden-print disabled" data-tooltip="true"  data-placement="top" data-title="{{ trans('general.cannot_be_deleted') }}">
-                          <x-icon type="delete" />
-                          {{ trans('general.delete') }}
-                      </a>
-                @endif
-
+      @can('delete', $location)
+      <div class="col-md-12 hidden-print" style="padding-top: 10px;">
+        @if ($location->deleted_at=='')
+            @if ($location->isDeletable())
+                <button class="btn btn-sm btn-block btn-danger btn-social delete-location" data-toggle="modal" data-title="{{ trans('general.delete') }}" data-content="{{ trans('general.sure_to_delete_var', ['item' => $location->name]) }}" data-target="#dataConfirmModal">
+                    <x-icon type="delete" />
+                    {{ trans('general.delete') }}
+                </button>
             @else
-                  <form method="POST" action="{{ route('locations.restore', ['location' => $location->id]) }}">
-                      @csrf
-                      <button class="btn btn-sm btn-block btn-warning btn-social delete-asset">
-                          <x-icon type="restore" />
-                          {{ trans('general.restore') }}
-                      </button>
-                  </form>
+                <a href="#" class="btn btn-block btn-sm btn-danger btn-social hidden-print disabled" data-tooltip="true"  data-placement="top" data-title="{{ trans('general.cannot_be_deleted') }}">
+                    <x-icon type="delete" />
+                    {{ trans('general.delete') }}
+                </a>
             @endif
-              </div>
-    @endcan
+        @else
+            <form method="POST" action="{{ route('locations.restore', ['location' => $location->id]) }}">
+                @csrf
+                <button class="btn btn-sm btn-block btn-warning btn-social delete-asset">
+                    <x-icon type="restore" />
+                    {{ trans('general.restore') }}
+                </button>
+            </form>
+        @endif
+      </div>
+      @endcan
+
       @if ($location->image!='')
           <div class="col-md-12 text-center" style="padding-bottom: 17px;">
               <img src="{{ Storage::disk('public')->url('locations/'.e($location->image)) }}" class="img-responsive img-thumbnail" style="width:100%" alt="{{ $location->name }}">
