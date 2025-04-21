@@ -285,11 +285,16 @@
       <!-- side address column -->
       <div class="col-md-3">
 
-
-      @if (($supplier->address!='') && ($supplier->state!='') && ($supplier->country!='') && (config('services.google.maps_api_key')))
-              <div class="col-md-12 text-center" style="padding-bottom: 20px;">
-                  <img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ urlencode($supplier->address.','.$supplier->city.' '.$supplier->state.' '.$supplier->country.' '.$supplier->zip) }}&size=500x300&maptype=roadmap&key={{ config('services.google.maps_api_key') }}" class="img-responsive img-thumbnail" alt="Map">
-              </div>
+          @if config('services.google.maps_api_key')
+              @if (($supplier->present()->coordinates!=''))
+                  <div class="col-md-12 text-center" style="padding-bottom: 20px;">
+                      <img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ urlencode($supplier->present()->coordinates) }}&size=500x300&maptype=roadmap&key={{ config('services.google.maps_api_key') }}" class="img-responsive img-thumbnail" alt="Map">
+                  </div>
+              @elseif (($supplier->address!='') && ($supplier->state!='') && ($supplier->country!=''))
+                  <div class="col-md-12 text-center" style="padding-bottom: 20px;">
+                      <img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ urlencode($supplier->address.','.$supplier->city.' '.$supplier->state.' '.$supplier->country.' '.$supplier->zip) }}&size=500x300&maptype=roadmap&key={{ config('services.google.maps_api_key') }}" class="img-responsive img-thumbnail" alt="Map">
+                  </div>
+              @endif
           @endif
 
 
