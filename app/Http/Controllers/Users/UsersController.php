@@ -73,7 +73,7 @@ class UsersController extends Controller
         $userPermissions = Helper::selectedPermissionsArray($permissions, $request->old('permissions', []));
         $permissions = $this->filterDisplayable($permissions);
 
-        $user = new User;
+        $user = new User();
 
         return view('users/edit', compact('groups', 'userGroups', 'permissions', 'userPermissions'))
             ->with('user', $user);
@@ -91,7 +91,7 @@ class UsersController extends Controller
     public function store(SaveUserRequest $request)
     {
         $this->authorize('create', User::class);
-        $user = new User;
+        $user = new User();
         //Username, email, and password need to be handled specially because the need to respect config values on an edit.
         $user->email = trim($request->input('email'));
         $user->username = trim($request->input('username'));
@@ -191,7 +191,6 @@ class UsersController extends Controller
         $user = User::with(['assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc'])->withTrashed()->find($user->id);
 
         if ($user) {
-
             $permissions = config('permissions');
             $groups = Group::pluck('name', 'id');
 
@@ -202,7 +201,6 @@ class UsersController extends Controller
 
             return view('users/edit', compact('user', 'groups', 'userGroups', 'permissions', 'userPermissions'))->with('item', $user);
         }
-
     }
 
     /**
@@ -332,7 +330,6 @@ class UsersController extends Controller
         $this->authorize('delete', User::class);
 
         if ($user = User::find($id)) {
-
             $this->authorize('delete', $user);
 
             if ($user->delete()) {
@@ -340,7 +337,6 @@ class UsersController extends Controller
             }
         }
         return redirect()->route('users.index')->with('error', trans('admin/users/message.user_not_found'));
-
     }
 
     /**
@@ -375,7 +371,6 @@ class UsersController extends Controller
                     return redirect()->back()->with('success', trans('admin/users/message.success.restored'));
                 }
                 return redirect()->route('users.index')->with('success', trans('admin/users/message.success.restored'));
-
             }
 
             // Check validation to make sure we're not restoring a user with the same username as an existing user
@@ -444,8 +439,6 @@ class UsersController extends Controller
 
 
         if ($user_to_clone) {
-
-
             $user = clone $user_to_clone;
 
             // Blank out some fields
@@ -471,8 +464,6 @@ class UsersController extends Controller
                 ->with('clone_user', $user_to_clone)
                 ->with('item', $user);
         }
-
-
     }
 
     /**
@@ -533,19 +524,17 @@ class UsersController extends Controller
                         $user_groups = '';
 
                         foreach ($user->groups as $user_group) {
-                            $user_groups .= $user_group->name.', ';
+                            $user_groups .= $user_group->name . ', ';
                         }
 
 
                         $permissionstring = "";
-                        
-                        if($user->isSuperUser()) {
+
+                        if ($user->isSuperUser()) {
                             $permissionstring = trans('general.superuser');
-                        }
-                        elseif($user->hasAccess('admin')) {
+                        } elseif ($user->hasAccess('admin')) {
                             $permissionstring = trans('general.admin');
-                        }
-                        else {
+                        } else {
                             $permissionstring = trans('general.user');
                         }
 
@@ -580,7 +569,7 @@ class UsersController extends Controller
             fclose($handle);
         }, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="users-'.date('Y-m-d-his').'.csv"',
+            'Content-Disposition' => 'attachment; filename="users-' . date('Y-m-d-his') . '.csv"',
         ]);
 
         return $response;
@@ -646,7 +635,6 @@ class UsersController extends Controller
         $this->authorize('view', $user);
 
         if ($user) {
-
             if (empty($user->email)) {
                 return redirect()->back()->with('error', trans('admin/users/message.user_has_no_email'));
             }
@@ -656,7 +644,6 @@ class UsersController extends Controller
         }
 
         return redirect()->back()->with('error', trans('admin/users/message.user_not_found', ['id' => $id]));
-
     }
 
     /**
@@ -674,10 +661,8 @@ class UsersController extends Controller
             $credentials = ['email' => trim($user->email)];
 
             try {
-
                 Password::sendResetLink($credentials);
                 return redirect()->back()->with('success', trans('admin/users/message.password_reset_sent', ['email' => $user->email]));
-
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', trans('general.error_sending_email'));
             }

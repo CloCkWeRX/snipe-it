@@ -81,6 +81,8 @@
           </div>
         </div>
 
+        @include ('partials.forms.edit.address', ['item' => $user])
+
         <div class="form-group">
           <div class="col-md-9 col-md-offset-3">
             <label class="form-control">
