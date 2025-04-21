@@ -315,11 +315,19 @@
                   </li>
               @endif
 
+              @if ($supplier->wikidata!='')
+                  <li>
+                      <i class="fas fa-external-link"></i>
+                      <a href="https://www.wikidata.org/wiki/{{ $supplier->wikidata }}" rel="no-opener" target="_new">{{ $supplier->wikidata }}</a>
+                  </li>
+              @endif
+
               @if ($supplier->present()->formattedAddress()!='')
                   <li style="white-space: pre-line">
                       <a href="https://www.google.com/maps?q{{ urlencode($supplier->present()->formattedAddress(", ")) }}" target="_blank" rel="noopener">{{ $supplier->present()->formattedAddress("\n") }}</a>
                   </li>
               @endif
+
 
               @if ($supplier->notes!='')
                   <li><i class="fa fa-comment"></i> {!! nl2br(Helper::parseEscapedMarkedownInline($supplier->notes)) !!}</li>
