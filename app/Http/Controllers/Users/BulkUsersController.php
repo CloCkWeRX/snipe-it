@@ -41,11 +41,10 @@ class BulkUsersController extends Controller
 
         // Make sure there were users selected
         if (($request->filled('ids')) && (count($request->input('ids')) > 0)) {
-
             // Get the list of affected users
             $user_raw_array = request('ids');
             $users = User::whereIn('id', $user_raw_array)
-                ->with('assets', 'manager', 'userlog', 'licenses', 'consumables', 'accessories', 'managedLocations','uploads', 'acceptances')->get();
+                ->with('assets', 'manager', 'userlog', 'licenses', 'consumables', 'accessories', 'managedLocations', 'uploads', 'acceptances')->get();
 
             // bulk edit, display the bulk edit form
             if ($request->input('bulk_actions') == 'edit') {
@@ -97,11 +96,10 @@ class BulkUsersController extends Controller
                         $credentials = ['email' => $user->email];
                         Password::sendResetLink($credentials/* , function (Message $message) {
                         $message->subject($this->getEmailSubject()); // TODO - I'm not sure if we still need this, but this second parameter is no longer accepted in later Laravel versions.
-                        } */ );                                      // TODO - so hopefully this doesn't give us generic password reset messages? But it at least _works_
+                        } */);                                      // TODO - so hopefully this doesn't give us generic password reset messages? But it at least _works_
                     }
                 }
                 return redirect()->back()->with('success', trans('admin/users/message.password_resets_sent'));
-
             } elseif ($request->input('bulk_actions') == 'print') {
                 $users = User::query()
                     ->with([
@@ -186,31 +184,31 @@ class BulkUsersController extends Controller
         /**
          * Check to see if the user wants to actually blank out the values vs skip them
          */
-        if ($request->input('null_location_id')=='1') {
+        if ($request->input('null_location_id') == '1') {
             $this->update_array['location_id'] = null;
         }
 
-        if ($request->input('null_department_id')=='1') {
+        if ($request->input('null_department_id') == '1') {
             $this->update_array['department_id'] = null;
         }
 
-        if ($request->input('null_manager_id')=='1') {
+        if ($request->input('null_manager_id') == '1') {
             $this->update_array['manager_id'] = null;
         }
 
-        if ($request->input('null_company_id')=='1') {
+        if ($request->input('null_company_id') == '1') {
             $this->update_array['company_id'] = null;
         }
 
-        if ($request->input('null_start_date')=='1') {
+        if ($request->input('null_start_date') == '1') {
             $this->update_array['start_date'] = null;
         }
 
-        if ($request->input('null_end_date')=='1') {
+        if ($request->input('null_end_date') == '1') {
             $this->update_array['end_date'] = null;
         }
 
-        if ($request->input('null_locale')=='1') {
+        if ($request->input('null_locale') == '1') {
             $this->update_array['locale'] = null;
         }
 
@@ -221,7 +219,7 @@ class BulkUsersController extends Controller
         User::whereIn('id', $user_raw_array)
             ->where('id', '!=', auth()->id())->update($this->update_array);
 
-        if (array_key_exists('location_id', $this->update_array)){
+        if (array_key_exists('location_id', $this->update_array)) {
             Asset::where('assigned_type', User::class)
                 ->whereIn('assigned_to', $user_raw_array)
                 ->update(['location_id' => $this->update_array['location_id']]);
@@ -311,13 +309,13 @@ class BulkUsersController extends Controller
 
         foreach ($users as $user) {
             $user->accessories()->sync([]);
-            if ($request->input('delete_user')=='1') {
+            if ($request->input('delete_user') == '1') {
                 $user->delete();
             }
         }
 
         $msg = trans('general.bulk_checkin_success');
-        if ($request->input('delete_user')=='1') {
+        if ($request->input('delete_user') == '1') {
             $msg = trans('general.bulk_checkin_delete_success');
         }
 
@@ -336,7 +334,7 @@ class BulkUsersController extends Controller
             $item_id = $item->id;
             $logAction = new Actionlog();
 
-            if ($itemType == License::class){
+            if ($itemType == License::class) {
                 $item_id = $item->license_id;
             }
 
@@ -391,25 +389,24 @@ class BulkUsersController extends Controller
 
         // Get the users
         $merge_into_user = User::find($request->input('merge_into_id'));
-        $users_to_merge = User::whereIn('id', $user_ids_to_merge)->with('assets', 'manager', 'userlog', 'licenses', 'consumables', 'accessories', 'managedLocations','uploads', 'acceptances')->get();
+        $users_to_merge = User::whereIn('id', $user_ids_to_merge)->with('assets', 'manager', 'userlog', 'licenses', 'consumables', 'accessories', 'managedLocations', 'uploads', 'acceptances')->get();
         $admin = User::find(auth()->id());
 
         // Walk users
         foreach ($users_to_merge as $user_to_merge) {
-
             foreach ($user_to_merge->assets as $asset) {
-                Log::debug('Updating asset: '.$asset->asset_tag . ' to '.$merge_into_user->id);
+                Log::debug('Updating asset: ' . $asset->asset_tag . ' to ' . $merge_into_user->id);
                 $asset->assigned_to = $request->input('merge_into_id');
                 $asset->save();
             }
 
             foreach ($user_to_merge->licenses as $license) {
-                Log::debug('Updating license pivot: '.$license->id . ' to '.$merge_into_user->id);
+                Log::debug('Updating license pivot: ' . $license->id . ' to ' . $merge_into_user->id);
                 $user_to_merge->licenses()->updateExistingPivot($license->id, ['assigned_to' => $merge_into_user->id]);
             }
 
             foreach ($user_to_merge->consumables as $consumable) {
-                Log::debug('Updating consumable pivot: '.$consumable->id . ' to '.$merge_into_user->id);
+                Log::debug('Updating consumable pivot: ' . $consumable->id . ' to ' . $merge_into_user->id);
                 $user_to_merge->consumables()->updateExistingPivot($consumable->id, ['assigned_to' => $merge_into_user->id]);
             }
 
@@ -442,11 +439,8 @@ class BulkUsersController extends Controller
             $user_to_merge->delete();
 
             event(new UserMerged($user_to_merge, $merge_into_user, $admin));
-
         }
 
         return redirect()->route('users.index')->with('success', trans('general.merge_success', ['count' => $users_to_merge->count(), 'into_username' => $merge_into_user->username]));
-
-
     }
 }

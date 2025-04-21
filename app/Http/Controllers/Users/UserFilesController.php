@@ -31,7 +31,7 @@ class UserFilesController extends Controller
             return redirect()->back()->with('error', trans('admin/users/message.upload.nofiles'));
         }
         foreach ($files as $file) {
-            $file_name = $request->handleFile('private_uploads/users/', 'user-'.$user->id, $file);
+            $file_name = $request->handleFile('private_uploads/users/', 'user-' . $user->id, $file);
 
             //Log the uploaded file to the log
             $logAction = new Actionlog();
@@ -45,13 +45,11 @@ class UserFilesController extends Controller
             $logAction->action_type = 'uploaded';
 
             if (! $logAction->save()) {
-                return JsonResponse::create(['error' => 'Failed validation: '.print_r($logAction->getErrors(), true)], 500);
+                return JsonResponse::create(['error' => 'Failed validation: ' . print_r($logAction->getErrors(), true)], 500);
             }
 
-        return redirect()->back()->withFragment('files')->with('success', trans('admin/users/message.upload.success'));
+            return redirect()->back()->withFragment('files')->with('success', trans('admin/users/message.upload.success'));
         }
-
-
     }
 
     /**
@@ -67,7 +65,6 @@ class UserFilesController extends Controller
     public function destroy($userId = null, $fileId = null)
     {
         if ($user = User::find($userId)) {
-
             $this->authorize('delete', $user);
             $rel_path = 'private_uploads/users';
 
@@ -75,12 +72,11 @@ class UserFilesController extends Controller
             if ($log = Actionlog::find($fileId)) {
                 $filename = $log->filename;
                 $log->delete();
-                
-                if (Storage::exists($rel_path.'/'.$filename)) {
-                    Storage::delete($rel_path.'/'.$filename);
+
+                if (Storage::exists($rel_path . '/' . $filename)) {
+                    Storage::delete($rel_path . '/' . $filename);
                     return redirect()->back()->withFragment('files')->with('success', trans('admin/users/message.deletefile.success'));
                 }
-
             }
 
             // The log record doesn't exist somehow
@@ -88,7 +84,6 @@ class UserFilesController extends Controller
         }
 
         return redirect()->route('users.index')->with('error', trans('admin/users/message.user_not_found', ['id' => $userId]));
-
     }
 
     /**
@@ -112,18 +107,16 @@ class UserFilesController extends Controller
             $this->authorize('view', $user);
 
         if ($log = Actionlog::whereNotNull('filename')->where('item_id', $user->id)->find($fileId)) {
-            $file = 'private_uploads/users/'.$log->filename;
+            $file = 'private_uploads/users/' . $log->filename;
 
             try {
                 return StorageHelper::showOrDownloadFile($file, $log->filename);
             } catch (\Exception $e) {
-                return redirect()->route('users.show', ['user' => $user])->with('error',  trans('general.file_not_found'));
+                return redirect()->route('users.show', ['user' => $user])->with('error', trans('general.file_not_found'));
             }
         }
 
         // The log record doesn't exist somehow
-        return redirect()->route('users.show', ['user' => $user])->with('error',  trans('general.log_record_not_found'));
-
+        return redirect()->route('users.show', ['user' => $user])->with('error', trans('general.log_record_not_found'));
     }
-
 }
