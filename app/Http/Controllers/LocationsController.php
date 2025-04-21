@@ -256,7 +256,7 @@ class LocationsController extends Controller
                 ];
             }
 
-            return view('locations/view', compact('location'));
+            return view('locations/view', compact('location', 'options', 'initialMarkers'));
         }
 
         return redirect()->route('locations.index')->with('error', trans('admin/locations/message.does_not_exist'));

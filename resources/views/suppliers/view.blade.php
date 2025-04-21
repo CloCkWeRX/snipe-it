@@ -315,18 +315,9 @@
                   </li>
               @endif
 
-              @if ($supplier->address!='')
-                  <li><br>
-                      {{ $supplier->address }}
-
-                      @if ($supplier->address2)
-                          <br>
-                          {{ $supplier->address2 }}
-                      @endif
-                      @if (($supplier->city) || ($supplier->state))
-                          <br>
-                          {{ $supplier->city }} {{ strtoupper($supplier->state) }} {{ $supplier->zip }} {{ strtoupper($supplier->country) }}
-                      @endif
+              @if ($supplier->present()->formattedAddress()!='')
+                  <li style="white-space: pre-line">
+                      {{ $supplier->present()->formattedAddress("\n") }}
                   </li>
               @endif
 

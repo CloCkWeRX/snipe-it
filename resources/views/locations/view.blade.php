@@ -425,58 +425,6 @@
   </div><!--/.col-md-9-->
 
   <div class="col-md-3">
-
-      @if ($location->image!='')
-          <div class="col-md-12 text-center" style="padding-bottom: 17px;">
-              <img src="{{ Storage::disk('public')->url('locations/'.e($location->image)) }}" class="img-responsive img-thumbnail" style="width:100%" alt="{{ $location->name }}">
-          </div>
-      @endif
-
-      @if (($location->state!='') && ($location->country!='') && (config('services.google.maps_api_key')))
-          <div class="col-md-12 text-center" style="padding-bottom: 10px;">
-              <img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ urlencode($location->address.','.$location->city.' '.$location->state.' '.$location->country.' '.$location->zip) }}&size=700x500&maptype=roadmap&key={{ config('services.google.maps_api_key') }}" class="img-thumbnail" style="width:100%" alt="Map">
-          </div>
-      @endif
-
-      <div class="col-md-12">
-
-          <ul class="list-unstyled" style="line-height: 22px; padding-bottom: 20px;">
-
-              @if ($location->notes)
-                  <li>
-                      <strong>{{ trans('general.notes') }}</strong>:
-                      {!! nl2br(Helper::parseEscapedMarkedownInline($location->notes)) !!}
-                  </li>
-              @endif
-
-              @if ($location->address!='')
-                  <li>{{ $location->address }}</li>
-              @endif
-              @if ($location->address2!='')
-                  <li>{{ $location->address2 }}</li>
-              @endif
-              @if (($location->city!='') || ($location->state!='') || ($location->zip!=''))
-                  <li>{{ $location->city }} {{ $location->state }} {{ $location->zip }}</li>
-              @endif
-              @if ($location->manager)
-                  <li>{{ trans('admin/users/table.manager') }}: {!! $location->manager->present()->nameUrl() !!}</li>
-              @endif
-              @if ($location->company)
-                  <li>{{ trans('admin/companies/table.name') }}: {!! $location->company->present()->nameUrl() !!}</li>
-              @endif
-              @if ($location->parent)
-                  <li>{{ trans('admin/locations/table.parent') }}: {!! $location->parent->present()->nameUrl() !!}</li>
-              @endif
-              @if ($location->ldap_ou)
-                  <li>{{ trans('admin/locations/table.ldap_ou') }}: {{ $location->ldap_ou }}</li>
-              @endif
-
-
-              @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $location])
-
-          </ul>
-      </div>
-
       @can('update', $location)
       <div class="col-md-12">
           <a href="{{ route('locations.edit', ['location' => $location->id]) }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social">
@@ -498,7 +446,6 @@
               {{ trans('admin/locations/table.print_all_assigned') }}
           </a>
       </div>
-
           @can('delete', $location)
               <div class="col-md-12 hidden-print" style="padding-top: 10px;">
 
@@ -527,8 +474,46 @@
             @endif
               </div>
     @endcan
+      @if ($location->image!='')
+          <div class="col-md-12 text-center" style="padding-bottom: 17px;">
+              <img src="{{ Storage::disk('public')->url('locations/'.e($location->image)) }}" class="img-responsive img-thumbnail" style="width:100%" alt="{{ $location->name }}">
+          </div>
+      @endif
+
+      <div class="col-md-12">
+
+          <ul class="list-unstyled" style="line-height: 22px; padding-bottom: 20px;">
+
+              @if ($location->notes)
+                  <li>
+                      <strong>{{ trans('general.notes') }}</strong>:
+                      {!! nl2br(Helper::parseEscapedMarkedownInline($location->notes)) !!}
+                  </li>
+              @endif
+
+              @if ($location->present()->formattedAddress()!='')
+                  <li style="white-space: pre-line">
+                      {{ $location->present()->formattedAddress("\n") }}
+                  </li>
+              @endif
+              @if ($location->manager)
+                  <li>{{ trans('admin/users/table.manager') }}: {!! $location->manager->present()->nameUrl() !!}</li>
+              @endif
+              @if ($location->company)
+                  <li>{{ trans('admin/companies/table.name') }}: {!! $location->company->present()->nameUrl() !!}</li>
+              @endif
+              @if ($location->parent)
+                  <li>{{ trans('admin/locations/table.parent') }}: {!! $location->parent->present()->nameUrl() !!}</li>
+              @endif
+              @if ($location->ldap_ou)
+                  <li>{{ trans('admin/locations/table.ldap_ou') }}: {{ $location->ldap_ou }}</li>
+              @endif
 
 
+              @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $location])
+
+          </ul>
+      </div>
 
 </div>
 </div>
