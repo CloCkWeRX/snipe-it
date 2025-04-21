@@ -7,6 +7,7 @@ use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Watson\Validating\ValidatingTrait;
+use App\Presenters\Presentable;
 
 class Supplier extends SnipeModel
 {
@@ -15,6 +16,7 @@ class Supplier extends SnipeModel
     use ValidatingTrait;
     use UniqueUndeletedTrait;
     use Searchable;
+    use Presentable;
 
     protected $table = 'suppliers';
 

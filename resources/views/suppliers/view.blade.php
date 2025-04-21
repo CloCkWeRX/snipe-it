@@ -285,7 +285,7 @@
       <!-- side address column -->
       <div class="col-md-3">
 
-          @if config('services.google.maps_api_key')
+          @if (config('services.google.maps_api_key'))
               @if (($supplier->present()->coordinates!=''))
                   <div class="col-md-12 text-center" style="padding-bottom: 20px;">
                       <img src="https://maps.googleapis.com/maps/api/staticmap?markers={{ urlencode($supplier->present()->coordinates) }}&size=500x300&maptype=roadmap&key={{ config('services.google.maps_api_key') }}" class="img-responsive img-thumbnail" alt="Map">
@@ -323,7 +323,7 @@
               @if ($supplier->url!='')
                   <li>
                       <i class="fas fa-globe-americas"></i>
-                      <a href="{{ $supplier->url }}" target="_new">{{ $supplier->url }}</a>
+                      <a href="{{ $supplier->url }}" rel="no-opener" target="_new">{{ $supplier->url }}</a>
                   </li>
               @endif
 
