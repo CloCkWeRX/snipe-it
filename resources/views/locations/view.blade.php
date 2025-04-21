@@ -424,7 +424,7 @@
       </div><!--/.col-md-9-->
   </div><!--/.col-md-9-->
 
-  <div class="col-md-3">
+  <div class="col-md-3" itemscope itemtype="https://schema.org/Organization">
       @can('update', $location)
       <div class="col-md-12">
           <a href="{{ route('locations.edit', ['location' => $location->id]) }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social">
@@ -473,7 +473,7 @@
       @endcan
 
       @if ($location->image!='')
-          <div class="col-md-12 text-center" style="padding-bottom: 17px;">
+          <div class="col-md-12 text-center" itemprop="image" style="padding-bottom: 17px;">
               <img src="{{ Storage::disk('public')->url('locations/'.e($location->image)) }}" class="img-responsive img-thumbnail" style="width:100%" alt="{{ $location->name }}">
           </div>
       @endif

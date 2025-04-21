@@ -290,7 +290,11 @@
               </div>
           @endif
 
-          <ul class="list-unstyled" style="line-height: 25px; padding-bottom: 20px; padding-top: 20px;">
+          <ul class="list-unstyled sidebar-attribute-list" style="line-height: 25px; padding-bottom: 20px; padding-top: 20px; clear: both;">
+              @if ($supplier->notes!='')
+                  <li><i class="fa fa-comment"></i> {!! nl2br(Helper::parseEscapedMarkedownInline($supplier->notes)) !!}</li>
+              @endif
+
               @if ($supplier->contact!='')
                   <li><x-icon type="user" /> {{ $supplier->contact }}</li>
               @endif
@@ -328,19 +332,13 @@
 
               @if ($supplier->present()->formattedAddress()!='')
                   <li style="white-space: pre-line" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                      <i class="fas fa-globe-americas"></i>
                       <a href="https://www.google.com/maps?q{{ urlencode($supplier->present()->formattedAddress(", ")) }}" target="_blank" rel="noopener">{{ $supplier->present()->formattedAddress("\n") }}</a>
                   </li>
               @endif
-
-              <li>
-                @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $supplier])
-              </li>
-
-              @if ($supplier->notes!='')
-                  <li><i class="fa fa-comment"></i> {!! nl2br(Helper::parseEscapedMarkedownInline($supplier->notes)) !!}</li>
-              @endif
-
           </ul>
+          @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $supplier])
+
 
       </div> <!--/col-md-3-->
 
