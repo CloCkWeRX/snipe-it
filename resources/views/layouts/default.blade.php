@@ -16,11 +16,11 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
 
     <link rel="apple-touch-icon"
-          href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
+          href="{{ ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
     <link rel="apple-touch-startup-image"
-          href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
+          href="{{ ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
     <link rel="shortcut icon" type="image/ico"
-          href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->favicon)) : config('app.url').'/favicon.ico' }} ">
+          href="{{ ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->favicon)) : config('app.url').'/favicon.ico' }} ">
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -34,7 +34,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
     {{-- stylesheets --}}
     <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">
-    @if (($snipeSettings) && ($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
+    @if (($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
         <link rel="stylesheet" href="{{ url(mix('css/dist/skins/skin-'.Auth::user()->present()->skin.'.min.css')) }}">
     @else
         <link rel="stylesheet"
@@ -986,6 +986,38 @@ dir="{{ Helper::determineLanguageDirection() }}">
             </footer>
         </div><!-- ./wrapper -->
 
+        <script type="text/javascript">
+
+            @if (($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
+                var skin = "{{ Auth::user()->present()->skin }}";
+                var allows_user_skins = true;
+            @else
+                var skin = "{{ ($snipeSettings->skin!='' ? $snipeSettings->skin : 'blue') }}";
+                var allows_user_skins = false;
+            @endif
+
+            if (window.matchMedia('(prefers-color-scheme: dark').matches && !(skin.includes("dark") || skin.includes("contrast"))) {
+                if (allows_user_skins) {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Tip: Turn on dark mode in your profile")
+                    );
+                } else {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Ask your administrator to allow user skins to enable dark or high contrast mode")
+                    );
+                }
+            } else if (window.matchMedia('(prefers-color-scheme: light').matches && skin.includes("dark")) {
+                if (allows_user_skins) {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Tip: Turn off dark mode in your profile")
+                    );
+                } else {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Ask your administrator to allow user skins to enable light or high contrast mode")
+                    );
+                }
+            }
+        </script>
 
         <!-- end main container -->
 
