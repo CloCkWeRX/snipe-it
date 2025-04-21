@@ -18,6 +18,8 @@ class Supplier extends SnipeModel
     use Searchable;
     use Presentable;
 
+    protected $presenter = \App\Presenters\SupplierPresenter::class;
+
     protected $table = 'suppliers';
 
     protected $rules = [
