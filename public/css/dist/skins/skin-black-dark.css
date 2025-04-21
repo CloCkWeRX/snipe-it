@@ -472,6 +472,7 @@ input[type=search] {
   background-color: #000000;
 }
 .fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner,
 .skin-black-dark .sidebar-menu > li.active > a,
 .skin-black .sidebar-menu > li:hover > a,
 .sidebar-toggle:hover {

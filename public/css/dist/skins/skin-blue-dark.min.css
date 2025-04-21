@@ -347,7 +347,8 @@ body {
   background-color: var(--back-main);
   color: var(--nav-link);
 }
-.fixed-table-body thead th .th-inner {
+.fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner {
   color: var(--nav-link);
 }
 .form-control {
@@ -453,6 +454,7 @@ input[type=search] {
   background-color: #3c8dbc;
 }
 .fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner,
 .skin-blue-dark .sidebar-menu > li.active > a,
 .skin-blue .sidebar-menu > li:hover > a,
 .sidebar-toggle:hover {

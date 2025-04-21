@@ -16,7 +16,7 @@
         <i class="fas fa-exclamation-triangle faa-pulse animated"></i>
 
         <strong>
-          <a href="{{ route('account.accept') }}" style="color: white;">
+          <a href="{{ route('account.accept') }}" class="alert-link">
             {{ trans_choice('general.unaccepted_profile_warning', $acceptances, ['count' => $acceptances]) }}
           </a>
           </strong>
