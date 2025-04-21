@@ -472,19 +472,7 @@
               @endif
 
 
-              @if ((($location->address!='') && ($location->city!='')) || ($location->state!='') || ($location->country!=''))
-                      <li>
-                        <a href="https://maps.google.com/?q={{ urlencode($location->address.','. $location->city.','.$location->state.','.$location->country.','.$location->zip) }}" target="_blank">
-                            {!! trans('admin/locations/message.open_map', ['map_provider_icon' => '<i class="fa-brands fa-google" aria-hidden="true"></i>']) !!}
-                            <x-icon type="external-link"/>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://maps.apple.com/?q={{ urlencode($location->address.','. $location->city.','.$location->state.','.$location->country.','.$location->zip) }}" target="_blank">
-                            {!! trans('admin/locations/message.open_map', ['map_provider_icon' => '<i class="fa-brands fa-apple" aria-hidden="true" style="font-size: 18px"></i>']) !!}
-                            <x-icon type="external-link"/></a>
-                  </li>
-              @endif
+              @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $location])
 
           </ul>
       </div>
