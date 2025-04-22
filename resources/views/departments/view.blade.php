@@ -34,6 +34,7 @@
                                         data-show-columns="true"
                                         data-show-export="true"
                                         data-show-refresh="true"
+                                        data-show-fullscreen="true"
                                         data-sort-order="asc"
                                         id="departmentsUsersTable"
                                         class="table table-striped snipe-table"

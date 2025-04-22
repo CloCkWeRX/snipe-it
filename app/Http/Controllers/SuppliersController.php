@@ -22,7 +22,7 @@ class SuppliersController extends Controller
      * @return \Illuminate\Contracts\View\View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('view', Supplier::class);
         return view('suppliers/index');
@@ -32,7 +32,7 @@ class SuppliersController extends Controller
      * Supplier create.
      *
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Supplier::class);
         return view('suppliers/edit')->with('item', new Supplier());
@@ -43,7 +43,7 @@ class SuppliersController extends Controller
      *
      * @param ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('create', Supplier::class);
         // Create a new supplier
@@ -80,7 +80,7 @@ class SuppliersController extends Controller
      *
      * @param  int $supplierId
      */
-    public function edit(Supplier $supplier) : View | RedirectResponse
+    public function edit(Supplier $supplier): View | RedirectResponse
     {
         $this->authorize('update', Supplier::class);
         return view('suppliers/edit')->with('item', $supplier);
@@ -91,7 +91,7 @@ class SuppliersController extends Controller
      *
      * @param  int $supplierId
      */
-    public function update(ImageUploadRequest $request, Supplier $supplier) : RedirectResponse
+    public function update(ImageUploadRequest $request, Supplier $supplier): RedirectResponse
     {
         $this->authorize('update', Supplier::class);
         // Save the  data
@@ -125,7 +125,7 @@ class SuppliersController extends Controller
      *
      * @param  int $supplierId
      */
-    public function destroy($supplierId) : RedirectResponse
+    public function destroy($supplierId): RedirectResponse
     {
         $this->authorize('delete', Supplier::class);
         if (is_null($supplier = Supplier::with('asset_maintenances', 'assets', 'licenses')->withCount('asset_maintenances as asset_maintenances_count', 'assets as assets_count', 'licenses as licenses_count')->find($supplierId))) {
@@ -158,9 +158,35 @@ class SuppliersController extends Controller
      * @param null $supplierId
      * @internal param int $assetId
      */
-    public function show(Supplier $supplier) : View | RedirectResponse
+    public function show(Supplier $supplier): View | RedirectResponse
     {
         $this->authorize('view', Supplier::class);
-        return view('suppliers/view', compact('supplier'));
+        $options = [];
+        $initialMarkers = [];
+        if ($supplier->latitude && $supplier->longitude) {
+            $options = [
+                'center' => [
+                    'lat' => $supplier->latitude,
+                    'lng' => $supplier->longitude
+                ],
+                'googleview' => false,
+                'zoom' => 18,
+                'zoomControl' => false,
+            ];
+
+
+            $initialMarkers = [
+                [
+                    'position' => [
+                        'lat' => $supplier->latitude,
+                        'lng' => $supplier->longitude
+                    ],
+                    'draggable' => false,
+                    'title' => $supplier->name
+                ]
+            ];
+        }
+
+        return view('suppliers/view', compact('supplier', 'options', 'initialMarkers'));
     }
 }

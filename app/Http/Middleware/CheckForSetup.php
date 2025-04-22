@@ -7,7 +7,6 @@ use Closure;
 
 class CheckForSetup
 {
-
     protected $except = [
         '_debugbar*',
         'health'
@@ -19,7 +18,7 @@ class CheckForSetup
         /**
          * Skip this middleware for the debugbar and health check
          */
-        if ($request->is($this->except))  {
+        if ($request->is($this->except)) {
             return $next($request);
         }
 
@@ -31,7 +30,7 @@ class CheckForSetup
             }
         } else {
             if (! ($request->is('setup*')) && ! ($request->is('.env'))) {
-                return redirect(config('app.url').'/setup');
+                return redirect(config('app.url') . '/setup');
             }
 
             return $next($request);

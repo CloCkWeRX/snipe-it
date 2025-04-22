@@ -616,8 +616,8 @@ input[type=search] {
 }
 .input-group,
 .input-group-addon {
-  background-color: var(--back-sub);
-  color: var(--text-main);
+  background-color: var(--back-sub) !important;
+  color: var(--text-main) !important;
 }
 #licensesTable > tbody > tr > td > nobr > a > i.fa {
   color: var(--text-main);
@@ -690,6 +690,7 @@ input[type=search] {
   background-color: #000000;
 }
 .fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner,
 .skin-black-dark .sidebar-menu > li.active > a,
 .skin-black .sidebar-menu > li:hover > a,
 .sidebar-toggle:hover {
@@ -1378,7 +1379,8 @@ body {
   background-color: var(--back-main);
   color: var(--nav-link);
 }
-.fixed-table-body thead th .th-inner {
+.fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner {
   color: var(--nav-link);
 }
 .form-control {
@@ -1484,6 +1486,7 @@ input[type=search] {
   background-color: #3c8dbc;
 }
 .fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner,
 .skin-blue-dark .sidebar-menu > li.active > a,
 .skin-blue .sidebar-menu > li:hover > a,
 .sidebar-toggle:hover {
@@ -2339,7 +2342,8 @@ body {
   background-color: var(--back-main);
   color: var(--nav-link);
 }
-.fixed-table-body thead th .th-inner {
+.fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner {
   color: var(--nav-link);
 }
 .form-control {
@@ -2441,6 +2445,7 @@ input[type=search] {
   background-color: #006300;
 }
 .fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner,
 .skin-green-dark .sidebar-menu > li.active > a,
 .skin-green .sidebar-menu > li:hover > a,
 .sidebar-toggle:hover {
@@ -2870,7 +2875,8 @@ a:link.btn-default {
   background-color: var(--back-main);
   color: var(--nav-link);
 }
-.fixed-table-body thead th .th-inner {
+.fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner {
   color: var(--nav-link);
 }
 .form-control {
@@ -2976,6 +2982,7 @@ input[type=search] {
   background-color: #ff8c00;
 }
 .fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner,
 .skin-orange-dark .sidebar-menu > li.active > a,
 .skin-orange .sidebar-menu > li:hover > a,
 .sidebar-toggle:hover {
@@ -4369,8 +4376,8 @@ input[type=search] {
 }
 .input-group,
 .input-group-addon {
-  background-color: var(--back-sub) !important;
-  color: var(--text-main);
+  background-color: var(--back-sub);
+  color: var(--text-main) !important;
 }
 #licensesTable > tbody > tr > td > nobr > a > i.fa {
   color: var(--text-main);

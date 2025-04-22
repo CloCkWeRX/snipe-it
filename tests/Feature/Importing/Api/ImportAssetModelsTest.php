@@ -125,7 +125,8 @@ class ImportAssetModelsTest extends ImportDataTestCase implements TestsPermissio
         $updatedAssetmodel = AssetModel::query()->find($assetmodel->id);
         $updatedAttributes = [
             'name',
-            'model_number'
+            'model_number',
+            'updated_at'
         ];
 
         $this->assertEquals($row['model_number'], $updatedAssetmodel->model_number);

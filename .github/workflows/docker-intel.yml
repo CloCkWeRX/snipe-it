@@ -1,27 +1,19 @@
-# Snipe-IT Docker image build for hub.docker.com
 name: Docker Intel/amd64 images (Ubuntu)
 
-# Run this Build for all pushes to 'master' or develop branch, or tagged releases.
-# Also run for PRs to ensure PR doesn't break Docker build process
 on:
   push:
-    branches:
-      - master
-      - develop
     tags:
       - 'v**'
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
-  pull_request:
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
-permissions:
-  contents: read
-
+# There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
   docker-ubuntu-intel:
     # Ensure this job never runs on forked repos. It's only executed for 'grokability/snipe-it'
-    if: github.repository == 'grokability/snipe-it'
+    if: github.repository == 'CloCkWeRX/snipe-it'
     runs-on: ubuntu-latest
     env:
       # Define tags to use for Docker images based on Git tags/branches (for docker/metadata-action)
@@ -38,42 +30,44 @@ jobs:
       # We turn off 'latest' tag by default.
       TAGS_FLAVOR: |
         latest=false
+    # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
     steps:
       # https://github.com/actions/checkout
       - name: Checkout codebase
         uses: actions/checkout@v4
-
-      # https://github.com/docker/setup-buildx-action
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # https://github.com/docker/login-action
-      - name: Login to DockerHub
+      # Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.
+      - name: Log in to the Container registry
         # Only login if not a PR, as PRs only trigger a Docker build and not a push
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       ###############################################
-      # Build/Push the 'grokability/snipe-it' image
+      # Build/Push the 'CloCkWeRX/snipe-it' image
       ###############################################
       # https://github.com/docker/metadata-action
       # Get Metadata for docker_build step below
-      - name: Sync metadata (tags, labels) from GitHub to Docker for 'snipe-it' image
+      - name: Sync metadata (tags, labels) for Docker
         id: meta_build
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: grokability/snipe-it
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: ${{ env.IMAGE_TAGS }}
           flavor: ${{ env.TAGS_FLAVOR }}
 
       # https://github.com/docker/build-push-action
-      - name: Build and push 'snipe-it' image
-        id: docker_build
-        uses: docker/build-push-action@v6
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
           file: ./Dockerfile
@@ -84,68 +78,11 @@ jobs:
           # Use tags / labels provided by 'docker/metadata-action' above
           tags: ${{ steps.meta_build.outputs.tags }}
           labels: ${{ steps.meta_build.outputs.labels }}
-  docker-alpine-intel:
-    # Ensure this job never runs on forked repos. It's only executed for 'grokability/snipe-it'
-    if: github.repository == 'grokability/snipe-it'
-    runs-on: ubuntu-latest
-    env:
-      # Define tags to use for Docker images based on Git tags/branches (for docker/metadata-action)
-      # For a new commit on default branch (master), use the literal tag 'latest' on Docker image.
-      # For a new commit on other branches, use the branch name as the tag for Docker image.
-      # For a new tag, copy that tag name as the tag for Docker image.
-      IMAGE_TAGS: |
-        type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }},suffix=-alpine
-        type=ref,event=branch,enable=${{ !endsWith(github.ref, github.event.repository.default_branch) }},suffix=-alpine
-        type=ref,event=tag,suffix=-alpine
-        type=semver,pattern=v{{major}}-latest-alpine
-      # Define default tag "flavor" for docker/metadata-action per
-      # https://github.com/docker/metadata-action#flavor-input
-      # We turn off 'latest' tag by default.
-      TAGS_FLAVOR: |
-        latest=false
 
-    steps:
-      # https://github.com/actions/checkout
-      - name: Checkout codebase
-        uses: actions/checkout@v4
-
-      # https://github.com/docker/setup-buildx-action
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # https://github.com/docker/login-action
-      - name: Login to DockerHub
-        # Only login if not a PR, as PRs only trigger a Docker build and not a push
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+      # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see [Using artifact attestations to establish provenance for builds](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-
-      ###############################################
-      # Build/Push the 'grokability/snipe-it' image
-      ###############################################
-      # https://github.com/docker/metadata-action
-      # Get Metadata for docker_build step below
-      - name: Sync metadata (tags, labels) from GitHub to Docker for 'snipe-it' image
-        id: meta_build
-        uses: docker/metadata-action@v5
-        with:
-          images: grokability/snipe-it
-          tags: ${{ env.IMAGE_TAGS }}
-          flavor: ${{ env.TAGS_FLAVOR }}
-
-      # https://github.com/docker/build-push-action
-      - name: Build and push 'snipe-it' image
-        id: docker_build
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile.alpine
-          platforms: linux/amd64
-          # For pull requests, we run the Docker build (to ensure no PR changes break the build),
-          # but we ONLY do an image push to DockerHub if it's NOT a PR
-          push: ${{ github.event_name != 'pull_request' }}
-          # Use tags / labels provided by 'docker/metadata-action' above
-          tags: ${{ steps.meta_build.outputs.tags }}
-          labels: ${{ steps.meta_build.outputs.labels }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true

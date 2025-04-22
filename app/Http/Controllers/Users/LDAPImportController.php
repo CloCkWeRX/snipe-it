@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan; // Note that this is awful close to 'Users' the namespace above; be careful
+use Illuminate\Support\Facades\Artisan;
+
+// Note that this is awful close to 'Users' the namespace above; be careful
 
 class LDAPImportController extends Controller
 {
@@ -61,7 +63,6 @@ class LDAPImportController extends Controller
 
         // Direct user to appropriate status page.
         if ($ldap_results['error']) {
-
             return redirect()->back()->withInput()->with('error', $ldap_results['error_message']);
         }
 

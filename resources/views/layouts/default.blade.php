@@ -16,11 +16,11 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
 
     <link rel="apple-touch-icon"
-          href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
+          href="{{ ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
     <link rel="apple-touch-startup-image"
-          href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
+          href="{{ ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
     <link rel="shortcut icon" type="image/ico"
-          href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->favicon)) : config('app.url').'/favicon.ico' }} ">
+          href="{{ ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->favicon)) : config('app.url').'/favicon.ico' }} ">
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -34,7 +34,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
     {{-- stylesheets --}}
     <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">
-    @if (($snipeSettings) && ($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
+    @if (($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
         <link rel="stylesheet" href="{{ url(mix('css/dist/skins/skin-'.Auth::user()->present()->skin.'.min.css')) }}">
     @else
         <link rel="stylesheet"
@@ -258,6 +258,50 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 <a href="{{ route('users.create') }}" tabindex="-1">
                                                     <x-icon type="users" />
                                                     {{ trans('general.user') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        <li role="separator" class="divider"></li>
+                                        @can('create', \App\Models\Manufacturer::class)
+                                            <li {!! (Request::is('manufacturers/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('manufacturers.create') }}" tabindex="-1">
+                                                    <x-icon type="manufacturer" />
+                                                    {{ trans('general.manufacturer') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+                                        @can('create', \App\Models\Supplier::class)
+                                            <li {!! (Request::is('suppliers/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('suppliers.create') }}" tabindex="-1">
+                                                    <x-icon type="supplier" />
+                                                    {{ trans('general.supplier') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+                                        @can('create', \App\Models\Department::class)
+                                            <li {!! (Request::is('departments/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('departments.create') }}" tabindex="-1">
+                                                    <x-icon type="department" />
+                                                    {{ trans('general.department') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+                                        @can('create', \App\Models\Location::class)
+                                            <li {!! (Request::is('locations/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('locations.create') }}" tabindex="-1">
+                                                    <x-icon type="location" />
+                                                    {{ trans('general.location') }}
+                                                </a>
+                                            </li>
+                                        @endcan                                                                                                                             
+                                        @can('create', \App\Models\Company::class)
+                                            <li {!! (Request::is('companies/create') ? 'class="active"' : '') !!}>
+                                                <a href="{{ route('companies.create') }}" tabindex="-1">
+                                                    <x-icon type="company" />
+                                                    {{ trans('general.company') }}
                                                 </a>
                                             </li>
                                         @endcan
@@ -650,6 +694,50 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </a>
                             </li>
                         @endcan
+                        @can('view', \App\Models\Manufacturer::class)
+                            <li>
+                                <a href="{{ route('manufacturers.index') }}" {{ (Request::is('/manufacturers') ? ' class="active"' : '') }}>
+                                    <x-icon type="manufacturer" class="fa-fw" />
+                                    <span>{{ trans('general.manufacturers') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('view', \App\Models\Supplier::class)
+                            <li>
+                                <a href="{{ route('suppliers.index') }}" {{ (Request::is('/suppliers') ? ' class="active"' : '') }}>
+                                    <x-icon type="supplier" class="fa-fw" />
+                                    <span>{{ trans('general.suppliers') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('view', \App\Models\Department::class)
+                            <li>
+                                <a href="{{ route('departments.index') }}" {{ (Request::is('/departments') ? ' class="active"' : '') }}>
+                                    <x-icon type="department" class="fa-fw" />
+                                    <span>{{ trans('general.departments') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('view', \App\Models\Location::class)
+                            <li>
+                                <a href="{{ route('locations.index') }}" {{ (Request::is('/locations') ? ' class="active"' : '') }}>
+                                    <x-icon type="location" class="fa-fw" />
+                                    <span>{{ trans('general.locations') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('view', \App\Models\Company::class)
+                            <li>
+                                <a href="{{ route('companies.index') }}" {{ (Request::is('/companies') ? ' class="active"' : '') }}>
+                                    <x-icon type="company" class="fa-fw" />
+                                    <span>{{ trans('general.companies') }}</span>
+                                </a>
+                            </li>
+                        @endcan
 
                         @can('backend.interact')
                             <li class="treeview {!! in_array(Request::route()->getName(),App\Helpers\Helper::SettingUrls()) ? ' active': '' !!}">
@@ -688,46 +776,6 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                         <li>
                                             <a href="{{ route('categories.index') }}" {{ (Request::is('/categories') ? ' class="active"' : '') }}>
                                                 {{ trans('general.categories') }}
-                                            </a>
-                                        </li>
-                                    @endcan
-
-                                    @can('view', \App\Models\Manufacturer::class)
-                                        <li>
-                                            <a href="{{ route('manufacturers.index') }}" {{ (Request::is('/manufacturers') ? ' class="active"' : '') }}>
-                                                {{ trans('general.manufacturers') }}
-                                            </a>
-                                        </li>
-                                    @endcan
-
-                                    @can('view', \App\Models\Supplier::class)
-                                        <li>
-                                            <a href="{{ route('suppliers.index') }}" {{ (Request::is('/suppliers') ? ' class="active"' : '') }}>
-                                                {{ trans('general.suppliers') }}
-                                            </a>
-                                        </li>
-                                    @endcan
-
-                                    @can('view', \App\Models\Department::class)
-                                        <li>
-                                            <a href="{{ route('departments.index') }}" {{ (Request::is('/departments') ? ' class="active"' : '') }}>
-                                                {{ trans('general.departments') }}
-                                            </a>
-                                        </li>
-                                    @endcan
-
-                                    @can('view', \App\Models\Location::class)
-                                        <li>
-                                            <a href="{{ route('locations.index') }}" {{ (Request::is('/locations') ? ' class="active"' : '') }}>
-                                                {{ trans('general.locations') }}
-                                            </a>
-                                        </li>
-                                    @endcan
-
-                                    @can('view', \App\Models\Company::class)
-                                        <li>
-                                            <a href="{{ route('companies.index') }}" {{ (Request::is('/companies') ? ' class="active"' : '') }}>
-                                                {{ trans('general.companies') }}
                                             </a>
                                         </li>
                                     @endcan
@@ -919,27 +967,9 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
                 <div class="1hidden-xs pull-left">
                     <div class="pull-left" >
-                        <a target="_blank" href="https://snipeitapp.com" rel="noopener">Snipe-IT</a> is open source software, made with <x-icon type="heart" style="color: #a94442; font-size: 10px" />
-                            <span class="sr-only">love</span> by <a href="https://bsky.app/profile/snipeitapp.com" rel="noopener">@snipeitapp</a>.
+                        <a target="_blank" href="https://github.com/CloCkWeRX/snipe-it/" rel="noopener">This is open source software</a>
                     </div>
                     <div class="pull-right">
-                    @if ($snipeSettings->version_footer!='off')
-                        @if (($snipeSettings->version_footer=='on') || (($snipeSettings->version_footer=='admin') && (Auth::user()->isSuperUser()=='1')))
-                            &nbsp; <strong>Version</strong> {{ config('version.app_version') }} -
-                            build {{ config('version.build_version') }} ({{ config('version.branch') }})
-                        @endif
-                    @endif
-
-                    @if ($snipeSettings->support_footer!='off')
-                        @if (($snipeSettings->support_footer=='on') || (($snipeSettings->support_footer=='admin') && (Auth::user()->isSuperUser()=='1')))
-                            <a target="_blank" class="btn btn-default btn-xs"
-                               href="https://snipe-it.readme.io/docs/overview"
-                               rel="noopener">{{ trans('general.user_manual') }}</a>
-                            <a target="_blank" class="btn btn-default btn-xs" href="https://snipeitapp.com/support/"
-                               rel="noopener">{{ trans('general.bug_report') }}</a>
-                        @endif
-                    @endif
-
                     @if ($snipeSettings->privacy_policy_link!='')
                         <a target="_blank" class="btn btn-default btn-xs" rel="noopener"
                            href="{{  $snipeSettings->privacy_policy_link }}"
@@ -956,6 +986,38 @@ dir="{{ Helper::determineLanguageDirection() }}">
             </footer>
         </div><!-- ./wrapper -->
 
+        <script type="text/javascript">
+
+            @if (($snipeSettings->allow_user_skin==1) && Auth::check() && Auth::user()->present()->skin != '')
+                var skin = "{{ Auth::user()->present()->skin }}";
+                var allows_user_skins = true;
+            @else
+                var skin = "{{ ($snipeSettings->skin!='' ? $snipeSettings->skin : 'blue') }}";
+                var allows_user_skins = false;
+            @endif
+
+            if (window.matchMedia('(prefers-color-scheme: dark').matches && !(skin.includes("dark") || skin.includes("contrast"))) {
+                if (allows_user_skins) {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Tip: Turn on dark mode in your profile")
+                    );
+                } else {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Ask your administrator to allow user skins to enable dark or high contrast mode")
+                    );
+                }
+            } else if (window.matchMedia('(prefers-color-scheme: light').matches && skin.includes("dark")) {
+                if (allows_user_skins) {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Tip: Turn off dark mode in your profile")
+                    );
+                } else {
+                    document.querySelector('.main-footer .pull-left').append(
+                        document.createTextNode("Ask your administrator to allow user skins to enable light or high contrast mode")
+                    );
+                }
+            }
+        </script>
 
         <!-- end main container -->
 

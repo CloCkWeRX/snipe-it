@@ -47,6 +47,7 @@ class LocationsTransformer
                 'zip' => ($location->zip) ? e($location->zip) : null,
                 'latitude' => ($location->latitude) ? e($location->latitude) : null,
                 'longitude' => ($location->longitude) ? e($location->longitude) : null,
+                'coordinates' => e($location->present()->coordinates),
                 'phone' => ($location->phone != '') ? e($location->phone) : null,
                 'fax' => ($location->fax != '') ? e($location->fax) : null,
                 'accessories_count' => (int) $location->accessories_count,

@@ -312,8 +312,8 @@ input[type=text], input[type=search] {
   background-color: var(--back-sub) !important;
 }
 .input-group, .input-group-addon {
-  background-color: var(--back-sub);
-  color: var(--text-main);
+  background-color: var(--back-sub) !important;
+  color: var(--text-main) !important;
 }
 #licensesTable>tbody>tr>td>nobr>a>i.fa {
   color: var(--text-main);
@@ -382,7 +382,11 @@ input[type=text], input[type=search] {
 .skin-black-dark .main-header .navbar .dropdown-menu li a:hover {
   background-color: #000000;
 }
-.fixed-table-body thead th .th-inner, .skin-black-dark .sidebar-menu>li.active>a, .skin-black .sidebar-menu>li:hover>a, .sidebar-toggle:hover {
+.fixed-table-body thead th .th-inner,
+.fixed-table-body tfoot th .th-inner,
+.skin-black-dark .sidebar-menu>li.active>a,
+.skin-black .sidebar-menu>li:hover>a,
+.sidebar-toggle:hover {
   background-color: var(--header)!important;
 }
 .tab-content, .tab-pane {

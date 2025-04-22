@@ -429,7 +429,7 @@ class UserPresenter extends Presenter
      */
     public function fullName()
     {
-        return html_entity_decode($this->first_name . ' ' . $this->last_name, ENT_QUOTES | ENT_XML1, 'UTF-8');
+        return html_entity_decode($this->getFullNameAttribute(), ENT_QUOTES | ENT_XML1, 'UTF-8');
     }
 
     /**

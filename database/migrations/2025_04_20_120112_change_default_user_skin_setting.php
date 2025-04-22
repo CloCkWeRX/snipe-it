@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('suppliers', function (Blueprint $table) {
-            $table->float('latitude', 5)->nullable();
-            $table->float('longitude', 5)->nullable();
+        Schema::table('settings', function ($table) {
+            $table->boolean('allow_user_skin')->default(1)->change();
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('suppliers', function (Blueprint $table) {
-            $table->dropColumn('latitude');
-            $table->dropColumn('longitude');
+        Schema::table('settings', function ($table) {
+            $table->boolean('allow_user_skin')->default(0)->change();
         });
     }
 };

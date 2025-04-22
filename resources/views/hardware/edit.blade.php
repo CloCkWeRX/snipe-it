@@ -101,7 +101,7 @@
 
         <div class="col-md-9 col-sm-9 col-md-offset-3">
 
-        <a id="optional_info" class="text-primary">
+        <a id="optional_info" href="#optional_details" class="text-primary">
             <x-icon type="caret-right" class="fa-2x" id="optional_info_icon" />
             <strong>{{ trans('admin/hardware/form.optional_infos') }}</strong>
         </a>
@@ -151,7 +151,7 @@
 
     <div class="form-group">
         <div class="col-md-9 col-sm-9 col-md-offset-3">
-            <a id="order_info" class="text-primary">
+            <a id="order_info" href="#order_details" class="text-primary">
                 <x-icon type="caret-right" class="fa-2x" id="order_info_icon" />
                 <strong>{{ trans('admin/hardware/form.order_details') }}</strong>
             </a>
