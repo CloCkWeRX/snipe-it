@@ -1,4 +1,4 @@
-<div id="{{ (isset($id_divname)) ? $id_divname : 'assetsBulkEditToolbar' }}" style="min-width:400px">
+<div id="{{ (isset($id_divname)) ? $id_divname : 'assetsBulkEditToolbar' }}">
     <form
     method="POST"
     action="{{ route('hardware/bulkedit') }}"
@@ -16,7 +16,7 @@
             {{ trans('button.bulk_actions') }}
         </span>
     </label>
-    <select name="bulk_actions" class="form-control select2" aria-label="bulk_actions" style="min-width: 350px;">
+    <select name="bulk_actions" class="form-control select2" aria-label="bulk_actions">
         @if((isset($status)) && ($status == 'Deleted'))
             @can('delete', \App\Models\Asset::class)
                 <option value="restore">{{trans('button.restore')}}</option>

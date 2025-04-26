@@ -1,5 +1,5 @@
 @can('view', \App\Models\User::class)
-    <div id="userBulkEditToolbar" class="pull-left" style="min-width:500px !important; padding-top: 10px;">
+    <div id="userBulkEditToolbar" class="pull-left">
 
         @if (request('status')!='deleted')
 
@@ -14,7 +14,7 @@
 
             <div id="users-toolbar" style="width:100% !important;">
                 <label for="bulk_actions" class="sr-only">{{ trans('general.bulk_actions') }}</label>
-                <select name="bulk_actions" class="form-control select2" style="width: 50% !important;" aria-label="bulk_actions">
+                <select name="bulk_actions" class="form-control select2" aria-label="bulk_actions">
 
                     @can('update', \App\Models\User::class)
                         <option value="edit">{{ trans('general.bulk_edit') }}</option>
