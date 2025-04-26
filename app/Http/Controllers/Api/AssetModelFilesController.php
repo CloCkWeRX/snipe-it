@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-
 /**
  * This class controls file related actions related
  * to assets for the Snipe-IT Asset Management application.
@@ -35,7 +34,7 @@ class AssetModelFilesController extends Controller
      * @since [v7.0.12]
      * @author [r-xyz]
      */
-    public function store(UploadFileRequest $request, $assetModelId = null) : JsonResponse
+    public function store(UploadFileRequest $request, $assetModelId = null): JsonResponse
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetModelId)) {
@@ -45,7 +44,7 @@ class AssetModelFilesController extends Controller
         // Make sure we are allowed to update this asset
         $this->authorize('update', $assetModel);
 
-            if ($request->hasFile('file')) {
+        if ($request->hasFile('file')) {
             // If the file storage directory doesn't exist; create it
             if (! Storage::exists('private_uploads/assetmodels')) {
                 Storage::makeDirectory('private_uploads/assetmodels', 775);
@@ -53,8 +52,8 @@ class AssetModelFilesController extends Controller
 
             // Loop over the attached files and add them to the asset
             foreach ($request->file('file') as $file) {
-                $file_name = $request->handleFile('private_uploads/assetmodels/','model-'.$assetModel->id, $file);
-                
+                $file_name = $request->handleFile('private_uploads/assetmodels/', 'model-' . $assetModel->id, $file);
+
                 $assetModel->logUpload($file_name, e($request->get('notes')));
             }
 
@@ -73,7 +72,7 @@ class AssetModelFilesController extends Controller
      * @since [v7.0.12]
      * @author [r-xyz]
      */
-    public function list($assetmodel_id) : JsonResponse | array
+    public function list($assetmodel_id): JsonResponse | array
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetmodel_id)) {
@@ -82,7 +81,7 @@ class AssetModelFilesController extends Controller
 
             $assetmodel = AssetModel::with('uploads')->find($assetmodel_id);
             $this->authorize('view', $assetmodel);
-            return (new AssetModelsTransformer)->transformAssetModelFiles($assetmodel, $assetmodel->uploads()->count());
+            return (new AssetModelsTransformer())->transformAssetModelFiles($assetmodel, $assetmodel->uploads()->count());
     }
 
     /**
@@ -95,7 +94,7 @@ class AssetModelFilesController extends Controller
      * @since [v7.0.12]
      * @author [r-xyz]
      */
-    public function show($assetModelId = null, $fileId = null) : JsonResponse | StreamedResponse | Storage | StorageHelper | BinaryFileResponse
+    public function show($assetModelId = null, $fileId = null): JsonResponse | StreamedResponse | Storage | StorageHelper | BinaryFileResponse
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetModelId)) {
@@ -112,11 +111,11 @@ class AssetModelFilesController extends Controller
             }
 
             // Form the full filename with path
-            $file = 'private_uploads/assetmodels/'.$log->filename;
-            Log::debug('Checking for '.$file);
+            $file = 'private_uploads/assetmodels/' . $log->filename;
+            Log::debug('Checking for ' . $file);
 
             if ($log->action_type == 'audit') {
-                $file = 'private_uploads/audits/'.$log->filename;
+                $file = 'private_uploads/audits/' . $log->filename;
             }
 
             // Check the file actually exists on the filesystem
@@ -125,7 +124,6 @@ class AssetModelFilesController extends Controller
             }
 
             if (request('inline') == 'true') {
-
                 $headers = [
                     'Content-Disposition' => 'inline',
                 ];
@@ -148,7 +146,7 @@ class AssetModelFilesController extends Controller
      * @since [v7.0.12]
      * @author [r-xyz]
      */
-    public function destroy($assetModelId = null, $fileId = null) : JsonResponse
+    public function destroy($assetModelId = null, $fileId = null): JsonResponse
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetModelId)) {
@@ -165,8 +163,8 @@ class AssetModelFilesController extends Controller
             $log = Actionlog::find($fileId);
             if ($log) {
                 // Check the file actually exists, and delete it
-                if (Storage::exists($rel_path.'/'.$log->filename)) {
-                    Storage::delete($rel_path.'/'.$log->filename);
+                if (Storage::exists($rel_path . '/' . $log->filename)) {
+                    Storage::delete($rel_path . '/' . $log->filename);
                 }
                 // Delete the record of the file
                 $log->delete();

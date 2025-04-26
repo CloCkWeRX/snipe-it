@@ -30,7 +30,7 @@ class AssetModelsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('view', AssetModel::class);
         $allowed_columns =
@@ -73,7 +73,7 @@ class AssetModelsController extends Controller
             ->with('category', 'depreciation', 'manufacturer', 'fieldset.fields.defaultValues', 'adminuser')
             ->withCount('assets as assets_count');
 
-        if ($request->input('status')=='deleted') {
+        if ($request->input('status') == 'deleted') {
             $assetmodels->onlyTrashed();
         }
 
@@ -129,7 +129,7 @@ class AssetModelsController extends Controller
         $total = $assetmodels->count();
         $assetmodels = $assetmodels->skip($offset)->take($limit)->get();
 
-        return (new AssetModelsTransformer)->transformAssetModels($assetmodels, $total);
+        return (new AssetModelsTransformer())->transformAssetModels($assetmodels, $total);
     }
 
 
@@ -140,10 +140,10 @@ class AssetModelsController extends Controller
      * @since [v4.0]
      * @param  \App\Http\Requests\StoreAssetModelRequest  $request
      */
-    public function store(StoreAssetModelRequest $request) : JsonResponse
+    public function store(StoreAssetModelRequest $request): JsonResponse
     {
         $this->authorize('create', AssetModel::class);
-        $assetmodel = new AssetModel;
+        $assetmodel = new AssetModel();
         $assetmodel->fill($request->all());
         $assetmodel = $request->handleImages($assetmodel);
 
@@ -151,8 +151,6 @@ class AssetModelsController extends Controller
             return response()->json(Helper::formatStandardApiResponse('success', $assetmodel, trans('admin/models/message.create.success')));
         }
         return response()->json(Helper::formatStandardApiResponse('error', null, $assetmodel->getErrors()));
-
-
     }
 
     /**
@@ -162,12 +160,12 @@ class AssetModelsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function show($id) :  array
+    public function show($id): array
     {
         $this->authorize('view', AssetModel::class);
         $assetmodel = AssetModel::withCount('assets as assets_count')->findOrFail($id);
 
-        return (new AssetModelsTransformer)->transformAssetModel($assetmodel);
+        return (new AssetModelsTransformer())->transformAssetModel($assetmodel);
     }
 
     /**
@@ -177,12 +175,12 @@ class AssetModelsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function assets($id) : array
+    public function assets($id): array
     {
         $this->authorize('view', AssetModel::class);
         $assets = Asset::where('model_id', '=', $id)->get();
 
-        return (new AssetsTransformer)->transformAssets($assets, $assets->count());
+        return (new AssetsTransformer())->transformAssets($assets, $assets->count());
     }
 
 
@@ -195,13 +193,13 @@ class AssetModelsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreAssetModelRequest $request, $id) : JsonResponse
+    public function update(StoreAssetModelRequest $request, $id): JsonResponse
     {
         $this->authorize('update', AssetModel::class);
         $assetmodel = AssetModel::findOrFail($id);
         $assetmodel->fill($request->all());
         $assetmodel = $request->handleImages($assetmodel);
-        
+
         /**
          * Allow custom_fieldset_id to override and populate fieldset_id.
          * This is stupid, but required for legacy API support.
@@ -229,7 +227,7 @@ class AssetModelsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', AssetModel::class);
         $assetmodel = AssetModel::findOrFail($id);
@@ -241,7 +239,7 @@ class AssetModelsController extends Controller
 
         if ($assetmodel->image) {
             try {
-                Storage::disk('public')->delete('assetmodels/'.$assetmodel->image);
+                Storage::disk('public')->delete('assetmodels/' . $assetmodel->image);
             } catch (\Exception $e) {
                 Log::info($e);
             }
@@ -259,7 +257,7 @@ class AssetModelsController extends Controller
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
 
         $this->authorize('view.selectlists');
@@ -284,22 +282,22 @@ class AssetModelsController extends Controller
             $assetmodel->use_text = '';
 
             if ($settings->modellistCheckedValue('category')) {
-                $assetmodel->use_text .= (($assetmodel->category) ? $assetmodel->category->name.' - ' : '');
+                $assetmodel->use_text .= (($assetmodel->category) ? $assetmodel->category->name . ' - ' : '');
             }
 
             if ($settings->modellistCheckedValue('manufacturer')) {
-                $assetmodel->use_text .= (($assetmodel->manufacturer) ? $assetmodel->manufacturer->name.' ' : '');
+                $assetmodel->use_text .= (($assetmodel->manufacturer) ? $assetmodel->manufacturer->name . ' ' : '');
             }
 
             $assetmodel->use_text .= $assetmodel->name;
 
             if (($settings->modellistCheckedValue('model_number')) && ($assetmodel->model_number != '')) {
-                $assetmodel->use_text .= ' (#'.$assetmodel->model_number.')';
+                $assetmodel->use_text .= ' (#' . $assetmodel->model_number . ')';
             }
 
-            $assetmodel->use_image = ($settings->modellistCheckedValue('image') && ($assetmodel->image)) ? Storage::disk('public')->url('models/'.e($assetmodel->image)) : null;
+            $assetmodel->use_image = ($settings->modellistCheckedValue('image') && ($assetmodel->image)) ? Storage::disk('public')->url('models/' . e($assetmodel->image)) : null;
         }
 
-        return (new SelectlistTransformer)->transformSelectlist($assetmodels);
+        return (new SelectlistTransformer())->transformSelectlist($assetmodels);
     }
 }
