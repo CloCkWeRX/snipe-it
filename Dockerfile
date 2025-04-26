@@ -56,6 +56,12 @@ RUN phpenmod bcmath
 RUN sed -i 's/variables_order = .*/variables_order = "EGPCS"/' /etc/php/8.3/apache2/php.ini
 RUN sed -i 's/variables_order = .*/variables_order = "EGPCS"/' /etc/php/8.3/cli/php.ini
 
+RUN sed -i 's/post_max_size = .*/post_max_size = 10M/' /etc/php/8.3/apache2/php.ini
+RUN sed -i 's/post_max_size = .*/post_max_size = 10M/' /etc/php/8.3/cli/php.ini
+
+RUN sed -i 's/upload_max_filesize = .*/post_max_size = 5M/' /etc/php/8.3/apache2/php.ini
+RUN sed -i 's/upload_max_filesize = .*/post_max_size = 5M/' /etc/php/8.3/cli/php.ini
+
 RUN useradd -m --uid 10000 --gid 50 docker
 
 RUN echo export APACHE_RUN_USER=docker >> /etc/apache2/envvars
