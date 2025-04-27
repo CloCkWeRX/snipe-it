@@ -4,6 +4,10 @@ A hard fork of Snipe-IT, approximately from v8.0.4
 
 ### Goals
 
+#### Geocoding over Addresses
+
+If you run an organisation with a mobile fleet or remote sites, sync up where your assets are by pushing latitude, longitude details via the API.
+
 #### Provide pre-made datasets and libraries you can just use.
 
 Want all of the manufacturers or the Australian tax office depreciation rates?
