@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
  */
 class UserPresenter extends Presenter
 {
+    use Traits\Addressable;
+
     /**
      * Json Column Layout for bootstrap table
      * @return string

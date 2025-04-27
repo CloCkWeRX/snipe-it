@@ -205,23 +205,8 @@
                             <br><x-icon type="email" /> <a href="mailto:{{ $license->supplier->email }}">{{ $license->supplier->email }}</a>
                           @endif
 
-                          @if ($license->supplier->address)
-                            <br>{{ $license->supplier->address }}
-                          @endif
-                          @if ($license->supplier->address2)
-                            <br>{{ $license->supplier->address2 }}
-                          @endif
-                          @if ($license->supplier->city)
-                            <br>{{ $license->supplier->city }},
-                          @endif
-                          @if ($license->supplier->state)
-                            {{ $license->supplier->state }}
-                          @endif
-                          @if ($license->supplier->country)
-                            {{ $license->supplier->country }}
-                          @endif
-                          @if ($license->supplier->zip)
-                            {{ $license->supplier->zip }}
+                          @if ($license->supplier->present->formattedAddress())
+                            <br>{{ $license->supplier->present->formattedAddress() }}
                           @endif
                         @else
                           {{ trans('general.deleted') }}

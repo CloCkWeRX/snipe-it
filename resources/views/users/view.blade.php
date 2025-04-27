@@ -351,23 +351,9 @@
                         {{ trans('general.address') }}
                       </div>
                       <div class="col-md-9">
-                      
-                          @if ($user->address)
-                          {{ $user->address }} <br>
+                          @if ($user->present->formattedAddress())
+                            {{ $user->present->formattedAddress() }} <br>
                           @endif
-                          @if ($user->city)
-                            {{ $user->city }}
-                          @endif
-                          @if ($user->state)
-                            {{ $user->state }}
-                          @endif
-                          @if ($user->country)
-                            {{ $user->country }}
-                          @endif
-                          @if ($user->zip)
-                              {{ $user->zip }}
-                          @endif
-
                       </div>
                     </div>
                     @endif
