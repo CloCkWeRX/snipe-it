@@ -7,6 +7,8 @@ namespace App\Presenters;
  */
 class LocationPresenter extends Presenter
 {
+    use Traits\Addressable;
+
     /**
      * Json Column Layout for bootstrap table
      * @return string
