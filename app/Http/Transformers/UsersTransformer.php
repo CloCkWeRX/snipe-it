@@ -40,6 +40,7 @@ class UsersTransformer
                 'vip' => ($user->vip == '1') ? true : false,
                 'phone' => ($user->phone) ? e($user->phone) : null,
                 'website' => ($user->website) ? e($user->website) : null,
+                'formattedAddress' => e($user->formattedAddress()),
                 'address' => ($user->address) ? e($user->address) : null,
                 'city' => ($user->city) ? e($user->city) : null,
                 'state' => ($user->state) ? e($user->state) : null,

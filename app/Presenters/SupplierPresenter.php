@@ -2,10 +2,12 @@
 
 namespace App\Presenters;
 
+use App\Models\Traits\Addressable;
+
 /**
  * Class SupplierPresenter
  */
 class SupplierPresenter extends Presenter
 {
-    use Traits\Addressable;
+    use Addressable;
 }

@@ -2,12 +2,14 @@
 
 namespace App\Presenters;
 
+use App\Models\Traits\Addressable;
+
 /**
  * Class LocationPresenter
  */
 class LocationPresenter extends Presenter
 {
-    use Traits\Addressable;
+    use Addressable;
 
     /**
      * Json Column Layout for bootstrap table
@@ -124,12 +126,19 @@ class LocationPresenter extends Presenter
                 'visible' => true,
                 'class' => 'css-currency',
             ], [
-                'field' => 'address',
+                'field' => 'formattedAddress',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.address'),
                 'visible' => true,
+            ], [
+                'field' => 'address',
+                'searchable' => true,
+                'sortable' => true,
+                'switchable' => true,
+                'title' =>  trans('admin/locations/table.address'),
+                'visible' => false,
             ], [
                 'field' => 'address2',
                 'searchable' => true,
@@ -143,14 +152,14 @@ class LocationPresenter extends Presenter
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.city'),
-                'visible' => true,
+                'visible' => false,
             ], [
                 'field' => 'state',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.state'),
-                'visible' => true,
+                'visible' => false,
             ], [
                 'field' => 'zip',
                 'searchable' => true,

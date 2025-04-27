@@ -351,8 +351,8 @@
                         {{ trans('general.address') }}
                       </div>
                       <div class="col-md-9">
-                          @if ($user->present->formattedAddress())
-                            {{ $user->present->formattedAddress() }} <br>
+                          @if ($user->present()->formattedAddress())
+                            {{ $user->present()->formattedAddress() }} <br>
                           @endif
                       </div>
                     </div>
