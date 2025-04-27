@@ -38,6 +38,7 @@ class Importer extends Component
     public $licenses_fields;
     public $locations_fields;
     public $consumables_fields;
+    public $depreciations_fields;
     public $components_fields;
     public $aliases_fields;
 
@@ -85,8 +86,8 @@ class Importer extends Component
             case 'component':
                 $results = $this->components_fields;
                 break;
-            case 'consumable':
-                $results = $this->consumables_fields;
+            case 'depreciation':
+                $results = $this->depreciations_fields;
                 break;
             case 'license':
                 $results = $this->licenses_fields;
@@ -168,6 +169,7 @@ class Importer extends Component
             'assetModel'    =>      trans('general.asset_models'),
             'component'     =>  trans('general.components'),
             'consumable'    => trans('general.consumables'),
+            'depreciation'  => trans('general.depreciations'),
             'license'       =>    trans('general.licenses'),
             'location'      =>   trans('general.locations'),
             'user'          =>       trans('general.users'),
@@ -270,6 +272,11 @@ class Importer extends Component
             'quantity' => trans('general.qty'),
             'serial' => trans('general.serial_number'),
             'supplier' => trans('general.supplier'),
+        ];
+
+        $this->depreciations_fields = [
+            'name' => trans('general.name'),
+            'months' => trans('general.months')
         ];
 
         $this->licenses_fields = [
