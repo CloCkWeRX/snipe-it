@@ -1,0 +1,16 @@
+name,url,support_url,warranty_lookup_url,notes
+'Apple','https://apple.com','https://support.apple.com','https://checkcoverage.apple.com',
+'Microsoft','https://microsoft.com','https://support.microsoft.com','https://account.microsoft.com/devices',
+'Dell','https://dell.com','https://support.dell.com','https://www.dell.com/support/home/en-us/Products/?app=warranty',
+'Asus','https://asus.com','https://support.asus.com',,,
+'HP','https://hp.com','https://support.hp.com',
+'Lenovo','https://lenovo.com','https://support.lenovo.com',
+'LG','https://lg.com','https://support.lg.com', 
+'Polycom','https://polycom.com','https://support.polycom.com',
+'Adobe','https://adobe.com','https://support.adobe.com'
+'Avery','https://avery.com','https://support.avery.com',
+'Crucial','https://crucial.com','https://support.crucial.com',
+'Samsung','https://www.samsung.com','https://www.samsung.com/support/',
+'Google','https://www.google.com',
+'Huawei','https://consumer.huawei.com/',
+'Sony','https://electronics.sony.com',
