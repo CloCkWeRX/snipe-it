@@ -92,6 +92,9 @@ class Importer extends Component
             case 'license':
                 $results = $this->licenses_fields;
                 break;
+            case 'manufacturer':
+                $results = $this->manufacturers_fields;
+                break;
             case 'user':
                 $results = $this->users_fields;
                 break;
@@ -164,15 +167,16 @@ class Importer extends Component
     {
         $this->authorize('import');
         $this->importTypes = [
-            'accessory'     =>  trans('general.accessories'),
-            'asset'         =>      trans('general.assets'),
-            'assetModel'    =>      trans('general.asset_models'),
-            'component'     =>  trans('general.components'),
+            'accessory'     => trans('general.accessories'),
+            'asset'         => trans('general.assets'),
+            'assetModel'    => trans('general.asset_models'),
+            'component'     => trans('general.components'),
             'consumable'    => trans('general.consumables'),
             'depreciation'  => trans('general.depreciations'),
-            'license'       =>    trans('general.licenses'),
-            'location'      =>   trans('general.locations'),
-            'user'          =>       trans('general.users'),
+            'manufacturer'  => trans('general.manufacturers'),
+            'license'       => trans('general.licenses'),
+            'location'      => trans('general.locations'),
+            'user'          => trans('general.users'),
         ];
 
         /**
@@ -305,6 +309,15 @@ class Importer extends Component
             'supplier' => trans('general.supplier'),
             'termination_date' => trans('admin/licenses/form.termination_date'),
             'username' => trans('general.importer.checked_out_to_username'),
+        ];
+
+        $this->manufacturers_fields = [
+            'name' => trans('general.name'),
+            'url' => trans('general.url'),
+            'support_url' =>trans('admin/manufacturers/table.support_url'),
+            'support_email' => trans('admin/manufacturers/table.support_email'),
+            'warranty_lookup_url' => trans('admin/manufacturers/table.warranty_lookup_url'),
+            'wikidata' => "Wikidata",
         ];
 
         $this->users_fields = [
