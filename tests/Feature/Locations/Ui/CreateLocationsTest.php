@@ -28,7 +28,9 @@ class CreateLocationsTest extends TestCase
 
     public function testUserCanCreateLocations()
     {
-        $this->assertFalse(Location::where('name', 'Test Location')->exists());
+        $this->assertDatabaseMissing('locations', [
+            'name' => 'Test Location'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('locations.store'), [
@@ -37,12 +39,17 @@ class CreateLocationsTest extends TestCase
             ])
             ->assertRedirect(route('locations.index'));
 
-        $this->assertTrue(Location::where('name', 'Test Location')->where('notes', 'Test Note')->exists());
+        $this->assertDatabaseMissing('locations', [
+            'name' => 'Test Invalid License',
+            'notes' => 'Test Note'
+        ]);
     }
 
     public function testUserCannotCreateLocationsWithInvalidParent()
     {
-        $this->assertFalse(Location::where('name', 'Test Location')->exists());
+        $this->assertDatabaseMissing('locations', [
+            'name' => 'Test Location'
+        ]);
 
         $this->actingAs(User::factory()->superuser()->create())
             ->from(route('locations.create'))
@@ -52,6 +59,8 @@ class CreateLocationsTest extends TestCase
             ])
             ->assertRedirect(route('locations.create'));
 
-        $this->assertFalse(Location::where('name', 'Test Location')->exists());
+        $this->assertDatabaseMissing('locations', [
+            'name' => 'Test Location'
+        ]);
     }
 }

@@ -30,13 +30,13 @@ class CreateLocationsTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(Location::where('name', 'Test Location')->exists());
-
-        $location = Location::find($response['payload']['id']);
-        $this->assertEquals('Test Location', $location->name);
-        $this->assertEquals('Test Note', $location->notes);
-        $this->assertEquals(38.7532, $location->latitude);
-        $this->assertEquals(-77.1969, $location->longitude);
+        $this->assertDatabasHas('locations', [
+            'id' => $response['payload']['id'],
+            'name' => 'Test Location',
+            'notes' => 'Test Note',
+            'latitude' => 38.7532,
+            'longitude' => -77.1969
+        ]);
     }
 
     public function testCannotCreateNewLocationsWithTheSameName()

@@ -32,7 +32,9 @@ class CreateCategoriesTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertTrue(Category::where('name', 'Test Category')->exists());
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Test Category'
+        ]);
 
         $category = Category::find($response['payload']['id']);
         $this->assertEquals('Test Category', $category->name);
@@ -55,7 +57,10 @@ class CreateCategoriesTest extends TestCase
                     'category_type'    => ['The category type field is required.'],
                 ],
             ]);
-        $this->assertFalse(Category::where('name', 'Test Category')->exists());
+
+        $this->assertDatabaseMissing('categories', [
+            'name' => 'Test Category'
+        ]);
     }
 
     public function testCannotCreateCategoryWithInvalidCategoryType()
@@ -75,6 +80,8 @@ class CreateCategoriesTest extends TestCase
                 ],
             ]);
 
-        $this->assertFalse(Category::where('name', 'Test Category')->exists());
+        $this->assertDatabaseMissing('categories', [
+            'name' => 'Test Category'
+        ]);
     }
 }

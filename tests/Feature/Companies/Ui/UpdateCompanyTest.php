@@ -18,7 +18,10 @@ class UpdateCompanyTest extends TestCase
     public function testUserCanEditCompanies()
     {
         $company = Company::factory()->create(['name' => 'Test Company']);
-        $this->assertTrue(Company::where('name', 'Test Company')->exists());
+        $this->assertDatabaseHas('companies', [
+            'name' => 'Test Company'
+        ]);
+
         $response = $this->actingAs(User::factory()->superuser()->create())
             ->put(route('companies.update', $company), [
                 'name' => 'Test Company Edited',
@@ -30,6 +33,11 @@ class UpdateCompanyTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('companies.index'));
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(Company::where('name', 'Test Company Edited')->where('notes', 'Test Note Edited')->where('url', 'http://example.com')->where('wikidata', 'Q12345')->exists());
+        $this->assertDatabaseHas('companies', [
+            'name' => 'Test Company Edited',
+            'notes' => 'Test Note Edited',
+            'url' => 'http://example.com',
+            'wikidata' => 'Q12345'
+        ]);
     }
 }

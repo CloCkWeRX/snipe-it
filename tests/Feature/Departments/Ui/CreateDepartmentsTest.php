@@ -29,8 +29,9 @@ class CreateDepartmentsTest extends TestCase
 
     public function testUserCanCreateDepartments()
     {
-        $this->assertFalse(Department::where('name', 'Test Department')->exists());
-
+        $this->assertDatabaseMissing('departments', [
+            'name' => 'Test Department'
+        ]);
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('departments.store'), [
                 'name' => 'Test Department',
@@ -39,7 +40,10 @@ class CreateDepartmentsTest extends TestCase
                 'wikidata' => 'Q12345'
             ])
             ->assertRedirect(route('departments.index'));
-
-        $this->assertTrue(Department::where('name', 'Test Department')->where('notes', 'Test Note')->exists());
+        $this->assertDatabaseHas('departments', [
+            'name' => 'Test Department',
+            'notes' => 'Test Note',
+            'wikidata' => 'Q12345'
+        ]);
     }
 }

@@ -41,6 +41,8 @@ class CreateLicenseTest extends TestCase
         $response->assertInvalid(['purchase_date']);
         $response->assertSessionHasErrors(['purchase_date']);
         $this->followRedirects($response)->assertSee(trans('general.error'));
-        $this->assertFalse(AssetModel::where('name', 'Test Invalid License')->exists());
+        $this->assertDatabaseMissing('locations', [
+            'name' => 'Test Invalid License'
+        ]);
     }
 }

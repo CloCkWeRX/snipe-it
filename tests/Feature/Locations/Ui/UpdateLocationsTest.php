@@ -31,7 +31,9 @@ class UpdateLocationsTest extends TestCase
     public function testUserCanEditLocations()
     {
         $location = Location::factory()->create(['name' => 'Test Location']);
-        $this->assertTrue(Location::where('name', 'Test Location')->exists());
+        $this->assertDatabaseHas('locations', [
+            'name' => 'Test Location'
+        ]);
 
         $response = $this->actingAs(User::factory()->superuser()->create())
             ->put(route('locations.update', ['location' => $location]), [
@@ -45,13 +47,12 @@ class UpdateLocationsTest extends TestCase
             ->assertRedirect(route('locations.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(
-            Location::where('name', 'Test Location Edited')
-                ->where('notes', 'Test Note Edited')
-                // ->where('latitude', 38.7532)
-                // ->where('longitude', -77.1969)
-                ->exists()
-        );
+        $this->assertDatabaseHas('locations', [
+            'name' => 'Test Location Edited',
+            'notes' => 'Test Note Edited',
+            'latitude' => 38.7532,
+            'longitude' => -77.1969
+        ]);
     }
 
     public function testUserCannotEditLocationsToMakeThemTheirOwnParent()
@@ -67,7 +68,9 @@ class UpdateLocationsTest extends TestCase
             ->assertRedirect(route('locations.edit', ['location' => $location]));
 
         $this->followRedirects($response)->assertSee(trans('general.error'));
-        $this->assertFalse(Location::where('name', 'Test Location')->exists());
+        $this->assertDatabaseMissing('locations', [
+            'name' => 'Test Location'
+        ]);
     }
 
     public function testUserCannotEditLocationsWithInvalidParent()
@@ -82,7 +85,9 @@ class UpdateLocationsTest extends TestCase
             ->assertRedirect(route('locations.edit', ['location' => $location->id]));
 
         $this->followRedirects($response)->assertSee(trans('general.error'));
-        $this->assertFalse(Location::where('name', 'Test Location')->exists());
+        $this->assertDatabaseMissing('locations', [
+            'name' => 'Test Location'
+        ]);
     }
 
     public function testFileIsUploadedAndLogged()

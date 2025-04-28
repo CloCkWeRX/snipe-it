@@ -18,7 +18,9 @@ class UpdateManufacturerTest extends TestCase
     public function testUserCanEditManufacturers()
     {
         $manufacturer = Manufacturer::factory()->create(['name' => 'Test Manufacturer']);
-        $this->assertTrue(Manufacturer::where('name', 'Test Manufacturer')->exists());
+        $this->assertDatabaseHas('manufacturers', [
+            'name' => 'Test Manufacturer'
+        ]);
 
         $response = $this->actingAs(User::factory()->superuser()->create())
             ->put(route('manufacturers.update', $manufacturer), [
@@ -31,6 +33,9 @@ class UpdateManufacturerTest extends TestCase
             ->assertRedirect(route('manufacturers.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(Manufacturer::where('name', 'Test Manufacturer Edited')->where('notes', 'Test Note Edited')->exists());
+        $this->assertDatabaseHas('manufacturers', [
+            'name' => 'Test Manufacturer Edited',
+            'notes' => 'Test Note Edited'
+        ]);
     }
 }
