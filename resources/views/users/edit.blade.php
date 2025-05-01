@@ -277,17 +277,10 @@
 
                       <div class="col-md-12">
 
-<<<<<<< HEAD
-                          <a id="optional_user_info" href="#optional_user_details" class="text-primary">
-                              <i class="fa fa-caret-right fa-2x" id="optional_user_info_icon"></i>
-                              <strong>{{ trans('admin/hardware/form.optional_infos') }}</strong>
-                          </a>
-=======
                       <fieldset name="optional-details">
->>>>>>> bced7df53960d1f22b6dc74c3288da189a94f6a5
 
                           <legend class="highlight">
-                              <a id="optional_user_info">
+                              <a id="optional_user_info" href="#optional_user_details">
                                   <x-icon type="caret-right" id="optional_user_info_icon" />
                                   {{ trans('admin/hardware/form.optional_infos') }}
                               </a>
@@ -297,8 +290,8 @@
 
 
 
-<<<<<<< HEAD
-                          <!-- Employee Number -->
+
+<!-- Employee Number -->
                           <div class="form-group {{ $errors->has('employee_num') ? 'has-error' : '' }}">
                               <label class="col-md-3 control-label" for="employee_num">{{ trans('general.employee_number') }}</label>
                               <div class="col-md-6">
@@ -433,13 +426,11 @@
 
                                       </div>
                                   </div>
-=======
                               <!-- everything here should be what is considered optional -->
                               <br>
                               <!-- Company -->
                               @if (\App\Models\Company::canManageUsersCompanies())
                                   @include ('partials.forms.edit.company-select', ['translated_name' => trans('general.select_company'), 'fieldname' => 'company_id'])
->>>>>>> bced7df53960d1f22b6dc74c3288da189a94f6a5
                               @endif
 
 
@@ -693,7 +684,6 @@
                                             @endforeach
                                         </select>
 
-<<<<<<< HEAD
                                         @foreach ($groups as $id => $group)
                                             <option value="{{ $id }}"
                                                     {{ ($userGroups->keys()->contains($id) ? ' selected="selected"' : '') }}>
@@ -705,21 +695,11 @@
                                     <span class="help-block">
                                       {{ trans('admin/users/table.groupnotes') }}
                                     </span>
-                            </div>
-                                 @endif
-                           @else
-                                      <p>{{ trans('admin/users/table.nogroup') }} <span class="label label-info">{{ trans('admin/settings/general.admin_settings') }} <i class="fa fa-cogs"></i> > {{ trans('general.groups') }} <i class="fas fa-user-friends"></i></span> </p>
-                           @endif
-=======
-                                        <span class="help-block">
-                                          {{ trans('admin/users/table.groupnotes') }}
-                                        </span>
-                                </div>
-                                     @endif
+                                    </div>
+                                    @endif
                                @else
-                                          <p>{{ trans('admin/users/table.nogroup') }} <code>{{ trans('admin/settings/general.admin_settings') }} <i class="fa fa-cogs"></i> > {{ trans('general.groups') }} <i class="fas fa-user-friends"></i></code> </p>
+                                <p>{{ trans('admin/users/table.nogroup') }} <span class="label label-info">{{ trans('admin/settings/general.admin_settings') }} <i class="fa fa-cogs"></i> > {{ trans('general.groups') }} <i class="fas fa-user-friends"></i></span> </p>
                                @endif
->>>>>>> bced7df53960d1f22b6dc74c3288da189a94f6a5
 
                                   </div>
                               </div>
