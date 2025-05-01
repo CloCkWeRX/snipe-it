@@ -440,23 +440,6 @@
                                   </div>
                               </div>
 
-                              <!-- Employee Number -->
-                              <div class="form-group {{ $errors->has('employee_num') ? 'has-error' : '' }}">
-                                  <label class="col-md-3 control-label" for="employee_num">{{ trans('general.employee_number') }}</label>
-                                  <div class="col-md-6">
-                                      <input
-                                              class="form-control"
-                                              type="text"
-                                              aria-label="employee_num"
-                                              name="employee_num"
-                                              maxlength="191"
-                                              id="employee_num"
-                                              value="{{ old('employee_num', $user->employee_num) }}"
-                                      />
-                                      {!! $errors->first('employee_num', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
-                                  </div>
-                              </div>
-
 
                               
                               <!-- Groups -->
