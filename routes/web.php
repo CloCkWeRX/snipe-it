@@ -60,8 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'manufacturers', 'middleware' => ['auth']], function () {
         Route::post('{manufacturers_id}/restore', [ManufacturersController::class, 'restore'] )->name('restore/manufacturer');
         Route::post('seed', [ManufacturersController::class, 'seed'] )->name('manufacturers.seed');
-
-
+        Route::get('{manufacturer}/parse', [ManufacturersController::class, 'parse'] )->name('manufacturers.parse');
     });
 
     Route::resource('manufacturers', ManufacturersController::class);
@@ -69,6 +68,10 @@ Route::group(['middleware' => 'auth'], function () {
     /*
     * Suppliers
     */
+    Route::group(['prefix' => 'suppliers', 'middleware' => ['auth']], function () {
+        Route::post('{supplier}/parse', [SuppliersController::class, 'parse'] )->name('suppliers.parse');
+    });
+
     Route::resource('suppliers', SuppliersController::class);
 
     /*

@@ -10,8 +10,6 @@
 @stop
 
 @section('header_right')
-    <a href="{{ route('suppliers.edit', $supplier->id) }}" class="btn btn-default pull-right">
-        {{ trans('admin/suppliers/table.update') }}</a>
 
     <a href="{{ route('suppliers.index') }}" class="btn btn-primary text-right" style="margin-right: 10px;">{{ trans('general.back') }}</a>
 
@@ -339,6 +337,25 @@
           </ul>
           @include ('partials.map', ['options' => $options, 'initialMarkers' => $initialMarkers, 'item' => $supplier])
 
+          @can('update', \App\Models\Supplier::class)
+              <div class="col-md-12" style="padding-bottom: 5px;">
+                  <a href="{{ ($supplier->deleted_at=='') ? route('suppliers.edit', $supplier->id) : '#' }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social hidden-print{{ ($supplier->deleted_at!='') ? ' disabled' : '' }}">
+                      <x-icon type="edit" />
+                      {{ trans('admin/suppliers/table.update') }}
+                  </a>
+              </div>
+              @if ($supplier->url)
+                  <div class="col-md-12" style="padding-bottom: 5px;">
+                      <form action="{{route('suppliers.parse', $supplier->id)}}" method="POST">
+                          @csrf
+                          <button style="width: 100%;" class="btn btn-sm btn-info btn-social hidden-print">
+                              <x-icon type="info-circle" />
+                              Update details from URL
+                          </button>
+                      </form>
+                  </div>
+              @endif
+          @endcan
 
       </div> <!--/col-md-3-->
 

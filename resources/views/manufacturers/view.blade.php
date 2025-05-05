@@ -28,7 +28,7 @@
 @section('content')
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-9">
     <div class="nav-tabs-custom">
 
       <ul class="nav nav-tabs">
@@ -237,7 +237,100 @@
 
       </div> <!-- /.tab-content -->
     </div>  <!-- /.nav-tabs-custom -->
-  </div><!-- /. col-md-12 -->
+  </div><!-- /. col-md-9 -->
+
+  <div class="col-md-3">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-default">
+          <div class="box-header with-border">
+            <div class="box-heading">
+                <h2 class="box-title"> {{ trans('general.moreinfo') }}:</h2>
+            </div>
+          </div><!-- /.box-header -->
+          
+          <div class="box-body">
+
+            @if ($manufacturer->image)
+                <img src="{{ Storage::disk('public')->url(app('manufacturers_upload_path').e($manufacturer->image)) }}" class="img-responsive"></li>
+            @endif
+
+
+            <ul class="list-unstyled" style="line-height: 25px;">
+                @if ($manufacturer->url)
+                    <li>
+                        <i class="fas fa-globe-americas"></i> <a href="{{ $manufacturer->url }}">{{ $manufacturer->url }}</a>
+                    </li>
+                @endif
+
+                @if ($manufacturer->support_url)
+                    <li>
+                        <x-icon type="more-info" /> <a href="{{ $manufacturer->support_url }}">{{ $manufacturer->support_url }}</a>
+                    </li>
+                @endif
+
+                @if ($manufacturer->support_phone)
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:{{ $manufacturer->support_phone }}">{{ $manufacturer->support_phone }}</a>
+
+                    </li>
+                @endif
+
+                @if ($manufacturer->support_email)
+                    <li>
+                        <i class="far fa-envelope"></i> <a href="mailto:{{ $manufacturer->support_email }}">{{ $manufacturer->support_email }}</a>
+                    </li>
+                @endif
+
+
+                @if ($manufacturer->notes)
+                    <li>
+                        <strong>{{ trans('general.notes') }}</strong>:
+                        {!! nl2br(Helper::parseEscapedMarkedownInline($manufacturer->notes)) !!}
+                    </li>
+                @endif
+
+                @if ($manufacturer->created_at)
+                    <li>
+                        <strong>{{ trans('general.created_at') }}</strong>:
+                        {{ Helper::getFormattedDateObject($manufacturer->created_at, 'datetime', false) }}
+                    </li>
+                @endif
+
+                @if ($manufacturer->adminuser)
+                    <li>
+                        <strong>{{ trans('general.created_by') }}</strong>:
+                        {{ $manufacturer->adminuser->present()->name() }}
+                    </li>
+                @endif
+            </ul>
+          </div>
+          </div>
+
+
+        @can('update', \App\Models\Manufacturer::class)
+              <div class="col-md-12" style="padding-bottom: 5px;">
+                  <a href="{{ ($manufacturer->deleted_at=='') ? route('manufacturers.edit', $manufacturer->id) : '#' }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social hidden-print{{ ($manufacturer->deleted_at!='') ? ' disabled' : '' }}">
+                      <x-icon type="edit" />
+                      {{ trans('admin/manufacturers/table.update') }}
+                  </a>
+              </div>
+              @if ($manufacturer->url)
+                  <div class="col-md-12" style="padding-bottom: 5px;">
+                      <form action="{{route('manufacturers.parse', $manufacturer->id)}}" method="POST">
+                          @csrf
+                          <button style="width: 100%;" class="btn btn-sm btn-info btn-social hidden-print">
+                              <x-icon type="info-circle" />
+                              Update details from URL
+                          </button>
+                      </form>
+                  </div>
+              @endif
+          @endcan
+      </div>
+    </div>
+  </div>
 </div> <!-- /.row -->
 @stop
 

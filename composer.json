@@ -40,7 +40,7 @@
     "enshrined/svg-sanitize": "^0.15.0",
     "erusev/parsedown": "^1.7",
     "ginocampra/laravel-leaflet": "^1.0",
-    "guzzlehttp/guzzle": "^7.0.1",
+    "guzzlehttp/guzzle": "^7.0",
     "intervention/image": "^2.5",
     "javiereguiluz/easyslugger": "^1.0",
     "laravel-notification-channels/google-chat": "^3.0",

@@ -9,6 +9,7 @@ use App\Models\Actionlog;
 use App\Models\AssetModel;
 use App\Models\CustomField;
 use App\Models\SnipeModel;
+use App\Models\Manufacturer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\MessageBag;
+use App\Services\LinkedDataService;
 
 /**
  * This class controls all actions related to asset models for
@@ -407,6 +409,57 @@ class AssetModelsController extends Controller
 
         return redirect()->route('models.index')
             ->with('error', trans('admin/models/message.bulkdelete.error'));
+    }
+
+    public function parse(AssetModel $model) {
+        if (empty($model->url)) {
+            return redirect()->route('models.show', ["model" => $model])->with('error', 'No URL provided');
+        }
+        $service = new LinkedDataService();
+        $json = $service->first($model->url, [
+            'Product',
+            'ProductModel',
+            'Vehicle',
+            'IndividualProduct'
+            // Ignoring DietarySupplement, Drug, ProductGroup, ProductCollection
+        ]);
+
+        if (empty($json)) {
+            return redirect()->route('models.show', ["model" => $model])->with('error', 'No data found to extract');
+        }
+
+        // $manufacturer->wikidata = $json['sameAs'] ?? null;
+        // $model->url = $json['url'] ?? null;
+        if ($json['image']) {
+            // $model->image = $json['image'];
+        }
+
+        if ($json['description'] && empty($model->notes)) {
+            $model->notes = strip_tags($json['description']);
+        }
+
+        if ($json['brand'] && empty($model->manufacturer_id)) {
+            $model->manufacturer_id = Manufacturer::where('name', $json['brand']['name'])->firstOrCreate([
+                'name' => $json['brand']['name']
+            ])->id;
+        }
+
+        if ($json['mpn'] && empty($model->model_number)) {
+            $model->model_number = $json['mpn'];
+        }
+
+        if ($json['offers']) {
+            // TODO: Consider if any of this should be crammed into the notes field.
+            // $model->price = $json['offers']['price'];
+            // $model->price_currency = $json['offers']['priceCurrency'];
+            // $model->price_valid_until = $json['offers']['priceValidUntil'];
+            // $model->sku = $json['offers']['sku'];
+            // $model->availability = $json['offers']['availability'];
+            // $model->url = $json['offers']['url'];
+        }
+        $model->save();
+
+        return redirect()->route('models.show', ["model" => $model])->with('success', 'Model updated');      
     }
 
     /**

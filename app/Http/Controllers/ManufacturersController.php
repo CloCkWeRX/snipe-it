@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use \Illuminate\Contracts\View\View;
+use App\Services\LinkedDataService;
 
 /**
  * This controller handles all actions related to Manufacturers for
@@ -241,6 +242,42 @@ class ManufacturersController extends Controller
         }
 
         return redirect()->route('manufacturers.index')->with('error', trans('admin/manufacturers/message.does_not_exist'));
+    }
 
+    public function parse(Manufacturer $manufacturer) {
+        if (empty($manufacturer->url)) {
+            return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'No URL provided');
+        }
+        $service = new LinkedDataService();
+        $json = $service->first($manufacturer->url, ['Organization']);
+        if (empty($json)) {
+            return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'No data found to extract');
+        }
+
+        // $manufacturer->wikidata = $json['sameAs'] ?? null;
+        if ($json['contactPoint']) {
+            if (!is_array($json['contactPoint'])) {
+                $json['contactPoint'] = [$json['contactPoint']];
+            }
+      
+            if (empty($manufacturer->support_url)) {
+                $manufacturer->support_url = $json['contactPoint'][0]['url'] ?? null;
+            }
+
+            if (empty($manufacturer->warranty_lookup_url)) {
+                $manufacturer->warranty_lookup_url = $json['contactPoint'][0]['url'] ?? null;
+            }
+
+            if (empty($manufacturer->support_phone)) {
+                $manufacturer->support_phone = $json['contactPoint'][0]['telephone'] ?? null;
+            }
+
+            if (empty($manufacturer->support_email)) {
+                $manufacturer->support_email = $json['contactPoint'][0]['email'] ?? null;
+            }
+        }
+        $manufacturer->save();
+
+        return redirect()->route('manufacturers.show')->with('success', "Updated manufacturer with data from {$manufacturer->url}");      
     }
 }

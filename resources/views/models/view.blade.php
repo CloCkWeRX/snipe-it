@@ -152,6 +152,12 @@
 
 
                 <ul class="list-unstyled" style="line-height: 25px;">
+                    @if ($model->url)
+                        <li>
+                            <i class="fas fa-globe-americas"></i> <a href="{{ $model->url }}">{{ $model->url }}</a>
+                        </li>
+                    @endif
+
                     @if ($model->category)
                         <li>
                             <strong>{{ trans('general.category') }}</strong>:
@@ -270,12 +276,23 @@
         </div>
         </div>
             @can('update', \App\Models\AssetModel::class)
-            <div class="col-md-12" style="padding-bottom: 5px;">
-                <a href="{{ ($model->deleted_at=='') ? route('models.edit', $model->id) : '#' }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social hidden-print{{ ($model->deleted_at!='') ? ' disabled' : '' }}">
-                    <x-icon type="edit" />
-                    {{ trans('admin/models/table.edit') }}
-                </a>
-            </div>
+                <div class="col-md-12" style="padding-bottom: 5px;">
+                    <a href="{{ ($model->deleted_at=='') ? route('models.edit', $model->id) : '#' }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social hidden-print{{ ($model->deleted_at!='') ? ' disabled' : '' }}">
+                        <x-icon type="edit" />
+                        {{ trans('admin/models/table.edit') }}
+                    </a>
+                </div>
+                @if ($model->url)
+                    <div class="col-md-12" style="padding-bottom: 5px;">
+                        <form action="{{route('models.parse', $model->id)}}" method="POST">
+                            @csrf
+                            <button style="width: 100%;" class="btn btn-sm btn-info btn-social hidden-print">
+                                <x-icon type="info-circle" />
+                                Update details from URL
+                            </button>
+                        </form>
+                    </div>
+                @endif
             @endcan
 
             @can('create', \App\Models\AssetModel::class)
@@ -289,7 +306,6 @@
 
             @can('delete', \App\Models\AssetModel::class)
                 <div class="col-md-12" style="padding-top: 10px;">
-
                     @if ($model->deleted_at!='')
                         <form method="POST" action="{{ route('models.restore.store', $model->id) }}">
                             @csrf
