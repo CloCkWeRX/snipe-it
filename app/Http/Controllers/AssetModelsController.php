@@ -422,6 +422,7 @@ class AssetModelsController extends Controller
             'IndividualProduct'
             // Ignoring DietarySupplement, Drug, ProductGroup, ProductCollection
         ]);
+
         if (empty($json)) {
             return redirect()->route('models.show', ["model" => $model])->with('error', 'No data found to extract');
         }
@@ -434,6 +435,18 @@ class AssetModelsController extends Controller
         if ($json['description']) {
             $model->notes = strip_tags($json['description']);
         }
+        if ($json['brand']) {
+            if (empty($model->manufacturer_id)) {
+                $model->manufacturer_id = Manufacturer::where('name', $json['brand']['name'])->firstOrCreate([
+                    'name' => $json['brand']['name']
+                ]);
+            }
+        }
+
+        if ($json['mpn']) {
+            $model->model_number = $json['mpn'];
+        }
+
         if ($json['offers']) {
             // TODO: Consider if any of this should be crammed into the notes field.
             // $model->price = $json['offers']['price'];
@@ -442,14 +455,6 @@ class AssetModelsController extends Controller
             // $model->sku = $json['offers']['sku'];
             // $model->availability = $json['offers']['availability'];
             // $model->url = $json['offers']['url'];
-
-            // if ($json['offers']['seller'] && $json['offers']['seller']['@type'] == 'Organization') {
-            //     if (empty($model->manufacturer_id)) {
-            //         $model->manufacturer_id = Manufacturer::where('name', $json['offers']['seller']['name'])->firstOrCreate([
-            //             'name' => $json['offers']['seller']['name']
-            //         ]);
-            //     }
-            // }
         }
 
         return redirect()->route('manufacturers.index')->with('success', print_r($json, true));      
