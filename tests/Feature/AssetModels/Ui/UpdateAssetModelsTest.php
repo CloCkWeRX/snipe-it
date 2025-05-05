@@ -38,13 +38,17 @@ class UpdateAssetModelsTest extends TestCase
             ->put(route('models.update', ['model' => $model]), [
                 'name' => 'Test Model Edited',
                 'category_id' => $model->category_id,
+                'url' => 'https://example.com',
             ])
             ->assertStatus(302)
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('models.index'));
 
         $this->followRedirects($response)->assertSee('Success');
-        $this->assertTrue(AssetModel::where('name', 'Test Model Edited')->exists());
+        $this->assertDatabaseHas('models', [
+            'name' => 'Test Model Edited',
+            'url' => 'https://example.com',
+        ]);
     }
 
     public function testUserCannotChangeAssetModelCategoryType()
