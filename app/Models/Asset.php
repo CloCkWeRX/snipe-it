@@ -1610,34 +1610,14 @@ class Asset extends Depreciable
             foreach ($filter as $key => $search_val) {
                 $fieldname = str_replace('custom_fields.', '', $key);
 
-                if ($fieldname == 'asset_tag') {
-                    $query->where('assets.asset_tag', 'LIKE', '%' . $search_val . '%');
+                // Simple column like '%search_val%' checks.
+                $columns = ['asset_tag', 'name', 'serial', 'purchase_date', 'purchase_cost', 'notes', 'order_number'];
+                foreach ($columns as $column) {
+                    if ($fieldname == $column) {
+                        $query->where('assets.' . $column, 'LIKE', '%' . $search_val . '%');
+                    }
                 }
 
-                if ($fieldname == 'name') {
-                    $query->where('assets.name', 'LIKE', '%' . $search_val . '%');
-                }
-
-
-                if ($fieldname == 'serial') {
-                    $query->where('assets.serial', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'purchase_date') {
-                    $query->where('assets.purchase_date', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'purchase_cost') {
-                    $query->where('assets.purchase_cost', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'notes') {
-                    $query->where('assets.notes', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'order_number') {
-                    $query->where('assets.order_number', 'LIKE', '%' . $search_val . '%');
-                }
 
                 if ($fieldname == 'status_label') {
                     $query->whereHas('assetstatus', function ($query) use ($search_val) {
