@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Watson\Validating\ValidatingTrait;
-use \App\Presenters\AssetModelPresenter;
+use App\Presenters\AssetModelPresenter;
 use App\Http\Traits\TwoColumnUniqueUndeletedTrait;
 
 /**
@@ -22,7 +22,9 @@ class AssetModel extends SnipeModel
 {
     use HasFactory;
     use SoftDeletes;
-    use Loggable, Requestable, Presentable;
+    use Loggable;
+    use Requestable;
+    use Presentable;
     use TwoColumnUniqueUndeletedTrait;
 
     /**
@@ -48,8 +50,8 @@ class AssetModel extends SnipeModel
         'category_id'       => 'required|integer|exists:categories,id',
         'manufacturer_id'   => 'integer|exists:manufacturers,id|nullable',
         'eol'               => 'integer:min:0|max:240|nullable',
+        'url'               => 'string|nullable|starts_with:http://,https://'
     ];
-
 
 
     /**
@@ -69,6 +71,7 @@ class AssetModel extends SnipeModel
         'name',
         'notes',
         'requestable',
+        'url'
     ];
 
     use Searchable;
@@ -158,10 +161,10 @@ class AssetModel extends SnipeModel
     {
         return $this->belongsTo(\App\Models\CustomFieldset::class, 'fieldset_id');
     }
-   
+
     public function customFields()
     {
-       return $this->fieldset()->first()->fields(); 
+        return $this->fieldset()->first()->fields();
     }
 
     /**
@@ -188,7 +191,7 @@ class AssetModel extends SnipeModel
     public function getImageUrl()
     {
         if ($this->image) {
-            return Storage::disk('public')->url(app('models_upload_path').$this->image);
+            return Storage::disk('public')->url(app('models_upload_path') . $this->image);
         }
 
         return false;
@@ -289,12 +292,12 @@ class AssetModel extends SnipeModel
             ->orWhere('model_number', 'LIKE', "%$search%")
             ->orWhere(function ($query) use ($search) {
                 $query->whereHas('category', function ($query) use ($search) {
-                    $query->where('categories.name', 'LIKE', '%'.$search.'%');
+                    $query->where('categories.name', 'LIKE', '%' . $search . '%');
                 });
             })
             ->orWhere(function ($query) use ($search) {
                 $query->whereHas('manufacturer', function ($query) use ($search) {
-                    $query->where('manufacturers.name', 'LIKE', '%'.$search.'%');
+                    $query->where('manufacturers.name', 'LIKE', '%' . $search . '%');
                 });
             });
     }
@@ -338,5 +341,4 @@ class AssetModel extends SnipeModel
     {
         return $query->leftJoin('users as admin_sort', 'models.created_by', '=', 'admin_sort.id')->select('models.*')->orderBy('admin_sort.first_name', $order)->orderBy('admin_sort.last_name', $order);
     }
-
 }

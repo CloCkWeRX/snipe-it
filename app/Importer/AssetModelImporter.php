@@ -65,6 +65,7 @@ class AssetModelImporter extends ItemImporter
         $this->item['notes'] = trim($this->findCsvMatch($row, 'notes'));
         $this->item['fieldset'] = trim($this->findCsvMatch($row, 'fieldset'));
         $this->item['depreciation'] = trim($this->findCsvMatch($row, 'depreciation'));
+        $this->item['url'] = trim($this->findCsvMatch($row, 'url'));
         $this->item['requestable'] = trim(($this->fetchHumanBoolean($this->findCsvMatch($row, 'requestable'))) == 1) ? 1 : 0;
 
         if (!empty($this->item['category'])) {

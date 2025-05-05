@@ -175,7 +175,15 @@ class AssetModelPresenter extends Presenter
                 'visible' => false,
                 'formatter' => 'dateDisplayFormatter',
             ],
-
+            [
+                'field' => 'url',
+                'searchable' => true,
+                'sortable' => true,
+                'switchable' => true,
+                'title' => trans('general.url'),
+                'visible' => true,
+                'formatter' => 'linkFormatter',
+            ],
         ];
 
         $layout[] = [
