@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ImageUploadRequest;
 use App\Models\Supplier;
+use App\Services\LinkedDataService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
@@ -194,7 +195,8 @@ class SuppliersController extends Controller
         if (empty($supplier->url)) {
             return redirect()->route('suppliers.show', ["supplier" => $supplier])->with('error', 'No URL provided');
         }
-        $json = LinkedDataService::first($supplier->url, ['Organization']);
+        $service = new LinkedDataService();
+        $json = $service->first($supplier->url, ['Organization']);
         if (empty($json)) {
             return redirect()->route('suppliers.show', ["supplier" => $supplier])->with('error', 'No data found to extract');
         }
@@ -218,6 +220,6 @@ class SuppliersController extends Controller
         }
         $supplier->save();
 
-        return redirect()->route('suppliers.show')->with('success', "Updated suppliers with data from {$suppliers->url}");      
+        return redirect()->route('suppliers.show', ['supplier' => $supplier])->with('success', "Updated suppliers with data from {$suppliers->url}");      
     }
 }

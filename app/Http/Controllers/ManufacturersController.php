@@ -248,7 +248,8 @@ class ManufacturersController extends Controller
         if (empty($manufacturer->url)) {
             return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'No URL provided');
         }
-        $json = LinkedDataService::first($manufacturer->url, ['Organization']);
+        $service = new LinkedDataService();
+        $json = $service->first($manufacturer->url, ['Organization']);
         if (empty($json)) {
             return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'No data found to extract');
         }

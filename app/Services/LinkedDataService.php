@@ -20,11 +20,15 @@ class LinkedDataService
         $client = new Client([
             'timeout'  => 2.0
         ]);
-        $response = $client->get($url, [
-            'headers' => [
-                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36'
-            ]
-        ]);
+        try {
+            $response = $client->get($url, [
+                'headers' => [
+                    'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36'
+                ]
+            ]);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            return null;
+        }
         if ($response->getStatusCode() !== 200) {
             return null;
         }
