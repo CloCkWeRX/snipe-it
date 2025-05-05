@@ -209,7 +209,7 @@ class LdapSync extends Command
 
                 // Delete located users from the general group.
                 foreach ($results as $key => $generic_entry) {
-                    if ((is_array($generic_entry)) && (array_key_exists($ldap_map["username"], $generic_entry))) {
+                    if (is_array($generic_entry) && array_key_exists($ldap_map["username"], $generic_entry)) {
                         if (in_array($generic_entry[$ldap_map["username"]][0], $usernames)) {
                             unset($results[$key]);
                         }
@@ -419,8 +419,8 @@ class LdapSync extends Command
 
             if ($item['ldap_location_override'] == true) {
                 $user->location_id = $item['location_id'];
-            } elseif ((isset($location)) && (!empty($location))) {
-                if ((is_array($location)) && (array_key_exists('id', $location))) {
+            } elseif (isset($location) && !empty($location)) {
+                if (is_array($location) && array_key_exists('id', $location)) {
                     $user->location_id = $location['id'];
                 } elseif (is_object($location)) {
                     $user->location_id = $location->id; //THIS is the magic line, this should do it.

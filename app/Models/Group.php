@@ -88,7 +88,7 @@ class Group extends SnipeModel
         $permissions = json_decode($this->permissions ?? '{}', JSON_OBJECT_AS_ARRAY);
 
         // Otherwise, loop through the permissions and cast the values as integers
-        if ((is_array($permissions)) && ($permissions)) {
+        if (is_array($permissions) && ($permissions)) {
             foreach ($permissions as $permission => $value) {
 
                 if (!is_integer($permission)) {
