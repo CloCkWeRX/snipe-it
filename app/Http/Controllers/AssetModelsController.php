@@ -421,7 +421,7 @@ class AssetModelsController extends Controller
         }
 
         // $manufacturer->wikidata = $json['sameAs'] ?? null;
-        $model->url = $json['url'] ?? null;
+        // $model->url = $json['url'] ?? null;
         if ($json['image']) {
             // $model->image = $json['image'];
         }
