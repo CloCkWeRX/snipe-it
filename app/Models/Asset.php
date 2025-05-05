@@ -214,26 +214,24 @@ class Asset extends Depreciable
     }
 
 
-
     public function customFieldValidationRules()
     {
 
         $customFieldValidationRules = [];
 
-            if (($this->model) && ($this->model->fieldset)) {
+        if ($this->model?->fieldset) {
 
-                foreach ($this->model->fieldset->fields as $field) {
+            foreach ($this->model->fieldset->fields as $field) {
 
-                    if ($field->format == 'BOOLEAN'){
-                        $this->{$field->db_column} = filter_var($this->{$field->db_column}, FILTER_VALIDATE_BOOLEAN);
-                    }
+                if ($field->format == 'BOOLEAN') {
+                    $this->{$field->db_column} = filter_var($this->{$field->db_column}, FILTER_VALIDATE_BOOLEAN);
                 }
-
-                $customFieldValidationRules += $this->model->fieldset->validation_rules();
             }
 
-        return $customFieldValidationRules;
+            $customFieldValidationRules += $this->model->fieldset->validation_rules();
+        }
 
+        return $customFieldValidationRules;
     }
 
 
@@ -261,18 +259,18 @@ class Asset extends Depreciable
      */
     public function getWarrantyExpiresAttribute()
     {
-        if (isset($this->attributes['warranty_months']) && isset($this->attributes['purchase_date'])) {
-            if (is_string($this->attributes['purchase_date']) || is_string($this->attributes['purchase_date'])) {
-                $purchase_date = \Carbon\Carbon::parse($this->attributes['purchase_date']);
-            } else {
-                $purchase_date = \Carbon\Carbon::instance($this->attributes['purchase_date']);
-            }
-            $purchase_date->setTime(0, 0, 0);
-
-            return $purchase_date->addMonths((int) $this->attributes['warranty_months']);
+        if (!isset($this->attributes['warranty_months']) || !isset($this->attributes['purchase_date'])) {
+            return null;
         }
 
-        return null;
+        if (is_string($this->attributes['purchase_date']) || is_string($this->attributes['purchase_date'])) {
+            $purchase_date = \Carbon\Carbon::parse($this->attributes['purchase_date']);
+        } else {
+            $purchase_date = \Carbon\Carbon::instance($this->attributes['purchase_date']);
+        }
+        $purchase_date->setTime(0, 0, 0);
+
+        return $purchase_date->addMonths((int) $this->attributes['warranty_months']);
     }
 
 
@@ -300,19 +298,13 @@ class Asset extends Depreciable
      */
     public function availableForCheckout()
     {
-
-        // This asset is not currently assigned to anyone and is not deleted...
-        if ((! $this->assigned_to) && (! $this->deleted_at)) {
-
-            // The asset status is not archived and is deployable
-            if (($this->assetstatus) && ($this->assetstatus->archived == '0')
-                && ($this->assetstatus->deployable == '1'))
-            {
-                return true;
-
-            }
+        if ($this->assigned_to || $this->deleted_at) {
+            return false;
         }
-        return false;
+        // This asset is not currently assigned to anyone and is not deleted...
+
+        // The asset status is not archived and is deployable
+        return ($this->assetstatus?->archived == '0') && ($this->assetstatus->deployable == '1');
     }
 
 
@@ -334,9 +326,10 @@ class Asset extends Depreciable
      */
     public function checkOut($target, $admin = null, $checkout_at = null, $expected_checkin = null, $note = null, $name = null, $location = null)
     {
-        if (! $target) {
+        if (!$target) {
             return false;
         }
+
         if ($this->is($target)) {
             throw new CheckoutNotAllowed('You cannot check an asset out to itself.');
         }
@@ -401,7 +394,7 @@ class Asset extends Depreciable
             $user_name = 'Unassigned';
         }
 
-        return $this->asset_tag.' - '.$this->name.' ('.$user_name.') '.($this->model) ? $this->model->name : '';
+        return $this->asset_tag . ' - ' . $this->name . ' (' . $user_name . ') ' . ($this->model) ? $this->model->name : '';
     }
 
     /**
@@ -418,11 +411,13 @@ class Asset extends Depreciable
 
     public function customFieldsForCheckinCheckout($checkin_checkout) {
         // Check to see if any of the custom fields were included on the form and if they have any values
-        if (($this->model) && ($this->model->fieldset) && ($this->model->fieldset->fields)) {
-            foreach ($this->model->fieldset->fields as $field) {
-                if (($field->{$checkin_checkout} == 1) && (request()->has($field->db_column))){
-                    $this->{$field->db_column} = request()->get($field->db_column);
-                }
+        if (!$this->model?->fieldset?->fields) {
+            return;
+        }
+
+        foreach ($this->model->fieldset->fields as $field) {
+            if (($field->{$checkin_checkout} == 1) && request()->has($field->db_column)) {
+                $this->{$field->db_column} = request()->get($field->db_column);
             }
         }
     }
@@ -465,9 +460,7 @@ class Asset extends Depreciable
      */
     public function get_depreciation()
     {
-        if (($this->model) && ($this->model->depreciation)) {
-            return $this->model->depreciation;
-        }
+        return $this->model?->depreciation;
     }
 
 
@@ -498,17 +491,17 @@ class Asset extends Depreciable
      */
     public function checkedOutToUser(): bool
     {
-      return $this->assignedType() === self::USER;
+        return $this->assignedType() === self::USER;
     }
 
     public function checkedOutToLocation(): bool
     {
-      return $this->assignedType() === self::LOCATION;
+        return $this->assignedType() === self::LOCATION;
     }
 
     public function checkedOutToAsset(): bool
     {
-      return $this->assignedType() === self::ASSET;
+        return $this->assignedType() === self::ASSET;
     }
 
     /**
@@ -561,35 +554,37 @@ class Asset extends Depreciable
      */
     public function assetLoc($iterations = 1, $first_asset = null)
     {
-        if (! empty($this->assignedType())) {
-            if ($this->assignedType() == self::ASSET) {
-                if (! $first_asset) {
-                    $first_asset = $this;
-                }
-                if ($iterations > 10) {
-                    throw new \Exception('Asset assignment Loop for Asset ID: '.$first_asset->id);
-                }
-                $assigned_to = self::find($this->assigned_to); //have to do this this way because otherwise it errors
-                if ($assigned_to) {
-                    return $assigned_to->assetLoc($iterations + 1, $first_asset);
-                } // Recurse until we have a final location
-            }
-            if ($this->assignedType() == self::LOCATION) {
-                if ($this->assignedTo) {
-                    return $this->assignedTo;
-                }
-
-            }
-            if ($this->assignedType() == self::USER) {
-                if (($this->assignedTo) && $this->assignedTo->userLoc) {
-                    return $this->assignedTo->userLoc;
-                }
-                //this makes no sense
-                return $this->defaultLoc;
-
-            }
-
+        if (empty($this->assignedType())) {
+            return $this->defaultLoc;
         }
+    
+        if ($this->assignedType() == self::ASSET) {
+            if (!$first_asset) {
+                $first_asset = $this;
+            }
+
+            if ($iterations > 10) {
+                throw new \Exception('Asset assignment Loop for Asset ID: ' . $first_asset->id);
+            }
+
+            $assigned_to = self::find($this->assigned_to); //have to do this this way because otherwise it errors
+            if ($assigned_to) {
+                return $assigned_to->assetLoc($iterations + 1, $first_asset);
+            } // Recurse until we have a final location
+        }
+
+        if ($this->assignedType() == self::LOCATION) {
+            if ($this->assignedTo) {
+                return $this->assignedTo;
+            }
+        }
+
+        if ($this->assignedType() == self::USER) {
+            if ($this->assignedTo?->userLoc) {
+                return $this->assignedTo->userLoc;
+            }
+        }
+
         return $this->defaultLoc;
     }
 
@@ -604,8 +599,6 @@ class Asset extends Depreciable
     {
         return $this->assigned_type ? strtolower(class_basename($this->assigned_type)) : null;
     }
-
-
 
     /**
      * This is annoying, but because we don't say "assets" in our route names, we have to make an exception here
@@ -623,7 +616,6 @@ class Asset extends Depreciable
         }
 
         return $route;
-
     }
 
 
@@ -1013,7 +1005,7 @@ class Asset extends Depreciable
 
         return false;
     }
-    public function getComponentCost(){
+    public function getComponentCost() {
         $cost = 0;
         foreach($this->components as $component) {
             $cost += $component->pivot->assigned_qty*$component->purchase_cost;
