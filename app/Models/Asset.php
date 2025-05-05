@@ -933,9 +933,7 @@ class Asset extends Depreciable
      */
     public function checkin_email()
     {
-        if (($this->model) && ($this->model->category)) {
-            return $this->model->category->checkin_email;
-        }
+        return $this->model?->category?->checkin_email;
     }
 
     /**
@@ -947,9 +945,7 @@ class Asset extends Depreciable
      */
     public function requireAcceptance()
     {
-        if (($this->model) && ($this->model->category)) {
-            return $this->model->category->require_acceptance;
-        }
+        return $this->model?->category?->require_acceptance;
     }
 
 
@@ -990,19 +986,21 @@ class Asset extends Depreciable
      */
     public function getEula()
     {
+        if (!$this->model?->category) {
+            return false;
+        }
 
-        if (($this->model) && ($this->model->category)) {
-            if (($this->model->category->eula_text) && ($this->model->category->use_default_eula === 0)) {
-                return Helper::parseEscapedMarkedown($this->model->category->eula_text);
-            } elseif ($this->model->category->use_default_eula === 1) {
-                return Helper::parseEscapedMarkedown(Setting::getSettings()->default_eula_text);
-            } else {
-                return false;
-            }
+        if (($this->model->category->eula_text) && ($this->model->category->use_default_eula === 0)) {
+            return Helper::parseEscapedMarkedown($this->model->category->eula_text);
+        }
+
+        if ($this->model->category->use_default_eula === 1) {
+            return Helper::parseEscapedMarkedown(Setting::getSettings()->default_eula_text);
         }
 
         return false;
     }
+
     public function getComponentCost()
     {
         $cost = 0;
@@ -1156,7 +1154,7 @@ class Asset extends Depreciable
     *
     * @param  \Illuminate\Database\Query\Builder $query Query builder instance
     *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
+    * @return \Illuminate\Database\Query\Builder Modified query builder
     */
 
     public function scopeHardware($query)
@@ -1335,7 +1333,6 @@ class Asset extends Depreciable
 
     public function scopeDueOrOverdueForAudit($query, $settings)
     {
-
         return $query->where(function ($query) {
             $query->OverdueForAudit();
         })->orWhere(function ($query) use ($settings) {
@@ -1413,24 +1410,21 @@ class Asset extends Depreciable
 
     public function scopeAssetsForShow($query)
     {
-
         if (Setting::getSettings()->show_archived_in_list != 1) {
             return $query->whereHas('assetstatus', function ($query) {
                 $query->where('archived', '=', 0);
             });
-        } else {
-            return $query;
         }
+        return $query;
     }
 
-  /**
-   * Query builder scope for Archived assets
-   *
-   * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-   *
-   * @return \Illuminate\Database\Query\Builder          Modified query builder
-   */
-
+    /**
+     * Query builder scope for Archived assets
+     *
+     * @param  \Illuminate\Database\Query\Builder $query Query builder instance
+     *
+     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     */
     public function scopeArchived($query)
     {
         return $query->whereHas('assetstatus', function ($query) {
@@ -1440,33 +1434,30 @@ class Asset extends Depreciable
         });
     }
 
-  /**
-   * Query builder scope for Deployed assets
-   *
-   * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-   *
-   * @return \Illuminate\Database\Query\Builder          Modified query builder
-   */
-
+    /**
+     * Query builder scope for Deployed assets
+     *
+     * @param  \Illuminate\Database\Query\Builder $query Query builder instance
+     *
+     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     */
     public function scopeDeployed($query)
     {
         return $query->where('assigned_to', '>', '0');
     }
 
-  /**
-   * Query builder scope for Requestable assets
-   *
-   * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-   *
-   * @return \Illuminate\Database\Query\Builder          Modified query builder
-   */
-
+    /**
+     * Query builder scope for Requestable assets
+     *
+     * @param  \Illuminate\Database\Query\Builder $query Query builder instance
+     *
+     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     */
     public function scopeRequestableAssets($query): Builder
     {
         $table = $query->getModel()->getTable();
 
-        return Company::scopeCompanyables($query->where($table . '.requestable', '=', 1))
-        ->whereHas('assetstatus', function ($query) {
+        return Company::scopeCompanyables($query->where($table . '.requestable', '=', 1))->whereHas('assetstatus', function ($query) {
             $query->where(function ($query) {
                 $query->where('deployable', '=', 1)
                       ->where('archived', '=', 0); // you definitely can't request something that's archived
@@ -1476,53 +1467,53 @@ class Asset extends Depreciable
 
 
     /**
-   * scopeInModelList
-   * Get all assets in the provided listing of model ids
-   *
-   * @param       $query
-   * @param array $modelIdListing
-   *
-   * @return mixed
-   * @author  Vincent Sposato <vincent.sposato@gmail.com>
-   * @version v1.0
-   */
+     * scopeInModelList
+     * Get all assets in the provided listing of model ids
+     *
+     * @param       $query
+     * @param array $modelIdListing
+     *
+     * @return mixed
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     * @version v1.0
+     */
     public function scopeInModelList($query, array $modelIdListing)
     {
         return $query->whereIn('assets.model_id', $modelIdListing);
     }
 
-  /**
-  * Query builder scope to get not-yet-accepted assets
-  *
-  * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-  *
-  * @return \Illuminate\Database\Query\Builder          Modified query builder
-  */
+    /**
+     * Query builder scope to get not-yet-accepted assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     *
+     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     */
     public function scopeNotYetAccepted($query)
     {
         return $query->where('accepted', '=', 'pending');
     }
 
-  /**
-  * Query builder scope to get rejected assets
-  *
-  * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-  *
-  * @return \Illuminate\Database\Query\Builder          Modified query builder
-  */
+    /**
+     * Query builder scope to get rejected assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     *
+     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     */
     public function scopeRejected($query)
     {
         return $query->where('accepted', '=', 'rejected');
     }
 
 
-  /**
-  * Query builder scope to get accepted assets
-  *
-  * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-  *
-  * @return \Illuminate\Database\Query\Builder          Modified query builder
-  */
+    /**
+     * Query builder scope to get accepted assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     *
+     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     */
     public function scopeAccepted($query)
     {
         return $query->where('accepted', '=', 'accepted');
@@ -1619,34 +1610,14 @@ class Asset extends Depreciable
             foreach ($filter as $key => $search_val) {
                 $fieldname = str_replace('custom_fields.', '', $key);
 
-                if ($fieldname == 'asset_tag') {
-                    $query->where('assets.asset_tag', 'LIKE', '%' . $search_val . '%');
+                // Simple column like '%search_val%' checks.
+                $columns = ['asset_tag', 'name', 'serial', 'purchase_date', 'purchase_cost', 'notes', 'order_number'];
+                foreach ($columns as $column) {
+                    if ($fieldname == $column) {
+                        $query->where('assets.' . $column, 'LIKE', '%' . $search_val . '%');
+                    }
                 }
 
-                if ($fieldname == 'name') {
-                    $query->where('assets.name', 'LIKE', '%' . $search_val . '%');
-                }
-
-
-                if ($fieldname == 'serial') {
-                    $query->where('assets.serial', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'purchase_date') {
-                    $query->where('assets.purchase_date', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'purchase_cost') {
-                    $query->where('assets.purchase_cost', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'notes') {
-                    $query->where('assets.notes', 'LIKE', '%' . $search_val . '%');
-                }
-
-                if ($fieldname == 'order_number') {
-                    $query->where('assets.order_number', 'LIKE', '%' . $search_val . '%');
-                }
 
                 if ($fieldname == 'status_label') {
                     $query->whereHas('assetstatus', function ($query) use ($search_val) {
@@ -1698,6 +1669,7 @@ class Asset extends Depreciable
                     });
                 }
 
+                // TODO: DRY
                 if ($fieldname == 'model') {
                     $query->where(function ($query) use ($search_val) {
                         $query->whereHas('model', function ($query) use ($search_val) {
@@ -1731,34 +1703,20 @@ class Asset extends Depreciable
                     });
                 }
 
-
-            /**
-             * THIS CLUNKY BIT IS VERY IMPORTANT
-             *
-             * Although inelegant, this section matters a lot when querying against fields that do not
-             * exist on the asset table. There's probably a better way to do this moving forward, for
-             * example using the Schema:: methods to determine whether or not a column actually exists,
-             * or even just using the $searchableRelations variable earlier in this file.
-             *
-             * In short, this set of statements tells the query builder to ONLY query against an
-             * actual field that's being passed if it doesn't meet known relational fields. This
-             * allows us to query custom fields directly in the assets table
-             * (regardless of their name) and *skip* any fields that we already know can only be
-             * searched through relational searches that we do earlier in this method.
-             *
-             * For example, we do not store "location" as a field on the assets table, we store
-             * that relationship through location_id on the assets table, therefore querying
-             * assets.location would fail, as that field doesn't exist -- plus we're already searching
-             * against those relationships earlier in this method.
-             *
-             * - snipe
-             *
-             */
-
-                if (
-                    ($fieldname != 'category') && ($fieldname != 'model_number') && ($fieldname != 'rtd_location') && ($fieldname != 'location') && ($fieldname != 'supplier')
-                    && ($fieldname != 'status_label') && ($fieldname != 'assigned_to') && ($fieldname != 'model') && ($fieldname != 'company') && ($fieldname != 'manufacturer')
-                ) {
+                // TODO: Use reflection or similar to only query asset table fields.
+                $skippable = [
+                    'category',
+                    'model_number',
+                    'rtd_location',
+                    'location',
+                    'supplier',
+                    'status_label',
+                    'assigned_to',
+                    'model',
+                    'company',
+                    'manufacturer',
+                ];
+                if (!in_array($fieldname, $skippable)) {
                     $query->where('assets.' . $fieldname, 'LIKE', '%' . $search_val . '%');
                 }
             }
