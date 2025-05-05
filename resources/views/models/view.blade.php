@@ -276,24 +276,23 @@
         </div>
         </div>
             @can('update', \App\Models\AssetModel::class)
-            <div class="col-md-12" style="padding-bottom: 5px;">
-                <a href="{{ ($model->deleted_at=='') ? route('models.edit', $model->id) : '#' }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social hidden-print{{ ($model->deleted_at!='') ? ' disabled' : '' }}">
-                    <x-icon type="edit" />
-                    {{ trans('admin/models/table.edit') }}
-                </a>
-            </div>
-            @if ($model->url)
-            <div class="col-md-12" style="padding-bottom: 5px;">
-                <form action="{{route('models.parse', $model->id)}}" method="POST">
-                    @csrf
-                    <button style="width: 100%;" class="btn btn-sm btn-info btn-social hidden-print">
-                        <x-icon type="info-circle" />
-                        Update details from URL
-                    </button>
-                </form>
-            </div>
-            @endif
-
+                <div class="col-md-12" style="padding-bottom: 5px;">
+                    <a href="{{ ($model->deleted_at=='') ? route('models.edit', $model->id) : '#' }}" style="width: 100%;" class="btn btn-sm btn-warning btn-social hidden-print{{ ($model->deleted_at!='') ? ' disabled' : '' }}">
+                        <x-icon type="edit" />
+                        {{ trans('admin/models/table.edit') }}
+                    </a>
+                </div>
+                @if ($model->url)
+                    <div class="col-md-12" style="padding-bottom: 5px;">
+                        <form action="{{route('models.parse', $model->id)}}" method="POST">
+                            @csrf
+                            <button style="width: 100%;" class="btn btn-sm btn-info btn-social hidden-print">
+                                <x-icon type="info-circle" />
+                                Update details from URL
+                            </button>
+                        </form>
+                    </div>
+                @endif
             @endcan
 
             @can('create', \App\Models\AssetModel::class)
