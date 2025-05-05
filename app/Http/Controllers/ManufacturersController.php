@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use \Illuminate\Contracts\View\View;
-use GuzzleHttp\Client;
-use DomDocument;
-use DomXPath;
+use App\Services\LinkedDataService;
 
 /**
  * This controller handles all actions related to Manufacturers for
@@ -250,41 +248,16 @@ class ManufacturersController extends Controller
         if (empty($manufacturer->url)) {
             return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'No URL provided');
         }
-        libxml_use_internal_errors(true);
-        $client = new Client([
-            'timeout'  => 2.0
-        ]);
-        $response = $client->get($manufacturer->url, [ 
-            'headers' => [
-                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36'
-            ]
-        ]);  // TODO: Security?
-        if ($response->getStatusCode() !== 200) {
-            return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'Failed to fetch URL');
+        $json = LinkedDataService::first($manufacturer->url, ['Organization']);
+        if (empty($json)) {
+            return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'No data found to extract');
         }
 
-        $document = new DOMDocument();
-        $document->loadHTML($response->getBody(), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        
-        $xpath = new DOMXPath($document);
-
-        $query = '//script[contains(@type, "application/ld+json")]/text()';
-        $entries = $xpath->query($query);
-
-        foreach ($entries as $entry) {
-            $json = json_decode($entry->nodeValue, true);
-            if (isset($json['@type']) && $json['@type'] === 'Organization') {
-                $manufacturer->wikidata = $json['sameAs'] ?? null;
-                $manufacturer->url = $json['url'] ?? null;
-                $manufacturer->support_url = $json['contactPoint'][0]['url'] ?? null;
-                $manufacturer->support_phone = $json['contactPoint'][0]['telephone'] ?? null;
-                $manufacturer->support_email = $json['contactPoint'][0]['email'] ?? null;
-                return redirect()->route('manufacturers.index')->with('success', print_r($manufacturer->toArray(), true));
-                break;
-            }
-        }
-
-        return redirect()->route('manufacturers.index')->with('error', "Fail");
+        // $manufacturer->wikidata = $json['sameAs'] ?? null;
+        $manufacturer->url = $json['url'] ?? null;
+        $manufacturer->support_url = $json['contactPoint'][0]['url'] ?? null;
+        $manufacturer->support_phone = $json['contactPoint'][0]['telephone'] ?? null;
+        $manufacturer->support_email = $json['contactPoint'][0]['email'] ?? null;
+        return redirect()->route('manufacturers.index')->with('success', print_r($manufacturer->toArray(), true));      
     }
-
 }
