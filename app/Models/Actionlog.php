@@ -322,7 +322,7 @@ class Actionlog extends SnipeModel
     public function get_src($type = 'assets', $fieldname = 'filename')
     {
         if ($this->filename != '') {
-            $file = config('app.private_uploads').'/'.$type.'/'.$this->{$fieldname};
+            $file = config('app.private_uploads') . '/' . $type . '/' . $this->{$fieldname};
 
             return $file;
         }
@@ -374,9 +374,9 @@ class Actionlog extends SnipeModel
 
         // Show as negative number if the next audit date is before the audit date we're looking at
         if ($this->created_at > $override_default_next) {
-            $next_audit_days = '-'.$next_audit_days;
+            $next_audit_days = '-' . $next_audit_days;
         }
-        
+
         return $next_audit_days;
     }
 
@@ -424,13 +424,15 @@ class Actionlog extends SnipeModel
     public function determineActionSource(): string
     {
         // This is a manually set source
-        if($this->source) {
+        if ($this->source) {
             return $this->source;
         }
 
         // This is an API call
-        if (((request()->header('content-type') && (request()->header('accept'))=='application/json'))
-            && (starts_with(request()->header('authorization'), 'Bearer '))) {
+        if (
+            ((request()->header('content-type') && (request()->header('accept')) == 'application/json'))
+            && (starts_with(request()->header('authorization'), 'Bearer '))
+        ) {
             return 'api';
         }
 
@@ -441,7 +443,6 @@ class Actionlog extends SnipeModel
 
         // We're not sure, probably cli
         return 'cli/unknown';
-
     }
 
     // Manually sets $this->source for determineActionSource()
