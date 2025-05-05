@@ -415,7 +415,13 @@ class AssetModelsController extends Controller
             return redirect()->route('models.show', ["model" => $model])->with('error', 'No URL provided');
         }
         $service = new LinkedDataService();
-        $json = $service->first($model->url, ['Product']);
+        $json = $service->first($model->url, [
+            'Product',
+            'ProductModel',
+            'Vehicle',
+            'IndividualProduct'
+            // Ignoring DietarySupplement, Drug, ProductGroup, ProductCollection
+        ]);
         if (empty($json)) {
             return redirect()->route('models.show', ["model" => $model])->with('error', 'No data found to extract');
         }
