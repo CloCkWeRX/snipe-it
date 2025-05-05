@@ -434,17 +434,23 @@ class AssetModelsController extends Controller
         if ($json['description']) {
             $model->notes = strip_tags($json['description']);
         }
-        // if ($json['offers']) {
-        //     $model->price = $json['offers']['price'];           
-        // }
+        if ($json['offers']) {
+            // TODO: Consider if any of this should be crammed into the notes field.
+            // $model->price = $json['offers']['price'];
+            // $model->price_currency = $json['offers']['priceCurrency'];
+            // $model->price_valid_until = $json['offers']['priceValidUntil'];
+            // $model->sku = $json['offers']['sku'];
+            // $model->availability = $json['offers']['availability'];
+            // $model->url = $json['offers']['url'];
+            if ($json['offers']['seller'] && $json['offers']['seller']['@type'] == 'Organization') {
+                if (empty($model->manufacturer_id)) {
+                    $model->manufacturer_id = Manufacturer::where('name', $json['offers']['seller']['name'])->firstOrCreate([
+                        'name' => $json['offers']['seller']['name']
+                    ]);
+                }
+            }
 
-        // [sku] => 42912361 
-        // [availability] => https://schema.org/InStock 
-        // [offers] => Array ( [@type] => Offer [availability] => https://schema.org/InStock 
-        // [url] => https://www.kmart.com.au/product/zuru-robo-alive-robo-fish-assorted-42912361/ 
-        // [priceCurrency] => AUD [price] => 9 
-        // [priceValidUntil] => [seller] => Array ( [@type] => Organization [name] => Kmart ) ) 
-        // [aggregateRating] => Array ( [@type] => AggregateRating [ratingValue] => 4.5675673 [reviewCount] => 37 ) )
+        }
 
         return redirect()->route('manufacturers.index')->with('success', print_r($json, true));      
     }
