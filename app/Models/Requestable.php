@@ -40,7 +40,7 @@ trait Requestable
 
     public function cancelRequest($user_id = null)
     {
-        if (!$user_id){
+        if (!$user_id) {
             $user_id = auth()->id();
         }
 

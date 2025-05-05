@@ -7,7 +7,6 @@ use Helper;
 use ArieTimmerman\Laravel\SCIMServer\SCIM\Schema;
 use ArieTimmerman\Laravel\SCIMServer\Attribute\AttributeMapping;
 
-
 class SnipeSCIMConfig extends \ArieTimmerman\Laravel\SCIMServer\SCIMConfig
 {
     public function getUserConfig()

@@ -37,7 +37,7 @@ trait Loggable
     public function logCheckout($note, $target, $action_date = null, $originalValues = [])
     {
 
-        $log = new Actionlog;
+        $log = new Actionlog();
 
         $fields_array = [];
 
@@ -73,7 +73,6 @@ trait Loggable
 
         if (static::class == Asset::class) {
             if ($asset = Asset::find($log->item_id)) {
-
                 // add the custom fields that were changed
                 if ($asset->model->fieldset) {
                     $fields_array = [];
@@ -111,7 +110,7 @@ trait Loggable
             // NOTE - if the attribute exists in $originalValues, but *not* in ->getAttributes(), it isn't added to $changed
         }
 
-        if (!empty($changed)){
+        if (!empty($changed)) {
             $log->log_meta = json_encode($changed);
         }
 
@@ -144,14 +143,13 @@ trait Loggable
      */
     public function logCheckin($target, $note, $action_date = null, $originalValues = [])
     {
-        $log = new Actionlog;
+        $log = new Actionlog();
 
         $fields_array = [];
 
-        if($target != null){
+        if ($target != null) {
             $log->target_type = get_class($target);
             $log->target_id = $target->id;
-
         }
 
         if (static::class == LicenseSeat::class) {
@@ -198,7 +196,6 @@ trait Loggable
         $originalValues = array_intersect_key($originalValues, array_flip($array_to_flip));
 
         foreach ($originalValues as $key => $value) {
-
             if ($key == 'action_date' && $value != $action_date) {
                 $changed[$key]['old'] = $value;
                 $changed[$key]['new'] = is_string($action_date) ? $action_date : $action_date->format('Y-m-d H:i:s');
@@ -208,7 +205,7 @@ trait Loggable
             }
         }
 
-        if (!empty($changed)){
+        if (!empty($changed)) {
             $log->log_meta = json_encode($changed);
         }
 
@@ -225,7 +222,7 @@ trait Loggable
     public function logAudit($note, $location_id, $filename = null, $originalValues = [])
     {
 
-        $log = new Actionlog;
+        $log = new Actionlog();
 
         if (static::class == Asset::class) {
             if ($asset = Asset::find($log->item_id)) {
@@ -245,14 +242,13 @@ trait Loggable
 
         unset($originalValues['updated_at'], $originalValues['last_audit_date']);
         foreach ($originalValues as $key => $value) {
-
             if ($value != $this->getAttributes()[$key]) {
                 $changed[$key]['old'] = $value;
                 $changed[$key]['new'] = $this->getAttributes()[$key];
             }
         }
 
-        if (!empty($changed)){
+        if (!empty($changed)) {
             $log->log_meta = json_encode($changed);
         }
 
@@ -279,12 +275,11 @@ trait Loggable
             'location' => ($location) ? $location->name : '',
             'note' => $note,
         ];
-        if(Setting::getSettings()->webhook_selected === 'microsoft' && Str::contains(Setting::getSettings()->webhook_endpoint, 'workflows')){
+        if (Setting::getSettings()->webhook_selected === 'microsoft' && Str::contains(Setting::getSettings()->webhook_endpoint, 'workflows')) {
             $message = AuditNotification::toMicrosoftTeams($params);
             $notification = new TeamsNotification(Setting::getSettings()->webhook_endpoint);
             $notification->success()->sendMessage($message[0], $message[1]);
-        }
-        else {
+        } else {
             Setting::getSettings()->notify(new AuditNotification($params));
         }
 
@@ -302,7 +297,7 @@ trait Loggable
         if (auth()->user()) {
             $created_by = auth()->id();
         }
-        $log = new Actionlog;
+        $log = new Actionlog();
         if (static::class == LicenseSeat::class) {
             $log->item_type = License::class;
             $log->item_id = $this->license_id;
@@ -327,7 +322,7 @@ trait Loggable
      */
     public function logUpload($filename, $note)
     {
-        $log = new Actionlog;
+        $log = new Actionlog();
         if (static::class == LicenseSeat::class) {
             $log->item_type = License::class;
             $log->item_id = $this->license_id;
