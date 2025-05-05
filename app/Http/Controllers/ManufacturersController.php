@@ -254,10 +254,29 @@ class ManufacturersController extends Controller
         }
 
         // $manufacturer->wikidata = $json['sameAs'] ?? null;
-        $manufacturer->url = $json['url'] ?? null;
-        $manufacturer->support_url = $json['contactPoint'][0]['url'] ?? null;
-        $manufacturer->support_phone = $json['contactPoint'][0]['telephone'] ?? null;
-        $manufacturer->support_email = $json['contactPoint'][0]['email'] ?? null;
-        return redirect()->route('manufacturers.index')->with('success', print_r($manufacturer->toArray(), true));      
+        if ($json['contactPoint']) {
+            if (!is_array($json['contactPoint'])) {
+                $json['contactPoint'] = [$json['contactPoint']];
+            }
+      
+            if (empty($manufacturer->support_url)) {
+                $manufacturer->support_url = $json['contactPoint'][0]['url'] ?? null;
+            }
+
+            if (empty($manufacturer->warranty_lookup_url)) {
+                $manufacturer->warranty_lookup_url = $json['contactPoint'][0]['url'] ?? null;
+            }
+
+            if (empty($manufacturer->support_phone)) {
+                $manufacturer->support_phone = $json['contactPoint'][0]['telephone'] ?? null;
+            }
+
+            if (empty($manufacturer->support_email)) {
+                $manufacturer->support_email = $json['contactPoint'][0]['email'] ?? null;
+            }
+        }
+        $manufacturer->save();
+
+        return redirect()->route('manufacturers.show')->with('success', "Updated manufacturer with data from {$manufacturer->url}");      
     }
 }

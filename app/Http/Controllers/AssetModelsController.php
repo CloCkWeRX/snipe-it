@@ -9,6 +9,7 @@ use App\Models\Actionlog;
 use App\Models\AssetModel;
 use App\Models\CustomField;
 use App\Models\SnipeModel;
+use App\Models\Manufacturer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -432,18 +433,18 @@ class AssetModelsController extends Controller
         if ($json['image']) {
             // $model->image = $json['image'];
         }
-        if ($json['description']) {
+
+        if ($json['description'] && empty($model->notes)) {
             $model->notes = strip_tags($json['description']);
         }
-        if ($json['brand']) {
-            if (empty($model->manufacturer_id)) {
-                $model->manufacturer_id = Manufacturer::where('name', $json['brand']['name'])->firstOrCreate([
-                    'name' => $json['brand']['name']
-                ]);
-            }
+
+        if ($json['brand'] && empty($model->manufacturer_id)) {
+            $model->manufacturer_id = Manufacturer::where('name', $json['brand']['name'])->firstOrCreate([
+                'name' => $json['brand']['name']
+            ])->id;
         }
 
-        if ($json['mpn']) {
+        if ($json['mpn'] && empty($model->model_number)) {
             $model->model_number = $json['mpn'];
         }
 
@@ -456,8 +457,9 @@ class AssetModelsController extends Controller
             // $model->availability = $json['offers']['availability'];
             // $model->url = $json['offers']['url'];
         }
+        $model->save();
 
-        return redirect()->route('manufacturers.index')->with('success', print_r($json, true));      
+        return redirect()->route('models.show', ["model" => $model])->with('success', 'Model updated');      
     }
 
     /**
