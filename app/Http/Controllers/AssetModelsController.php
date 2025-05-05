@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\MessageBag;
+use App\Services\LinkedDataService;
 
 /**
  * This class controls all actions related to asset models for
@@ -410,17 +411,36 @@ class AssetModelsController extends Controller
     }
 
     public function parse(AssetModel $model) {
-        if (empty($manufacturer->url)) {
+        if (empty($model->url)) {
             return redirect()->route('models.show', ["model" => $model])->with('error', 'No URL provided');
         }
-        $json = LinkedDataService::first($model->url, ['Organization']);
+        $service = new LinkedDataService();
+        $json = $service->first($model->url, ['Product']);
         if (empty($json)) {
             return redirect()->route('models.show', ["model" => $model])->with('error', 'No data found to extract');
         }
 
         // $manufacturer->wikidata = $json['sameAs'] ?? null;
         $model->url = $json['url'] ?? null;
-        return redirect()->route('manufacturers.index')->with('success', print_r($model->toArray(), true));      
+        if ($json['image']) {
+            // $model->image = $json['image'];
+        }
+        if ($json['description']) {
+            $model->notes = strip_tags($json['description']);
+        }
+        // if ($json['offers']) {
+        //     $model->price = $json['offers']['price'];           
+        // }
+
+        // [sku] => 42912361 
+        // [availability] => https://schema.org/InStock 
+        // [offers] => Array ( [@type] => Offer [availability] => https://schema.org/InStock 
+        // [url] => https://www.kmart.com.au/product/zuru-robo-alive-robo-fish-assorted-42912361/ 
+        // [priceCurrency] => AUD [price] => 9 
+        // [priceValidUntil] => [seller] => Array ( [@type] => Organization [name] => Kmart ) ) 
+        // [aggregateRating] => Array ( [@type] => AggregateRating [ratingValue] => 4.5675673 [reviewCount] => 37 ) )
+
+        return redirect()->route('manufacturers.index')->with('success', print_r($json, true));      
     }
 
     /**
