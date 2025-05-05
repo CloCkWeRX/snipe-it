@@ -34,11 +34,15 @@ class CreateAssetModelsTest extends TestCase
             ->from(route('models.create'))
             ->post(route('models.store'), [
                 'name' => 'Test Model',
-                'category_id' => Category::factory()->create()->id
+                'category_id' => Category::factory()->create()->id,
+                'url' => 'https://example.com',
             ])
             ->assertRedirect(route('models.index'));
 
-        $this->assertTrue(AssetModel::where('name', 'Test Model')->exists());
+        $this->assertDatabaseHas('models', [
+            'name' => 'Test Model',
+            'url' => 'https://example.com',
+        ]);
     }
 
     public function testUserCannotUseAccessoryCategoryTypeAsAssetModelCategoryType()
