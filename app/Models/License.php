@@ -21,7 +21,8 @@ class License extends Depreciable
 
     use SoftDeletes;
     use CompanyableTrait;
-    use Loggable, Presentable;
+    use Loggable;
+    use Presentable;
     protected $injectUniqueIdentifier = true;
     use ValidatingTrait;
 
@@ -49,7 +50,7 @@ class License extends Depreciable
         'notes'   => 'string|nullable',
         'category_id' => 'required|exists:categories,id',
         'company_id' => 'integer|nullable',
-        'purchase_cost'=> 'numeric|nullable|gte:0',
+        'purchase_cost' => 'numeric|nullable|gte:0',
         'purchase_date'   => 'date_format:Y-m-d|nullable|max:10|required_with:depreciation_id',
         'expiration_date'   => 'date_format:Y-m-d|nullable|max:10',
         'termination_date'   => 'date_format:Y-m-d|nullable|max:10',
@@ -180,7 +181,7 @@ class License extends Depreciable
                 $seatsAvailableForDelete->pop()->delete();
             }
             // Log Deletion of seats.
-            $logAction = new Actionlog;
+            $logAction = new Actionlog();
             $logAction->item_type = self::class;
             $logAction->item_id = $license->id;
             $logAction->created_by = auth()->id() ?: 1; // We don't have an id while running the importer from CLI.
@@ -288,7 +289,8 @@ class License extends Depreciable
      * @since [v6.3]
      * @return mixed
      */
-    public function getFreeSeatCountAttribute(){
+    public function getFreeSeatCountAttribute()
+    {
         return $this->attributes['free_seat_count'] = $this->remaincount();
     }
 
@@ -369,16 +371,15 @@ class License extends Depreciable
      */
     public function getEula()
     {
-        if ($this->category){
+        if ($this->category) {
             if ($this->category->eula_text) {
                 return Helper::parseEscapedMarkedown($this->category->eula_text);
             } elseif ($this->category->use_default_eula == '1') {
                 return Helper::parseEscapedMarkedown(Setting::getSettings()->default_eula_text);
-            } 
+            }
         }
 
         return false;
-        
     }
 
     /**
@@ -688,7 +689,7 @@ class License extends Depreciable
 
         return self::whereNotNull('expiration_date')
             ->whereNull('deleted_at')
-            ->whereRaw('DATE_SUB(`expiration_date`,INTERVAL '.$days.' DAY) <= DATE(NOW()) ')
+            ->whereRaw('DATE_SUB(`expiration_date`,INTERVAL ' . $days . ' DAY) <= DATE(NOW()) ')
             ->where('expiration_date', '>', date('Y-m-d'))
             ->orderBy('expiration_date', 'ASC')
             ->get();
