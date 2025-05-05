@@ -772,7 +772,6 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         // Otherwise, loop through the permissions and cast the values as integers
         if ((is_array($permissions)) && ($permissions)) {
             foreach ($permissions as $permission => $value) {
-
                 if (!is_integer($permission)) {
                     $permissions[$permission] = (int) $value;
                 } else {
@@ -780,9 +779,9 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
                     unset($permissions[$permission]);
                 }
             }
-            return $permissions ?: new \stdClass;
+            return $permissions ?: new \stdClass();
         }
-        return new \stdClass;
+        return new \stdClass();
     }
 
     /**
