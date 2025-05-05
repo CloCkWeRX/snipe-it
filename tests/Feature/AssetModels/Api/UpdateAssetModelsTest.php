@@ -25,6 +25,7 @@ class UpdateAssetModelsTest extends TestCase
             ->patchJson(route('api.models.update', $model), [
                 'name' => 'Test Model',
                 'category_id' => Category::factory()->forAssets()->create()->id,
+                'url' => 'https://example.com',
             ])
             ->assertOk()
             ->assertStatusMessageIs('success')
@@ -32,7 +33,9 @@ class UpdateAssetModelsTest extends TestCase
             ->json();
 
         $model->refresh();
+
         $this->assertEquals('Test Model', $model->name, 'Name was not updated');
+        $this->assertEquals('https://example.com', $model->url, 'URL was not updated');
     }
 
     public function testCannotUpdateAssetModelViaPatchWithAccessoryCategory()
