@@ -86,7 +86,7 @@ Route::group(['prefix' => 'models', 'middleware' => ['auth']], function () {
         ]
     )->name('models.bulkdelete.store');
 
-    Route::get('{model}/parse',
+    Route::post('{model}/parse',
         [AssetModelsController::class, 'parse']
     )->name('models.parse');
 
