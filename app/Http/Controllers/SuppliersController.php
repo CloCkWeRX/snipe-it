@@ -189,4 +189,35 @@ class SuppliersController extends Controller
 
         return view('suppliers/view', compact('supplier', 'options', 'initialMarkers'));
     }
+
+    public function parse(Supplier $supplier) {
+        if (empty($supplier->url)) {
+            return redirect()->route('suppliers.show', ["supplier" => $supplier])->with('error', 'No URL provided');
+        }
+        $json = LinkedDataService::first($supplier->url, ['Organization']);
+        if (empty($json)) {
+            return redirect()->route('suppliers.show', ["supplier" => $supplier])->with('error', 'No data found to extract');
+        }
+
+        // $manufacturer->wikidata = $json['sameAs'] ?? null;
+        if ($json['contactPoint']) {
+            if (!is_array($json['contactPoint'])) {
+                $json['contactPoint'] = [$json['contactPoint']];
+            }
+      
+            if (empty($supplier->phone)) {
+                $supplier->support_phone = $json['contactPoint'][0]['telephone'] ?? null;
+            }
+
+            if (empty($supplier->email)) {
+                $supplier->email = $json['contactPoint'][0]['email'] ?? null;
+            }
+
+            // Address?
+            // Coordinates?
+        }
+        $supplier->save();
+
+        return redirect()->route('suppliers.show')->with('success', "Updated suppliers with data from {$suppliers->url}");      
+    }
 }

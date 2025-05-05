@@ -68,6 +68,10 @@ Route::group(['middleware' => 'auth'], function () {
     /*
     * Suppliers
     */
+    Route::group(['prefix' => 'suppliers', 'middleware' => ['auth']], function () {
+        Route::get('{suppliers}/parse', [SuppliersController::class, 'parse'] )->name('suppliers.parse');
+    });
+
     Route::resource('suppliers', SuppliersController::class);
 
     /*
