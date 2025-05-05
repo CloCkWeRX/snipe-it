@@ -442,14 +442,14 @@ class AssetModelsController extends Controller
             // $model->sku = $json['offers']['sku'];
             // $model->availability = $json['offers']['availability'];
             // $model->url = $json['offers']['url'];
-            if ($json['offers']['seller'] && $json['offers']['seller']['@type'] == 'Organization') {
-                if (empty($model->manufacturer_id)) {
-                    $model->manufacturer_id = Manufacturer::where('name', $json['offers']['seller']['name'])->firstOrCreate([
-                        'name' => $json['offers']['seller']['name']
-                    ]);
-                }
-            }
 
+            // if ($json['offers']['seller'] && $json['offers']['seller']['@type'] == 'Organization') {
+            //     if (empty($model->manufacturer_id)) {
+            //         $model->manufacturer_id = Manufacturer::where('name', $json['offers']['seller']['name'])->firstOrCreate([
+            //             'name' => $json['offers']['seller']['name']
+            //         ]);
+            //     }
+            // }
         }
 
         return redirect()->route('manufacturers.index')->with('success', print_r($json, true));      
