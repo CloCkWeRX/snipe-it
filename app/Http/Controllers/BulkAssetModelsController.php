@@ -22,7 +22,7 @@ class BulkAssetModelsController extends Controller
         $models_raw_array = $request->input('ids');
 
         // Make sure some IDs have been selected
-        if ((is_array($models_raw_array)) && (count($models_raw_array) > 0)) {
+        if (is_array($models_raw_array) && (count($models_raw_array) > 0)) {
             $models = AssetModel::whereIn('id', $models_raw_array)
                 ->withCount('assets as assets_count')
                 ->orderBy('assets_count', 'ASC')
@@ -118,7 +118,7 @@ class BulkAssetModelsController extends Controller
       
         $models_raw_array = $request->input('ids');
 
-        if ((is_array($models_raw_array)) && (count($models_raw_array) > 0)) {
+        if (is_array($models_raw_array) && (count($models_raw_array) > 0)) {
             $models = AssetModel::whereIn('id', $models_raw_array)->withCount('assets as assets_count')->get();
 
             $del_error_count = 0;

@@ -381,7 +381,7 @@ class LocationsController extends Controller
         $locations_raw_array = $request->input('ids');
 
         // Make sure some IDs have been selected
-        if ((is_array($locations_raw_array)) && (count($locations_raw_array) > 0)) {
+        if (is_array($locations_raw_array) && (count($locations_raw_array) > 0)) {
             $locations = Location::whereIn('id', $locations_raw_array)
                 ->withCount('assignedAssets as assigned_assets_count')
                 ->withCount('assets as assets_count')
@@ -415,7 +415,7 @@ class LocationsController extends Controller
 
         $locations_raw_array = $request->input('ids');
 
-        if ((is_array($locations_raw_array)) && (count($locations_raw_array) > 0)) {
+        if (is_array($locations_raw_array) && (count($locations_raw_array) > 0)) {
             $locations = Location::whereIn('id', $locations_raw_array)
                 ->withCount('assignedAssets as assigned_assets_count')
                 ->withCount('assets as assets_count')
