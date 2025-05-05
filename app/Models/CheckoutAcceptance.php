@@ -10,7 +10,9 @@ use Illuminate\Notifications\Notifiable;
 
 class CheckoutAcceptance extends Model
 {
-    use HasFactory, SoftDeletes, Notifiable;
+    use HasFactory;
+    use SoftDeletes;
+    use Notifiable;
 
     protected $casts = [
         'accepted_at' => 'datetime',
