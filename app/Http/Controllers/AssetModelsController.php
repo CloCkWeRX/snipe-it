@@ -411,6 +411,20 @@ class AssetModelsController extends Controller
             ->with('error', trans('admin/models/message.bulkdelete.error'));
     }
 
+    public function parse(AssetModel $model) {
+        if (empty($manufacturer->url)) {
+            return redirect()->route('models.show', ["model" => $model])->with('error', 'No URL provided');
+        }
+        $json = LinkedDataService::first($model->url, ['Organization']);
+        if (empty($json)) {
+            return redirect()->route('models.show', ["model" => $model])->with('error', 'No data found to extract');
+        }
+
+        // $manufacturer->wikidata = $json['sameAs'] ?? null;
+        $model->url = $json['url'] ?? null;
+        return redirect()->route('manufacturers.index')->with('success', print_r($model->toArray(), true));      
+    }
+
     /**
      * Returns true if a fieldset is set, 'add default values' is ticked and if
      * any default values were entered into the form.
