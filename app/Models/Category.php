@@ -166,8 +166,8 @@ class Category extends SnipeModel
     public function itemCount()
     {
 
-        if (isset($this->{Str::plural($this->category_type).'_count'})) {
-            return $this->{Str::plural($this->category_type).'_count'};
+        if (isset($this->{Str::plural($this->category_type) . '_count'})) {
+            return $this->{Str::plural($this->category_type) . '_count'};
         }
 
         switch ($this->category_type) {
@@ -184,7 +184,6 @@ class Category extends SnipeModel
             default:
                 return 0;
         }
-
     }
 
     /**
