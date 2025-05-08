@@ -9,8 +9,8 @@ use App\Models\Accessory;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
 /** This controller handles all actions related to Accessories for
@@ -28,7 +28,7 @@ class AccessoriesController extends Controller
      * @see AccessoriesController::getDatatable() method that generates the JSON response
      * @since [v1.0]
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('index', Accessory::class);
         return view('accessories.index');
@@ -39,13 +39,13 @@ class AccessoriesController extends Controller
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Accessory::class);
         $category_type = 'accessory';
 
         return view('accessories/edit')->with('category_type', $category_type)
-          ->with('item', new Accessory);
+          ->with('item', new Accessory());
     }
 
     /**
@@ -54,10 +54,10 @@ class AccessoriesController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @param ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize(Accessory::class);
-        
+
         // create a new model instance
         $accessory = new Accessory();
 
@@ -95,7 +95,7 @@ class AccessoriesController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @param  int $accessoryId
      */
-    public function edit(Accessory $accessory) : View | RedirectResponse
+    public function edit(Accessory $accessory): View | RedirectResponse
     {
         $this->authorize('update', Accessory::class);
         return view('accessories.edit')->with('item', $accessory)->with('category_type', 'accessory');
@@ -108,7 +108,7 @@ class AccessoriesController extends Controller
      * @param int $accessoryId
      * @since [v6.0]
      */
-    public function getClone(Accessory $accessory) : View | RedirectResponse
+    public function getClone(Accessory $accessory): View | RedirectResponse
     {
 
         $this->authorize('create', Accessory::class);
@@ -119,7 +119,6 @@ class AccessoriesController extends Controller
 
         return view('accessories/edit')
             ->with('item', $cloned);
-        
     }
 
     /**
@@ -129,10 +128,9 @@ class AccessoriesController extends Controller
      * @param ImageUploadRequest $request
      * @param  int $accessoryId
      */
-    public function update(ImageUploadRequest $request, Accessory $accessory) : RedirectResponse
+    public function update(ImageUploadRequest $request, Accessory $accessory): RedirectResponse
     {
         if ($accessory = Accessory::withCount('checkouts as checkouts_count')->find($accessory->id)) {
-
             $this->authorize($accessory);
 
             $validator = Validator::make($request->all(), [
@@ -182,7 +180,7 @@ class AccessoriesController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @param  int $accessoryId
      */
-    public function destroy($accessoryId) : RedirectResponse
+    public function destroy($accessoryId): RedirectResponse
     {
         if (is_null($accessory = Accessory::withCount('checkouts as checkouts_count')->find($accessoryId))) {
             return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.not_found'));
@@ -197,7 +195,7 @@ class AccessoriesController extends Controller
 
         if ($accessory->image) {
             try {
-                Storage::disk('public')->delete('accessories'.'/'.$accessory->image);
+                Storage::disk('public')->delete('accessories' . '/' . $accessory->image);
             } catch (\Exception $e) {
                 Log::debug($e);
             }
@@ -218,7 +216,7 @@ class AccessoriesController extends Controller
      * @see AccessoriesController::getDataView() method that generates the JSON response
      * @since [v1.0]
      */
-    public function show(Accessory $accessory) : View | RedirectResponse
+    public function show(Accessory $accessory): View | RedirectResponse
     {
         $accessory = Accessory::withCount('checkouts as checkouts_count')->find($accessory->id);
         $this->authorize('view', $accessory);

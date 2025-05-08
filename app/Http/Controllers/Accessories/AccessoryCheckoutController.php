@@ -13,12 +13,11 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AccessoryCheckoutController extends Controller
 {
-
     use CheckInOutRequest;
 
     /**
@@ -27,16 +26,15 @@ class AccessoryCheckoutController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @param  int $id
      */
-    public function create($id) : View | RedirectResponse
+    public function create($id): View | RedirectResponse
     {
 
         if ($accessory = Accessory::withCount('checkouts as checkouts_count')->find($id)) {
-
             $this->authorize('checkout', $accessory);
 
             if ($accessory->category) {
                 // Make sure there is at least one available to checkout
-                if ($accessory->numRemaining() <= 0){
+                if ($accessory->numRemaining() <= 0) {
                     return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.checkout.unavailable'));
                 }
 
@@ -47,12 +45,10 @@ class AccessoryCheckoutController extends Controller
             // Invalid category
             return redirect()->route('accessories.edit', ['accessory' => $accessory->id])
                 ->with('error', trans('general.invalid_item_category_single', ['type' => trans('general.accessory')]));
-
         }
 
         // Not found
         return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.not_found'));
-
     }
 
     /**
@@ -65,17 +61,16 @@ class AccessoryCheckoutController extends Controller
      * @param Request $request
      * @param  Accessory $accessory
      */
-    public function store(AccessoryCheckoutRequest $request, Accessory $accessory) : RedirectResponse
+    public function store(AccessoryCheckoutRequest $request, Accessory $accessory): RedirectResponse
     {
-        
+
         $this->authorize('checkout', $accessory);
 
         $target = $this->determineCheckoutTarget();
-        
-        $accessory->checkout_qty = $request->input('checkout_qty', 1);
-        
-        for ($i = 0; $i < $accessory->checkout_qty; $i++) {
 
+        $accessory->checkout_qty = $request->input('checkout_qty', 1);
+
+        for ($i = 0; $i < $accessory->checkout_qty; $i++) {
             $accessory_checkout = new AccessoryCheckout([
                 'accessory_id' => $accessory->id,
                 'created_at' => Carbon::now(),
@@ -88,7 +83,7 @@ class AccessoryCheckoutController extends Controller
             $accessory_checkout->save();
         }
 
-        event(new CheckoutableCheckedOut($accessory,  $target, auth()->user(), $request->input('note')));
+        event(new CheckoutableCheckedOut($accessory, $target, auth()->user(), $request->input('note')));
 
         $request->request->add(['checkout_to_type' => request('checkout_to_type')]);
         $request->request->add(['assigned_to' => $target->id]);
