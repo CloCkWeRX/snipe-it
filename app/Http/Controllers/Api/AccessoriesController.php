@@ -41,7 +41,7 @@ class AccessoriesController extends Controller
 
         // This array is what determines which fields should be allowed to be sorted on ON the table itself, no relations
         // Relations will be handled in query scopes a little further down.
-        $allowed_columns = 
+        $allowed_columns =
             [
                 'id',
                 'name',
@@ -82,11 +82,11 @@ class AccessoriesController extends Controller
         }
 
         if ($request->filled('location_id')) {
-            $accessories->where('location_id','=',$request->input('location_id'));
+            $accessories->where('location_id', '=', $request->input('location_id'));
         }
 
         if ($request->filled('notes')) {
-            $accessories->where('notes','=',$request->input('notes'));
+            $accessories->where('notes', '=', $request->input('notes'));
         }
 
         // Make sure the offset and limit are actually integers and do not exceed system limits
@@ -109,7 +109,7 @@ class AccessoriesController extends Controller
                 break;
             case 'manufacturer':
                 $accessories = $accessories->OrderManufacturer($order);
-                break;    
+                break;
             case 'supplier':
                 $accessories = $accessories->OrderSupplier($order);
                 break;
@@ -120,11 +120,11 @@ class AccessoriesController extends Controller
                 $accessories = $accessories->orderBy($column_sort, $order);
                 break;
         }
- 
+
         $total = $accessories->count();
         $accessories = $accessories->skip($offset)->take($limit)->get();
 
-        return (new AccessoriesTransformer)->transformAccessories($accessories, $total);
+        return (new AccessoriesTransformer())->transformAccessories($accessories, $total);
     }
 
 
@@ -138,7 +138,7 @@ class AccessoriesController extends Controller
      */
     public function store(StoreAccessoryRequest $request)
     {
-        $accessory = new Accessory;
+        $accessory = new Accessory();
         $accessory->fill($request->all());
         $accessory = $request->handleImages($accessory);
 
@@ -147,7 +147,6 @@ class AccessoriesController extends Controller
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, $accessory->getErrors()));
-
     }
 
     /**
@@ -163,7 +162,7 @@ class AccessoriesController extends Controller
         $this->authorize('view', Accessory::class);
         $accessory = Accessory::withCount('checkouts as checkouts_count')->findOrFail($id);
 
-        return (new AccessoriesTransformer)->transformAccessory($accessory);
+        return (new AccessoriesTransformer())->transformAccessory($accessory);
     }
 
 
@@ -180,7 +179,7 @@ class AccessoriesController extends Controller
         $this->authorize('view', Accessory::class);
         $accessory = Accessory::findOrFail($id);
 
-        return (new AccessoriesTransformer)->transformAccessory($accessory);
+        return (new AccessoriesTransformer())->transformAccessory($accessory);
     }
 
 
@@ -211,7 +210,7 @@ class AccessoriesController extends Controller
         $total = $accessory_checkouts->count();
         $accessory_checkouts = $accessory_checkouts->skip($offset)->take($limit)->get();
 
-        return (new AccessoriesTransformer)->transformCheckedoutAccessory($accessory_checkouts, $total);
+        return (new AccessoriesTransformer())->transformCheckedoutAccessory($accessory_checkouts, $total);
     }
 
 
@@ -279,7 +278,6 @@ class AccessoriesController extends Controller
         $accessory->checkout_qty = $request->input('checkout_qty', 1);
 
         for ($i = 0; $i < $accessory->checkout_qty; $i++) {
-
             $accessory_checkout = new AccessoryCheckout([
                 'accessory_id' => $accessory->id,
                 'created_at' => Carbon::now(),
@@ -296,7 +294,6 @@ class AccessoriesController extends Controller
         event(new CheckoutableCheckedOut($accessory, $target, auth()->user(), $request->input('note')));
 
         return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/accessories/message.checkout.success')));
-
     }
 
     /**
@@ -327,11 +324,10 @@ class AccessoriesController extends Controller
                 $user = User::find($accessory_checkout->assigned_to);
             }
 
-            return response()->json(Helper::formatStandardApiResponse('success', null,  trans('admin/accessories/message.checkin.success')));
+            return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/accessories/message.checkin.success')));
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/accessories/message.checkin.error')));
-
     }
 
 
@@ -350,12 +346,11 @@ class AccessoriesController extends Controller
         ]);
 
         if ($request->filled('search')) {
-            $accessories = $accessories->where('accessories.name', 'LIKE', '%'.$request->get('search').'%');
+            $accessories = $accessories->where('accessories.name', 'LIKE', '%' . $request->get('search') . '%');
         }
 
         $accessories = $accessories->orderBy('name', 'ASC')->paginate(50);
 
-        return (new SelectlistTransformer)->transformSelectlist($accessories);
+        return (new SelectlistTransformer())->transformSelectlist($accessories);
     }
-
 }
