@@ -24,7 +24,7 @@ class ConsumablesController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function index(Request $request) : array
+    public function index(Request $request): array
     {
         $this->authorize('index', Consumable::class);
 
@@ -48,7 +48,7 @@ class ConsumablesController extends Controller
         }
 
         if ($request->filled('model_number')) {
-            $consumables->where('model_number','=',$request->input('model_number'));
+            $consumables->where('model_number', '=', $request->input('model_number'));
         }
 
         if ($request->filled('manufacturer_id')) {
@@ -60,11 +60,11 @@ class ConsumablesController extends Controller
         }
 
         if ($request->filled('location_id')) {
-            $consumables->where('location_id','=',$request->input('location_id'));
+            $consumables->where('location_id', '=', $request->input('location_id'));
         }
 
         if ($request->filled('notes')) {
-            $consumables->where('notes','=',$request->input('notes'));
+            $consumables->where('notes', '=', $request->input('notes'));
         }
 
 
@@ -123,7 +123,7 @@ class ConsumablesController extends Controller
         $total = $consumables->count();
         $consumables = $consumables->skip($offset)->take($limit)->get();
 
-        return (new ConsumablesTransformer)->transformConsumables($consumables, $total);
+        return (new ConsumablesTransformer())->transformConsumables($consumables, $total);
     }
 
     /**
@@ -133,10 +133,10 @@ class ConsumablesController extends Controller
      * @since [v4.0]
      * @param  \App\Http\Requests\ImageUploadRequest $request
      */
-    public function store(StoreConsumableRequest $request) : JsonResponse
+    public function store(StoreConsumableRequest $request): JsonResponse
     {
         $this->authorize('create', Consumable::class);
-        $consumable = new Consumable;
+        $consumable = new Consumable();
         $consumable->fill($request->all());
         $consumable = $request->handleImages($consumable);
 
@@ -153,12 +153,12 @@ class ConsumablesController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @param  int $id
      */
-    public function show($id) : array
+    public function show($id): array
     {
         $this->authorize('view', Consumable::class);
         $consumable = Consumable::with('users')->findOrFail($id);
 
-        return (new ConsumablesTransformer)->transformConsumable($consumable);
+        return (new ConsumablesTransformer())->transformConsumable($consumable);
     }
 
     /**
@@ -169,13 +169,13 @@ class ConsumablesController extends Controller
      * @param  \App\Http\Requests\ImageUploadRequest $request
      * @param  int $id
      */
-    public function update(StoreConsumableRequest $request, $id) : JsonResponse
+    public function update(StoreConsumableRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Consumable::class);
         $consumable = Consumable::findOrFail($id);
         $consumable->fill($request->all());
         $consumable = $request->handleImages($consumable);
-        
+
         if ($consumable->save()) {
             return response()->json(Helper::formatStandardApiResponse('success', $consumable, trans('admin/consumables/message.update.success')));
         }
@@ -190,7 +190,7 @@ class ConsumablesController extends Controller
      * @since [v4.0]
      * @param  int $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Consumable::class);
         $consumable = Consumable::findOrFail($id);
@@ -208,14 +208,14 @@ class ConsumablesController extends Controller
     * @since [v1.0]
     * @param int $consumableId
      */
-    public function getDataView($consumableId) : array
+    public function getDataView($consumableId): array
     {
-        $consumable = Consumable::with(['consumableAssignments'=> function ($query) {
-            $query->orderBy($query->getModel()->getTable().'.created_at', 'DESC');
+        $consumable = Consumable::with(['consumableAssignments' => function ($query) {
+            $query->orderBy($query->getModel()->getTable() . '.created_at', 'DESC');
         },
-        'consumableAssignments.adminuser'=> function ($query) {
+        'consumableAssignments.adminuser' => function ($query) {
         },
-        'consumableAssignments.user'=> function ($query) {
+        'consumableAssignments.user' => function ($query) {
         },
         ])->find($consumableId);
 
@@ -249,7 +249,7 @@ class ConsumablesController extends Controller
      * @param int $id
      * @since [v4.9.5]
      */
-    public function checkout(Request $request, $id) : JsonResponse
+    public function checkout(Request $request, $id): JsonResponse
     {
         // Check if the consumable exists
         if (!$consumable = Consumable::with('users')->find($id)) {
@@ -266,7 +266,7 @@ class ConsumablesController extends Controller
         }
 
         // Make sure there is a valid category
-        if (!$consumable->category){
+        if (!$consumable->category) {
             return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.invalid_item_category_single', ['type' => trans('general.consumable')])));
         }
 
@@ -287,7 +287,8 @@ class ConsumablesController extends Controller
         $consumable->assigned_to = $request->input('assigned_to');
 
         for ($i = 0; $i < $consumable->checkout_qty; $i++) {
-            $consumable->users()->attach($consumable->id,
+            $consumable->users()->attach(
+                $consumable->id,
                 [
                     'consumable_id' => $consumable->id,
                     'created_by' => $user->id,
@@ -301,7 +302,6 @@ class ConsumablesController extends Controller
         event(new CheckoutableCheckedOut($consumable, $user, auth()->user(), $request->input('note')));
 
         return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/consumables/message.checkout.success')));
-
     }
 
     /**
@@ -309,7 +309,7 @@ class ConsumablesController extends Controller
     *
     * @see \App\Http\Transformers\SelectlistTransformer
     */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
         $consumables = Consumable::select([
             'consumables.id',
@@ -317,11 +317,11 @@ class ConsumablesController extends Controller
         ]);
 
         if ($request->filled('search')) {
-            $consumables = $consumables->where('consumables.name', 'LIKE', '%'.$request->get('search').'%');
+            $consumables = $consumables->where('consumables.name', 'LIKE', '%' . $request->get('search') . '%');
         }
 
         $consumables = $consumables->orderBy('name', 'ASC')->paginate(50);
 
-        return (new SelectlistTransformer)->transformSelectlist($consumables);
+        return (new SelectlistTransformer())->transformSelectlist($consumables);
     }
 }
