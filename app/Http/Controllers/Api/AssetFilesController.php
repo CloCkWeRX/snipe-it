@@ -127,7 +127,7 @@ class AssetFilesController extends Controller
                 return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/hardware/message.download.no_match', ['id' => $fileId])), 404);
             }
 
-        // Form the full filename with path
+            // Form the full filename with path
             $file = 'private_uploads/assets/' . $log->filename;
             Log::debug('Checking for ' . $file);
 
