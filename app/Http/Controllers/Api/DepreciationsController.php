@@ -17,7 +17,7 @@ class DepreciationsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('view', Depreciation::class);
         $allowed_columns = [
@@ -32,7 +32,7 @@ class DepreciationsController extends Controller
             'licenses_count',
         ];
 
-        $depreciations = Depreciation::select('id','name','months','depreciation_min','depreciation_type','created_at','updated_at', 'created_by')
+        $depreciations = Depreciation::select('id', 'name', 'months', 'depreciation_min', 'depreciation_type', 'created_at', 'updated_at', 'created_by')
             ->with('adminuser')
             ->withCount('assets as assets_count')
             ->withCount('models as models_count')
@@ -61,7 +61,7 @@ class DepreciationsController extends Controller
         $total = $depreciations->count();
         $depreciations = $depreciations->skip($offset)->take($limit)->get();
 
-        return (new DepreciationsTransformer)->transformDepreciations($depreciations, $total);
+        return (new DepreciationsTransformer())->transformDepreciations($depreciations, $total);
     }
 
     /**
@@ -71,10 +71,10 @@ class DepreciationsController extends Controller
      * @since [v4.0]
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('create', Depreciation::class);
-        $depreciation = new Depreciation;
+        $depreciation = new Depreciation();
         $depreciation->fill($request->all());
 
         if ($depreciation->save()) {
@@ -91,12 +91,12 @@ class DepreciationsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function show($id) : JsonResponse | array
+    public function show($id): JsonResponse | array
     {
         $this->authorize('view', Depreciation::class);
         $depreciation = Depreciation::findOrFail($id);
 
-        return (new DepreciationsTransformer)->transformDepreciation($depreciation);
+        return (new DepreciationsTransformer())->transformDepreciation($depreciation);
     }
 
     /**
@@ -107,7 +107,7 @@ class DepreciationsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      */
-    public function update(Request $request, $id) : JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         $this->authorize('update', Depreciation::class);
         $depreciation = Depreciation::findOrFail($id);
@@ -127,7 +127,7 @@ class DepreciationsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Depreciation::class);
         $depreciation = Depreciation::withCount('models as models_count')->findOrFail($id);

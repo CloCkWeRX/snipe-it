@@ -29,7 +29,7 @@ class LocationsController extends Controller
      * @since [v4.0]
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('view', Location::class);
         $allowed_columns = [
@@ -175,7 +175,7 @@ class LocationsController extends Controller
      * @since [v4.0]
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Location::class);
         $location = new Location();
@@ -205,7 +205,7 @@ class LocationsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function show($id) : JsonResponse | array
+    public function show($id): JsonResponse | array
     {
         $this->authorize('view', Location::class);
         $location = Location::with('parent', 'manager', 'children', 'company')
@@ -246,7 +246,7 @@ class LocationsController extends Controller
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      * @param  int  $id
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Location::class);
         $location = Location::findOrFail($id);
@@ -283,7 +283,7 @@ class LocationsController extends Controller
     }
 
 
-    public function assets(Request $request, Location $location) : JsonResponse | array
+    public function assets(Request $request, Location $location): JsonResponse | array
     {
         $this->authorize('view', Asset::class);
         $this->authorize('view', $location);
@@ -292,7 +292,7 @@ class LocationsController extends Controller
         return (new AssetsTransformer())->transformAssets($assets, $assets->count(), $request);
     }
 
-    public function assignedAssets(Request $request, Location $location) : JsonResponse | array
+    public function assignedAssets(Request $request, Location $location): JsonResponse | array
     {
         $this->authorize('view', Asset::class);
         $this->authorize('view', $location);
@@ -301,7 +301,7 @@ class LocationsController extends Controller
         return (new AssetsTransformer())->transformAssets($assets, $assets->count(), $request);
     }
 
-    public function assignedAccessories(Request $request, Location $location) : JsonResponse | array
+    public function assignedAccessories(Request $request, Location $location): JsonResponse | array
     {
         $this->authorize('view', Accessory::class);
         $this->authorize('view', $location);
@@ -322,7 +322,7 @@ class LocationsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Location::class);
         $location = Location::withCount('assignedAssets as assigned_assets_count')
@@ -371,7 +371,7 @@ class LocationsController extends Controller
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
         // If a user is in the process of editing their profile, as determined by the referrer,
         // then we check that they have permission to edit their own location.

@@ -9,7 +9,6 @@ use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-
 class GroupsController extends Controller
 {
     /**
@@ -18,7 +17,7 @@ class GroupsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('superadmin');
 
@@ -61,7 +60,7 @@ class GroupsController extends Controller
         $total = $groups->count();
         $groups = $groups->skip($offset)->take($limit)->get();
 
-        return (new GroupsTransformer)->transformGroups($groups, $total);
+        return (new GroupsTransformer())->transformGroups($groups, $total);
     }
 
     /**
@@ -71,10 +70,10 @@ class GroupsController extends Controller
      * @since [v4.0]
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('superadmin');
-        $group = new Group;
+        $group = new Group();
         // Get all the available permissions
         $permissions = json_encode(config('permissions'));
         $groupPermissions = Helper::selectedPermissionsArray($permissions, $permissions);
@@ -85,7 +84,7 @@ class GroupsController extends Controller
         $group->permissions = json_encode($request->input('permissions', $groupPermissions));
 
         if ($group->save()) {
-            return response()->json(Helper::formatStandardApiResponse('success', (new GroupsTransformer)->transformGroup($group), trans('admin/groups/message.success.create')));
+            return response()->json(Helper::formatStandardApiResponse('success', (new GroupsTransformer())->transformGroup($group), trans('admin/groups/message.success.create')));
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, $group->getErrors()));
@@ -98,11 +97,11 @@ class GroupsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function show($id) : array
+    public function show($id): array
     {
         $this->authorize('superadmin');
         $group = Group::findOrFail($id);
-        return (new GroupsTransformer)->transformGroup($group);
+        return (new GroupsTransformer())->transformGroup($group);
     }
 
     /**
@@ -113,7 +112,7 @@ class GroupsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      */
-    public function update(Request $request, $id) : JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         $this->authorize('superadmin');
         $group = Group::findOrFail($id);
@@ -123,7 +122,7 @@ class GroupsController extends Controller
         $group->permissions = $request->input('permissions'); // Todo - some JSON validation stuff here
 
         if ($group->save()) {
-            return response()->json(Helper::formatStandardApiResponse('success', (new GroupsTransformer)->transformGroup($group), trans('admin/groups/message.success.update')));
+            return response()->json(Helper::formatStandardApiResponse('success', (new GroupsTransformer())->transformGroup($group), trans('admin/groups/message.success.update')));
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, $group->getErrors()));
@@ -136,7 +135,7 @@ class GroupsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('superadmin');
         $group = Group::findOrFail($id);

@@ -27,11 +27,11 @@ class ImportController extends Controller
      * Display a listing of the resource.
      *
      */
-    public function index() : JsonResponse | array
+    public function index(): JsonResponse | array
     {
         $this->authorize('import');
         $imports = Import::with('adminuser')->latest()->get();
-        return (new ImportsTransformer)->transformImports($imports);
+        return (new ImportsTransformer())->transformImports($imports);
     }
 
     /**
@@ -39,26 +39,28 @@ class ImportController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store() : JsonResponse
+    public function store(): JsonResponse
     {
         $this->authorize('import');
         if (! config('app.lock_passwords')) {
             $files = Request::file('files');
-            $path = config('app.private_uploads').'/imports';
+            $path = config('app.private_uploads') . '/imports';
             $results = [];
-            $import = new Import;
+            $import = new Import();
             $detector = new EncodingDetector();
 
             foreach ($files as $file) {
-                if (! in_array($file->getMimeType(), [
+                if (
+                    ! in_array($file->getMimeType(), [
                     'application/vnd.ms-excel',
                     'text/csv',
                     'application/csv',
                     'text/x-Algol68', // because wtf CSV files?
                     'text/plain',
                     'text/comma-separated-values',
-                    'text/tsv', ])) {
-                    $results['error'] = 'File type must be CSV. Uploaded file is '.$file->getMimeType();
+                    'text/tsv', ])
+                ) {
+                    $results['error'] = 'File type must be CSV. Uploaded file is ' . $file->getMimeType();
                     return response()->json(Helper::formatStandardApiResponse('error', null, $results['error']), 422);
                 }
 
@@ -126,12 +128,12 @@ class ImportController extends Controller
                             //avoid reporting duplicates twice, e.g. "1 is same as 17! 17 is same as 1!!!"
                             //as well as "1 is same as 1!!!" (which is always true)
                             //has to be > because otherwise the first result of array_search will always be $i itself(!)
-                            array_push($duplicate_headers, "Duplicate header '$header' detected, first at column: ".($found_at + 1).', repeats at column: '.($i + 1));
+                            array_push($duplicate_headers, "Duplicate header '$header' detected, first at column: " . ($found_at + 1) . ', repeats at column: ' . ($i + 1));
                         }
                     }
                 }
                 if (count($duplicate_headers) > 0) {
-                    return response()->json(Helper::formatStandardApiResponse('error', null, implode('; ', $duplicate_headers)),422);
+                    return response()->json(Helper::formatStandardApiResponse('error', null, implode('; ', $duplicate_headers)), 422);
                 }
 
                 try {
@@ -151,29 +153,29 @@ class ImportController extends Controller
                 $date = date('Y-m-d-his');
                 $fixed_filename = str_slug($file->getClientOriginalName());
                 try {
-                    $file->move($path, $date.'-'.$fixed_filename);
+                    $file->move($path, $date . '-' . $fixed_filename);
                 } catch (FileException $exception) {
                     $results['error'] = trans('admin/hardware/message.upload.error');
                     if (config('app.debug')) {
-                        $results['error'] .= ' '.$exception->getMessage();
+                        $results['error'] .= ' ' . $exception->getMessage();
                     }
 
                     return response()->json(Helper::formatStandardApiResponse('error', null, $results['error']), 500);
                 }
-                $file_name = date('Y-m-d-his').'-'.$fixed_filename;
+                $file_name = date('Y-m-d-his') . '-' . $fixed_filename;
                 $import->file_path = $file_name;
                 $import->filesize = null;
 
-                if (!file_exists($path.'/'.$file_name)) {
+                if (!file_exists($path . '/' . $file_name)) {
                     return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.file_not_found')), 500);
                 }
 
-                $import->filesize = filesize($path.'/'.$file_name);
+                $import->filesize = filesize($path . '/' . $file_name);
                 $import->created_by = auth()->id();
                 $import->save();
                 $results[] = $import;
             }
-            $results = (new ImportsTransformer)->transformImports($results);
+            $results = (new ImportsTransformer())->transformImports($results);
 
             return response()->json([
                 'files' => $results,
@@ -188,21 +190,21 @@ class ImportController extends Controller
      *
      * @param  int  $import_id
      */
-    public function process(ItemImportRequest $request, $import_id) : JsonResponse
+    public function process(ItemImportRequest $request, $import_id): JsonResponse
     {
         $this->authorize('import');
 
         // Run a backup immediately before processing
         if ($request->get('run-backup')) {
             Log::debug('Backup manually requested via importer');
-            Artisan::call('snipeit:backup', ['--filename' => 'pre-import-backup-'.date('Y-m-d-H:i:s')]);
+            Artisan::call('snipeit:backup', ['--filename' => 'pre-import-backup-' . date('Y-m-d-H:i:s')]);
         } else {
             Log::debug('NO BACKUP requested via importer');
         }
 
         $import = Import::find($import_id);
 
-        if(is_null($import)){
+        if (is_null($import)) {
             $error[0][0] = trans("validation.exists", ["attribute" => "file"]);
             return response()->json(Helper::formatStandardApiResponse('import-errors', null, $error), 500);
         }
@@ -250,14 +252,14 @@ class ImportController extends Controller
      *
      * @param  int  $import_id
      */
-    public function destroy($import_id) : JsonResponse
+    public function destroy($import_id): JsonResponse
     {
         $this->authorize('create', Asset::class);
 
         if ($import = Import::find($import_id)) {
             try {
                 // Try to delete the file
-                Storage::delete('imports/'.$import->file_path);
+                Storage::delete('imports/' . $import->file_path);
                 $import->delete();
 
                 return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/hardware/message.import.file_delete_success')));
@@ -267,7 +269,6 @@ class ImportController extends Controller
 
                 return response()->json(Helper::formatStandardApiResponse('warning', null, trans('admin/hardware/message.import.file_not_deleted_warning')));
             }
-
         }
         return response()->json(Helper::formatStandardApiResponse('warning', null, trans('admin/hardware/message.import.file_not_deleted_warning')));
     }
