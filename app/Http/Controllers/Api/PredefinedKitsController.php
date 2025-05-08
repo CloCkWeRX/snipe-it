@@ -20,7 +20,7 @@ class PredefinedKitsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('view', PredefinedKit::class);
 
@@ -58,7 +58,7 @@ class PredefinedKitsController extends Controller
         $total = $kits->count();
         $kits = $kits->skip($offset)->take($limit)->get();
 
-        return (new PredefinedKitsTransformer)->transformPredefinedKits($kits, $total);
+        return (new PredefinedKitsTransformer())->transformPredefinedKits($kits, $total);
     }
 
     /**
@@ -66,10 +66,10 @@ class PredefinedKitsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('create', PredefinedKit::class);
-        $kit = new PredefinedKit;
+        $kit = new PredefinedKit();
         $kit->fill($request->all());
 
         if ($kit->save()) {
@@ -84,12 +84,12 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $id
      */
-    public function show($id) :  array
+    public function show($id): array
     {
         $this->authorize('view', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($id);
 
-        return (new PredefinedKitsTransformer)->transformPredefinedKit($kit);
+        return (new PredefinedKitsTransformer())->transformPredefinedKit($kit);
     }
 
     /**
@@ -98,7 +98,7 @@ class PredefinedKitsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id kit id
      */
-    public function update(Request $request, $id) : JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($id);
@@ -116,7 +116,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($id);
@@ -137,7 +137,7 @@ class PredefinedKitsController extends Controller
      *
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
         $kits = PredefinedKit::select([
             'id',
@@ -145,12 +145,12 @@ class PredefinedKitsController extends Controller
         ]);
 
         if ($request->filled('search')) {
-            $kits = $kits->where('name', 'LIKE', '%'.$request->get('search').'%');
+            $kits = $kits->where('name', 'LIKE', '%' . $request->get('search') . '%');
         }
 
         $kits = $kits->orderBy('name', 'ASC')->paginate(50);
 
-        return (new SelectlistTransformer)->transformSelectlist($kits);
+        return (new SelectlistTransformer())->transformSelectlist($kits);
     }
 
     /**
@@ -159,13 +159,13 @@ class PredefinedKitsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function indexLicenses($kit_id) : array
+    public function indexLicenses($kit_id): array
     {
         $this->authorize('view', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
         $licenses = $kit->licenses;
 
-        return (new PredefinedKitsTransformer)->transformElements($licenses, $licenses->count());
+        return (new PredefinedKitsTransformer())->transformElements($licenses, $licenses->count());
     }
 
     /**
@@ -174,7 +174,7 @@ class PredefinedKitsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function storeLicense(Request $request, $kit_id) : JsonResponse
+    public function storeLicense(Request $request, $kit_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
 
@@ -201,7 +201,7 @@ class PredefinedKitsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $kit_id
      */
-    public function updateLicense(Request $request, $kit_id, $license_id) : JsonResponse
+    public function updateLicense(Request $request, $kit_id, $license_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
@@ -219,7 +219,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function detachLicense($kit_id, $license_id) : JsonResponse
+    public function detachLicense($kit_id, $license_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
@@ -234,13 +234,13 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function indexModels($kit_id) : array
+    public function indexModels($kit_id): array
     {
         $this->authorize('view', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
         $models = $kit->models;
 
-        return (new PredefinedKitsTransformer)->transformElements($models, $models->count());
+        return (new PredefinedKitsTransformer())->transformElements($models, $models->count());
     }
 
     /**
@@ -248,7 +248,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $id
      */
-    public function storeModel(Request $request, $kit_id) : JsonResponse
+    public function storeModel(Request $request, $kit_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
 
@@ -275,7 +275,7 @@ class PredefinedKitsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $kit_id
      */
-    public function updateModel(Request $request, $kit_id, $model_id) : JsonResponse
+    public function updateModel(Request $request, $kit_id, $model_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
@@ -293,7 +293,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function detachModel($kit_id, $model_id) : JsonResponse
+    public function detachModel($kit_id, $model_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
@@ -308,13 +308,13 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function indexConsumables($kit_id) : array
+    public function indexConsumables($kit_id): array
     {
         $this->authorize('view', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
         $consumables = $kit->consumables;
 
-        return (new PredefinedKitsTransformer)->transformElements($consumables, $consumables->count());
+        return (new PredefinedKitsTransformer())->transformElements($consumables, $consumables->count());
     }
 
     /**
@@ -322,7 +322,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $id
      */
-    public function storeConsumable(Request $request, $kit_id) : JsonResponse
+    public function storeConsumable(Request $request, $kit_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
 
@@ -349,7 +349,7 @@ class PredefinedKitsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $kit_id
      */
-    public function updateConsumable(Request $request, $kit_id, $consumable_id) : JsonResponse
+    public function updateConsumable(Request $request, $kit_id, $consumable_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
@@ -367,7 +367,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function detachConsumable($kit_id, $consumable_id) : JsonResponse
+    public function detachConsumable($kit_id, $consumable_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
@@ -382,13 +382,13 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function indexAccessories($kit_id) : array
+    public function indexAccessories($kit_id): array
     {
         $this->authorize('view', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
         $accessories = $kit->accessories;
 
-        return (new PredefinedKitsTransformer)->transformElements($accessories, $accessories->count());
+        return (new PredefinedKitsTransformer())->transformElements($accessories, $accessories->count());
     }
 
     /**
@@ -396,7 +396,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function storeAccessory(Request $request, $kit_id) : JsonResponse
+    public function storeAccessory(Request $request, $kit_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
 
@@ -423,7 +423,7 @@ class PredefinedKitsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $kit_id
      */
-    public function updateAccessory(Request $request, $kit_id, $accessory_id) : JsonResponse
+    public function updateAccessory(Request $request, $kit_id, $accessory_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);
@@ -441,7 +441,7 @@ class PredefinedKitsController extends Controller
      *
      * @param  int  $kit_id
      */
-    public function detachAccessory($kit_id, $accessory_id) : JsonResponse
+    public function detachAccessory($kit_id, $accessory_id): JsonResponse
     {
         $this->authorize('update', PredefinedKit::class);
         $kit = PredefinedKit::findOrFail($kit_id);

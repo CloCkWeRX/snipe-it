@@ -19,16 +19,13 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Transformers\LoginAttemptsTransformer;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-
 class SettingsController extends Controller
 {
-
-
-    public function ldaptest() : JsonResponse
+    public function ldaptest(): JsonResponse
     {
         $settings = Setting::getSettings();
 
-        if ($settings->ldap_enabled!='1') {
+        if ($settings->ldap_enabled != '1') {
             Log::debug('LDAP is not enabled cannot test.');
             return response()->json(['message' => 'LDAP is not enabled, cannot test.'], 400);
         }
@@ -46,7 +43,7 @@ class SettingsController extends Controller
                     'message' => 'Successfully connected to LDAP server.',
                 ];
 
-                $users = collect(Ldap::findLdapUsers(null,10))->filter(function ($value, $key) {
+                $users = collect(Ldap::findLdapUsers(null, 10))->filter(function ($value, $key) {
                     return is_int($key);
                 })->slice(0, 10)->map(function ($item) use ($settings) {
                     return (object) [
@@ -65,14 +62,14 @@ class SettingsController extends Controller
                     $message['user_sync'] = [
                         'message' => 'Connection to LDAP was successful, however there were no users returned from your query. You should confirm the Base Bind DN above.',
                     ];
-    
+
                     return response()->json($message, 400);
                 }
 
                 return response()->json($message, 200);
             } catch (\Exception $e) {
                 Log::debug('Bind failed');
-                Log::debug("Exception was: ".$e->getMessage());
+                Log::debug("Exception was: " . $e->getMessage());
                 return response()->json(['message' => $e->getMessage()], 400);
                 //return response()->json(['message' => $e->getMessage()], 500);
             }
@@ -80,11 +77,9 @@ class SettingsController extends Controller
             Log::debug('Connection failed but we cannot debug it any further on our end.');
             return response()->json(['message' => $e->getMessage()], 500);
         }
-
-
     }
 
-    public function ldaptestlogin(Request $request) : JsonResponse
+    public function ldaptestlogin(Request $request): JsonResponse
     {
 
         if (Setting::getSettings()->ldap_enabled != '1') {
@@ -101,10 +96,10 @@ class SettingsController extends Controller
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             Log::debug('LDAP Validation test failed.');
-            $validation_errors = implode(' ',$validator->errors()->all());
+            $validation_errors = implode(' ', $validator->errors()->all());
             return response()->json(['message' => $validator->errors()->all()], 400);
         }
-        
+
 
 
         Log::debug('Preparing to test LDAP login');
@@ -116,16 +111,14 @@ class SettingsController extends Controller
                 try {
                     $ldap_user = Ldap::findAndBindUserLdap($request->input('ldaptest_user'), $request->input('ldaptest_password'));
                     if ($ldap_user) {
-                        Log::debug('It worked! '. $request->input('ldaptest_user').' successfully binded to LDAP.');
-                        return response()->json(['message' => 'It worked! '. $request->input('ldaptest_user').' successfully binded to LDAP.'], 200);
+                        Log::debug('It worked! ' . $request->input('ldaptest_user') . ' successfully binded to LDAP.');
+                        return response()->json(['message' => 'It worked! ' . $request->input('ldaptest_user') . ' successfully binded to LDAP.'], 200);
                     }
-                    return response()->json(['message' => 'Login Failed. '. $request->input('ldaptest_user').' did not successfully bind to LDAP.'], 400);
-
+                    return response()->json(['message' => 'Login Failed. ' . $request->input('ldaptest_user') . ' did not successfully bind to LDAP.'], 400);
                 } catch (\Exception $e) {
                     Log::debug('LDAP login failed');
                     return response()->json(['message' => $e->getMessage()], 400);
                 }
-
             } catch (\Exception $e) {
                 Log::debug('Bind failed');
                 return response()->json(['message' => $e->getMessage()], 400);
@@ -135,8 +128,6 @@ class SettingsController extends Controller
             Log::debug('Connection failed');
             return response()->json(['message' => $e->getMessage()], 500);
         }
-
-
     }
 
     /**
@@ -145,18 +136,17 @@ class SettingsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v3.0]
      */
-    public function ajaxTestEmail() : JsonResponse
+    public function ajaxTestEmail(): JsonResponse
     {
         if (!config('app.lock_passwords')) {
             try {
                 Notification::send(Setting::first(), new MailTest());
-                return response()->json(['message' => 'Mail sent to '.config('mail.reply_to.address')], 200);
+                return response()->json(['message' => 'Mail sent to ' . config('mail.reply_to.address')], 200);
             } catch (\Exception $e) {
                 return response()->json(['message' => $e->getMessage()], 500);
             }
         }
         return response()->json(['message' => 'Mail would have been sent, but this application is in demo mode! '], 200);
-
     }
 
 
@@ -166,25 +156,24 @@ class SettingsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v5.0.0]
      */
-    public function purgeBarcodes() : JsonResponse
+    public function purgeBarcodes(): JsonResponse
     {
         $file_count = 0;
         $files = Storage::disk('public')->files('barcodes');
 
         foreach ($files as $file) { // iterate files
-
             $file_parts = explode('.', $file);
             $extension = end($file_parts);
             Log::debug($extension);
 
             // Only generated barcodes would have a .png file extension
             if ($extension == 'png') {
-                Log::debug('Deleting: '.$file);
+                Log::debug('Deleting: ' . $file);
 
 
                 try {
                     Storage::disk('public')->delete($file);
-                    Log::debug('Deleting: '.$file);
+                    Log::debug('Deleting: ' . $file);
                     $file_count++;
                 } catch (\Exception $e) {
                     Log::debug($e);
@@ -192,7 +181,7 @@ class SettingsController extends Controller
             }
         }
 
-        return response()->json(['message' => 'Deleted '.$file_count.' barcodes'], 200);
+        return response()->json(['message' => 'Deleted ' . $file_count . ' barcodes'], 200);
     }
 
 
@@ -206,7 +195,7 @@ class SettingsController extends Controller
      * @since [v5.0.0]
      * @param  \Illuminate\Http\Request  $request
      */
-    public function showLoginAttempts(Request $request) : array
+    public function showLoginAttempts(Request $request): array
     {
         $allowed_columns = ['id', 'username', 'remote_ip', 'user_agent', 'successful', 'created_at'];
 
@@ -218,7 +207,7 @@ class SettingsController extends Controller
         $login_attempts->orderBy($sort, $order);
         $login_attempt_results = $login_attempts->skip(request('offset', 0))->take(request('limit', 20))->get();
 
-        return (new LoginAttemptsTransformer)->transformLoginAttempts($login_attempt_results, $total);
+        return (new LoginAttemptsTransformer())->transformLoginAttempts($login_attempt_results, $total);
     }
 
 
@@ -227,7 +216,7 @@ class SettingsController extends Controller
      *
      * @author [A. Gianotto]
      */
-    public function listBackups() : array
+    public function listBackups(): array
     {
         $settings = Setting::getSettings();
         $path = 'app/backups';
@@ -236,9 +225,7 @@ class SettingsController extends Controller
         $count = 0;
 
         if (count($backup_files) > 0) {
-
             for ($f = 0; $f < count($backup_files); $f++) {
-
                 // Skip dotfiles like .gitignore and .DS_STORE
                 if ((substr(basename($backup_files[$f]), 0, 1) != '.')) {
                     $file_timestamp = Storage::lastModified($backup_files[$f]);
@@ -247,19 +234,17 @@ class SettingsController extends Controller
                         'filename' => basename($backup_files[$f]),
                         'filesize' => Setting::fileSizeConvert(Storage::size($backup_files[$f])),
                         'modified_value' => $file_timestamp,
-                        'modified_display' => date($settings->date_display_format.' '.$settings->time_display_format, $file_timestamp),
-                        'backup_url' => config('app.url').'/settings/backups/download/'.basename($backup_files[$f]),
+                        'modified_display' => date($settings->date_display_format . ' ' . $settings->time_display_format, $file_timestamp),
+                        'backup_url' => config('app.url') . '/settings/backups/download/' . basename($backup_files[$f]),
 
                     ];
                     $count++;
                 }
-
             }
         }
 
         $files = array_reverse($files_raw);
-        return (new DatatablesTransformer)->transformDatatables($files, $count);
-
+        return (new DatatablesTransformer())->transformDatatables($files, $count);
     }
 
 
@@ -270,18 +255,17 @@ class SettingsController extends Controller
      *
      * @author [A. Gianotto]
      */
-    public function downloadBackup($file) : JsonResponse | BinaryFileResponse
+    public function downloadBackup($file): JsonResponse | BinaryFileResponse
     {
 
         $path = storage_path('app/backups');
-        
-        if (Storage::exists('app/backups/'.$file)) {
-            $headers = ['ContentType' => 'application/zip'];
-            return response()->download($path.'/'.$file, $file, $headers);
-        } else {
-            return response()->json(Helper::formatStandardApiResponse('error', null,  trans('general.file_not_found')), 404);
-        }
 
+        if (Storage::exists('app/backups/' . $file)) {
+            $headers = ['ContentType' => 'application/zip'];
+            return response()->download($path . '/' . $file, $file, $headers);
+        } else {
+            return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.file_not_found')), 404);
+        }
     }
 
     /**
@@ -290,7 +274,7 @@ class SettingsController extends Controller
      * @author [A. Gianotto]
      * @since [v6.3.1]
      */
-    public function downloadLatestBackup() : JsonResponse | BinaryFileResponse
+    public function downloadLatestBackup(): JsonResponse | BinaryFileResponse
     {
 
         $fileData = collect();
@@ -308,11 +292,7 @@ class SettingsController extends Controller
             $headers = ['ContentType' => 'application/zip'];
             return response()->download(storage_path($newest['file']), basename($newest['file']), $headers);
         } else {
-            return response()->json(Helper::formatStandardApiResponse('error', null,  trans('general.file_not_found')), 404);
+            return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.file_not_found')), 404);
         }
-
-
     }
-
-
 }

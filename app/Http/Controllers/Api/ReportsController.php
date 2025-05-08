@@ -18,7 +18,7 @@ class ReportsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('activity.view');
 
@@ -31,18 +31,16 @@ class ReportsController extends Controller
 
         if (($request->filled('target_type')) && ($request->filled('target_id'))) {
             $actionlogs = $actionlogs->where('target_id', '=', $request->input('target_id'))
-                ->where('target_type', '=', 'App\\Models\\'.ucwords($request->input('target_type')));
+                ->where('target_type', '=', 'App\\Models\\' . ucwords($request->input('target_type')));
         }
 
         if (($request->filled('item_type')) && ($request->filled('item_id'))) {
-            $actionlogs = $actionlogs->where(function($query) use ($request)
-            {
+            $actionlogs = $actionlogs->where(function ($query) use ($request) {
                 $query->where('item_id', '=', $request->input('item_id'))
-                ->where('item_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')))
-                ->orWhere(function($query) use ($request)
-                {
+                ->where('item_type', '=', 'App\\Models\\' . ucwords($request->input('item_type')))
+                ->orWhere(function ($query) use ($request) {
                     $query->where('target_id', '=', $request->input('item_id'))
-                    ->where('target_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')));
+                    ->where('target_type', '=', 'App\\Models\\' . ucwords($request->input('item_type')));
                 });
             });
         }
@@ -58,7 +56,7 @@ class ReportsController extends Controller
         if ($request->filled('action_source')) {
             $actionlogs = $actionlogs->where('action_source', '=', $request->input('action_source'));
         }
-        
+
         if ($request->filled('remote_ip')) {
             $actionlogs = $actionlogs->where('remote_ip', '=', $request->input('remote_ip'));
         }
@@ -104,6 +102,6 @@ class ReportsController extends Controller
 
         $actionlogs = $actionlogs->skip($offset)->take($limit)->get();
 
-        return response()->json((new ActionlogsTransformer)->transformActionlogs($actionlogs, $total), 200, ['Content-Type' => 'application/json;charset=utf8'], JSON_UNESCAPED_UNICODE);
+        return response()->json((new ActionlogsTransformer())->transformActionlogs($actionlogs, $total), 200, ['Content-Type' => 'application/json;charset=utf8'], JSON_UNESCAPED_UNICODE);
     }
 }
