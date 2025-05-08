@@ -20,7 +20,7 @@ class LicenseSeatsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $licenseId
      */
-    public function index(Request $request, $licenseId) : JsonResponse | array
+    public function index(Request $request, $licenseId): JsonResponse | array
     {
 
         if ($license = License::find($licenseId)) {
@@ -42,7 +42,7 @@ class LicenseSeatsController extends Controller
             // Make sure the offset and limit are actually integers and do not exceed system limits
             $offset = ($request->input('offset') > $seats->count()) ? $seats->count() : app('api_offset_value');
 
-            if ($offset >= $total ){
+            if ($offset >= $total) {
                 $offset = 0;
             }
 
@@ -51,7 +51,7 @@ class LicenseSeatsController extends Controller
             $seats = $seats->skip($offset)->take($limit)->get();
 
             if ($seats) {
-                return (new LicenseSeatsTransformer)->transformLicenseSeats($seats, $total);
+                return (new LicenseSeatsTransformer())->transformLicenseSeats($seats, $total);
             }
         }
 
@@ -64,7 +64,7 @@ class LicenseSeatsController extends Controller
      * @param  int  $licenseId
      * @param  int  $seatId
      */
-    public function show($licenseId, $seatId) : JsonResponse | array
+    public function show($licenseId, $seatId): JsonResponse | array
     {
 
         $this->authorize('view', License::class);
@@ -78,7 +78,7 @@ class LicenseSeatsController extends Controller
             return response()->json(Helper::formatStandardApiResponse('error', null, 'Seat does not belong to the specified license'));
         }
 
-        return (new LicenseSeatsTransformer)->transformLicenseSeat($licenseSeat);
+        return (new LicenseSeatsTransformer())->transformLicenseSeat($licenseSeat);
     }
 
     /**
@@ -88,7 +88,7 @@ class LicenseSeatsController extends Controller
      * @param  int  $licenseId
      * @param  int  $seatId
      */
-    public function update(Request $request, $licenseId, $seatId) : JsonResponse | array
+    public function update(Request $request, $licenseId, $seatId): JsonResponse | array
     {
         $this->authorize('checkout', License::class);
 
@@ -129,12 +129,11 @@ class LicenseSeatsController extends Controller
             $target = $is_checkin ? $oldAsset : Asset::find($licenseSeat->asset_id);
         }
 
-        if (is_null($target)){
+        if (is_null($target)) {
             return response()->json(Helper::formatStandardApiResponse('error', null, 'Target not found'));
         }
 
         if ($licenseSeat->save()) {
-
             if ($is_checkin) {
                 $licenseSeat->logCheckin($target, $request->input('notes'));
 
