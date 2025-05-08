@@ -15,9 +15,9 @@ trait UniqueUndeletedTrait
     {
         // Only perform a replacement if the model has been persisted.
         if ($this->exists) {
-            return 'unique_undeleted:'.$this->table.','.$this->getKey();
+            return 'unique_undeleted:' . $this->table . ',' . $this->getKey();
         }
 
-        return 'unique_undeleted:'.$this->table.',0';
+        return 'unique_undeleted:' . $this->table . ',0';
     }
 }
