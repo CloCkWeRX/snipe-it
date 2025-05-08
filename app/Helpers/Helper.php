@@ -1715,7 +1715,6 @@ class Helper
                 case 'audit':
                     return route('assets.audit.due');
             }
-
         }
 
         return redirect()->back()->with('error', trans('admin/hardware/message.checkout.error'));
@@ -1792,7 +1791,6 @@ class Helper
                     $count = 0;
                     foreach ($items as $item) {
                         if ($item && $item->company_id != $location_company) {
-
                             $mismatched[] = [
                                     class_basename(get_class($item)),
                                     $item->id,
@@ -1815,9 +1813,6 @@ class Helper
                             if ((!$artisan) && ($count > 0)) {
                                 return $mismatched;
                             }
-
-
-
                         }
                     }
                 }
