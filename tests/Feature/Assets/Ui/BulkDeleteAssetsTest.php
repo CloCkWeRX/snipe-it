@@ -168,9 +168,10 @@ class BulkDeleteAssetsTest extends TestCase
     {
         $user = User::factory()->viewAssets()->deleteAssets()->editAssets()->create();
         $asset = Asset::factory()->create([
-           'id' => 5,
-           'assigned_to' => $user->id,
-           'asset_tag' => '12345',
+            'id' => 5,
+            'assigned_to' => $user->id,
+            'assigned_type' => User::class,
+            'asset_tag' => '12345',
         ]);
 
         $response = $this->actingAs($user)
