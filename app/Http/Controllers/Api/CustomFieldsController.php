@@ -21,12 +21,12 @@ class CustomFieldsController extends Controller
      * @since [v3.0]
      * @return array
      */
-    public function index() : array
+    public function index(): array
     {
         $this->authorize('index', CustomField::class);
         $fields = CustomField::get();
 
-        return (new CustomFieldsTransformer)->transformCustomFields($fields, $fields->count());
+        return (new CustomFieldsTransformer())->transformCustomFields($fields, $fields->count());
     }
 
     /**
@@ -35,11 +35,11 @@ class CustomFieldsController extends Controller
      * @param int $id
      * @since [v4.1.10]
      */
-    public function show($id) : JsonResponse | array
+    public function show($id): JsonResponse | array
     {
         $this->authorize('view', CustomField::class);
         if ($field = CustomField::find($id)) {
-            return (new CustomFieldsTransformer)->transformCustomField($field);
+            return (new CustomFieldsTransformer())->transformCustomField($field);
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/custom_fields/message.field.invalid')), 200);
@@ -53,7 +53,7 @@ class CustomFieldsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      */
-    public function update(Request $request, $id) : JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         $this->authorize('update', CustomField::class);
         $field = CustomField::findOrFail($id);
@@ -86,10 +86,10 @@ class CustomFieldsController extends Controller
      * @since [v4.1.10]
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('create', CustomField::class);
-        $field = new CustomField;
+        $field = new CustomField();
 
         $data = $request->all();
         $regex_format = null;
@@ -134,7 +134,7 @@ class CustomFieldsController extends Controller
         return $fieldset->fields()->sync($fields);
     }
 
-    public function associate(Request $request, $field_id) : JsonResponse
+    public function associate(Request $request, $field_id): JsonResponse
     {
         $this->authorize('update', CustomFieldset::class);
 
@@ -153,7 +153,7 @@ class CustomFieldsController extends Controller
         return response()->json(Helper::formatStandardApiResponse('success', $fieldset, trans('admin/custom_fields/message.fieldset.update.success')));
     }
 
-    public function disassociate(Request $request, $field_id) : JsonResponse
+    public function disassociate(Request $request, $field_id): JsonResponse
     {
         $this->authorize('update', CustomFieldset::class);
         $field = CustomField::findOrFail($field_id);
@@ -177,7 +177,7 @@ class CustomFieldsController extends Controller
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
      * @since [v1.8]
      */
-    public function destroy($field_id) : JsonResponse
+    public function destroy($field_id): JsonResponse
     {
         $field = CustomField::findOrFail($field_id);
 

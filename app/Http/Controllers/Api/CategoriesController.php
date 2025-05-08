@@ -21,7 +21,7 @@ class CategoriesController extends Controller
      * @since [v4.0]
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) : array
+    public function index(Request $request): array
     {
         $this->authorize('view', Category::class);
         $allowed_columns = [
@@ -66,7 +66,7 @@ class CategoriesController extends Controller
          *
          * @see \App\Models\Category::showableAssets()
          */
-        if ($request->input('archived')=='true') {
+        if ($request->input('archived') == 'true') {
             $categories = $categories->withCount('assets as assets_count');
         } else {
             $categories = $categories->withCount('showableAssets as assets_count');
@@ -127,8 +127,7 @@ class CategoriesController extends Controller
         $total = $categories->count();
         $categories = $categories->skip($offset)->take($limit)->get();
 
-        return (new CategoriesTransformer)->transformCategories($categories, $total);
-
+        return (new CategoriesTransformer())->transformCategories($categories, $total);
     }
 
 
@@ -140,10 +139,10 @@ class CategoriesController extends Controller
      * @param  \App\Http\Requests\ImageUploadRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Category::class);
-        $category = new Category;
+        $category = new Category();
         $category->fill($request->all());
         $category->category_type = strtolower($request->input('category_type'));
         $category = $request->handleImages($category);
@@ -152,7 +151,6 @@ class CategoriesController extends Controller
             return response()->json(Helper::formatStandardApiResponse('success', $category, trans('admin/categories/message.create.success')));
         }
         return response()->json(Helper::formatStandardApiResponse('error', null, $category->getErrors()));
-
     }
 
     /**
@@ -162,12 +160,11 @@ class CategoriesController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function show($id) : array
+    public function show($id): array
     {
         $this->authorize('view', Category::class);
         $category = Category::withCount('assets as assets_count', 'accessories as accessories_count', 'consumables as consumables_count', 'components as components_count', 'licenses as licenses_count')->findOrFail($id);
-        return (new CategoriesTransformer)->transformCategory($category);
-
+        return (new CategoriesTransformer())->transformCategory($category);
     }
 
 
@@ -180,7 +177,7 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Category::class);
         $category = Category::findOrFail($id);
@@ -188,7 +185,7 @@ class CategoriesController extends Controller
         // Don't allow the user to change the category_type once it's been created
         if (($request->filled('category_type')) && ($category->category_type != $request->input('category_type'))) {
             return response()->json(
-                Helper::formatStandardApiResponse('error', null,  ['category_type' => trans('admin/categories/message.update.cannot_change_category_type')], 422)
+                Helper::formatStandardApiResponse('error', null, ['category_type' => trans('admin/categories/message.update.cannot_change_category_type')], 422)
             );
         }
         $category->fill($request->all());
@@ -209,14 +206,14 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Category::class);
         $category = Category::withCount('assets as assets_count', 'accessories as accessories_count', 'consumables as consumables_count', 'components as components_count', 'licenses as licenses_count')->findOrFail($id);
 
         if (! $category->isDeletable()) {
             return response()->json(
-                Helper::formatStandardApiResponse('error', null, trans('admin/categories/message.assoc_items', ['asset_type'=>$category->category_type]))
+                Helper::formatStandardApiResponse('error', null, trans('admin/categories/message.assoc_items', ['asset_type' => $category->category_type]))
             );
         }
         $category->delete();
@@ -232,7 +229,7 @@ class CategoriesController extends Controller
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request, $category_type = 'asset') : array
+    public function selectlist(Request $request, $category_type = 'asset'): array
     {
         $this->authorize('view.selectlists');
         $categories = Category::select([
@@ -242,7 +239,7 @@ class CategoriesController extends Controller
         ]);
 
         if ($request->filled('search')) {
-            $categories = $categories->where('name', 'LIKE', '%'.$request->get('search').'%');
+            $categories = $categories->where('name', 'LIKE', '%' . $request->get('search') . '%');
         }
 
         $categories = $categories->where('category_type', $category_type)->orderBy('name', 'ASC')->paginate(50);
@@ -251,9 +248,9 @@ class CategoriesController extends Controller
         // This lets us have more flexibility in special cases like assets, where
         // they may not have a ->name value but we want to display something anyway
         foreach ($categories as $category) {
-            $category->use_image = ($category->image) ? Storage::disk('public')->url('categories/'.$category->image, $category->image) : null;
+            $category->use_image = ($category->image) ? Storage::disk('public')->url('categories/' . $category->image, $category->image) : null;
         }
 
-        return (new SelectlistTransformer)->transformSelectlist($categories);
+        return (new SelectlistTransformer())->transformSelectlist($categories);
     }
 }

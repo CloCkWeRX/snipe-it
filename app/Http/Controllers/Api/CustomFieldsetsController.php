@@ -30,12 +30,12 @@ class CustomFieldsetsController extends Controller
      * @param int $id
      * @since [v1.8]
      */
-    public function index() : array
+    public function index(): array
     {
         $this->authorize('index', CustomField::class);
         $fieldsets = CustomFieldset::withCount('fields as fields_count', 'models as models_count')->get();
 
-        return (new CustomFieldsetsTransformer)->transformCustomFieldsets($fieldsets, $fieldsets->count());
+        return (new CustomFieldsetsTransformer())->transformCustomFieldsets($fieldsets, $fieldsets->count());
     }
 
     /**
@@ -45,11 +45,11 @@ class CustomFieldsetsController extends Controller
      * @param int $id
      * @since [v1.8]
      */
-    public function show($id) : JsonResponse | array
+    public function show($id): JsonResponse | array
     {
         $this->authorize('view', CustomField::class);
         if ($fieldset = CustomFieldset::find($id)) {
-            return (new CustomFieldsetsTransformer)->transformCustomFieldset($fieldset);
+            return (new CustomFieldsetsTransformer())->transformCustomFieldset($fieldset);
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/custom_fields/message.fieldset.does_not_exist')), 200);
@@ -63,7 +63,7 @@ class CustomFieldsetsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      */
-    public function update(Request $request, $id) : JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         $this->authorize('update', CustomField::class);
         $fieldset = CustomFieldset::findOrFail($id);
@@ -83,10 +83,10 @@ class CustomFieldsetsController extends Controller
      * @since [v4.0]
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('create', CustomField::class);
-        $fieldset = new CustomFieldset;
+        $fieldset = new CustomFieldset();
         $fieldset->fill($request->all());
 
         if ($fieldset->save()) {
@@ -94,7 +94,6 @@ class CustomFieldsetsController extends Controller
             $fields = CustomField::select('id')->where('auto_add_to_fieldsets', '=', '1')->get();
 
             if ($fields->count() > 0) {
-
                 foreach ($fields as $field) {
                     $field_ids[] = $field->id;
                 }
@@ -114,7 +113,7 @@ class CustomFieldsetsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', CustomField::class);
         $fieldset = CustomFieldset::findOrFail($id);
@@ -141,13 +140,13 @@ class CustomFieldsetsController extends Controller
      * @param $fieldsetId
      * @return string JSON
      */
-    public function fields($id) : array
+    public function fields($id): array
     {
         $this->authorize('view', CustomField::class);
         $set = CustomFieldset::findOrFail($id);
         $fields = $set->fields;
 
-        return (new CustomFieldsTransformer)->transformCustomFields($fields, $fields->count());
+        return (new CustomFieldsTransformer())->transformCustomFields($fields, $fields->count());
     }
 
     /**
@@ -158,11 +157,11 @@ class CustomFieldsetsController extends Controller
      * @param $fieldsetId
      * @return string JSON
      */
-    public function fieldsWithDefaultValues($fieldsetId, $modelId) : array
+    public function fieldsWithDefaultValues($fieldsetId, $modelId): array
     {
         $this->authorize('view', CustomField::class);
         $set = CustomFieldset::findOrFail($fieldsetId);
         $fields = $set->fields;
-        return (new CustomFieldsTransformer)->transformCustomFieldsWithDefaultValues($fields, $modelId, $fields->count());
+        return (new CustomFieldsTransformer())->transformCustomFieldsWithDefaultValues($fields, $modelId, $fields->count());
     }
 }

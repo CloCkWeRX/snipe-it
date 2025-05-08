@@ -26,13 +26,13 @@ class ComponentsController extends Controller
      * @since [v4.0]
      *
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse | array
     {
         $this->authorize('view', Component::class);
 
         // This array is what determines which fields should be allowed to be sorted on ON the table itself, no relations
         // Relations will be handled in query scopes a little further down.
-        $allowed_columns = 
+        $allowed_columns =
             [
                 'id',
                 'name',
@@ -84,7 +84,7 @@ class ComponentsController extends Controller
         }
 
         if ($request->filled('notes')) {
-            $components->where('notes','=',$request->input('notes'));
+            $components->where('notes', '=', $request->input('notes'));
         }
 
         // Make sure the offset and limit are actually integers and do not exceed system limits
@@ -122,7 +122,7 @@ class ComponentsController extends Controller
         $total = $components->count();
         $components = $components->skip($offset)->take($limit)->get();
 
-        return (new ComponentsTransformer)->transformComponents($components, $total);
+        return (new ComponentsTransformer())->transformComponents($components, $total);
     }
 
 
@@ -133,10 +133,10 @@ class ComponentsController extends Controller
      * @since [v4.0]
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Component::class);
-        $component = new Component;
+        $component = new Component();
         $component->fill($request->all());
         $component = $request->handleImages($component);
 
@@ -153,13 +153,13 @@ class ComponentsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @param  int  $id
      */
-    public function show($id) : array
+    public function show($id): array
     {
         $this->authorize('view', Component::class);
         $component = Component::findOrFail($id);
 
         if ($component) {
-            return (new ComponentsTransformer)->transformComponent($component);
+            return (new ComponentsTransformer())->transformComponent($component);
         }
     }
 
@@ -171,13 +171,13 @@ class ComponentsController extends Controller
      * @param   \App\Http\Requests\ImageUploadRequest  $request
      * @param  int  $id
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Component::class);
         $component = Component::findOrFail($id);
         $component->fill($request->all());
         $component = $request->handleImages($component);
-        
+
 
         if ($component->save()) {
             return response()->json(Helper::formatStandardApiResponse('success', $component, trans('admin/components/message.update.success')));
@@ -193,14 +193,14 @@ class ComponentsController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Component::class);
         $component = Component::findOrFail($id);
         $this->authorize('delete', $component);
 
         if ($component->numCheckedOut() > 0) {
-            return response()->json(Helper::formatStandardApiResponse('error', null,  trans('admin/components/message.delete.error_qty')));
+            return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/components/message.delete.error_qty')));
         }
 
         $component->delete();
@@ -216,15 +216,15 @@ class ComponentsController extends Controller
      * @param Request $request
      * @param int $id
     */
-    public function getAssets(Request $request, $id) : array
+    public function getAssets(Request $request, $id): array
     {
         $this->authorize('view', \App\Models\Asset::class);
-        
+
         $component = Component::findOrFail($id);
-        
+
         $offset = request('offset', 0);
         $limit = $request->input('limit', 50);
-        
+
         if ($request->filled('search')) {
             $assets = $component->assets()
                                 ->where(function ($query) use ($request) {
@@ -235,17 +235,17 @@ class ComponentsController extends Controller
                                                 $query->selectRaw('id')->from('models')->where('name', 'like', $search_str);
                                             })
                                             ->orWhere('asset_tag', 'like', $search_str);
-                                         })
+                                })
                                          ->get();
             $total = $assets->count();
         } else {
             $assets = $component->assets();
-            
+
             $total = $assets->count();
             $assets = $assets->skip($offset)->take($limit)->get();
         }
 
-        return (new ComponentsTransformer)->transformCheckedoutComponents($assets, $total);
+        return (new ComponentsTransformer())->transformCheckedoutComponents($assets, $total);
     }
 
 
@@ -258,7 +258,7 @@ class ComponentsController extends Controller
      * @param Request $request
      * @param int $componentId
      */
-    public function checkout(Request $request, $componentId) : JsonResponse
+    public function checkout(Request $request, $componentId): JsonResponse
     {
         // Check if the component exists
         if (!$component = Component::find($componentId)) {
@@ -269,12 +269,11 @@ class ComponentsController extends Controller
 
         $validator = Validator::make($request->all(), [
             'assigned_to'          => 'required|exists:assets,id',
-            'assigned_qty'      => "required|numeric|min:1|digits_between:1,".$component->numRemaining(),
+            'assigned_qty'      => "required|numeric|min:1|digits_between:1," . $component->numRemaining(),
         ]);
 
         if ($validator->fails()) {
             return response()->json(Helper::formatStandardApiResponse('error', $validator->errors()));
-
         }
 
         // Make sure there is at least one available to checkout
@@ -283,7 +282,6 @@ class ComponentsController extends Controller
         }
 
         if ($component->numRemaining() >= $request->get('assigned_qty')) {
-
             $asset = Asset::find($request->input('assigned_to'));
             $component->assigned_to = $request->input('assigned_to');
 
@@ -298,7 +296,7 @@ class ComponentsController extends Controller
 
             $component->logCheckout($request->input('note'), $asset);
 
-            return response()->json(Helper::formatStandardApiResponse('success', null,  trans('admin/components/message.checkout.success')));
+            return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/components/message.checkout.success')));
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/components/message.checkout.unavailable', ['remaining' => $component->numRemaining(), 'requested' => $request->get('assigned_qty')])));
@@ -312,7 +310,7 @@ class ComponentsController extends Controller
      * @param Request $request
      * @param $component_asset_id
      */
-    public function checkin(Request $request, $component_asset_id) : JsonResponse
+    public function checkin(Request $request, $component_asset_id): JsonResponse
     {
         if ($component_assets = DB::table('components_assets')->find($component_asset_id)) {
             if (is_null($component = Component::find($component_assets->component_id))) {
@@ -338,7 +336,7 @@ class ComponentsController extends Controller
             // actually checked out.
             $component_assets->assigned_qty = $qty_remaining_in_checkout;
 
-            Log::debug($component_asset_id.' - '.$qty_remaining_in_checkout.' remaining in record '.$component_assets->id);
+            Log::debug($component_asset_id . ' - ' . $qty_remaining_in_checkout . ' remaining in record ' . $component_assets->id);
 
             DB::table('components_assets')->where('id', $component_asset_id)->update(['assigned_qty' => $qty_remaining_in_checkout]);
 
@@ -352,10 +350,9 @@ class ComponentsController extends Controller
 
             event(new CheckoutableCheckedIn($component, $asset, auth()->user(), $request->input('note'), Carbon::now()));
 
-            return response()->json(Helper::formatStandardApiResponse('success', null,  trans('admin/components/message.checkin.success')));
+            return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/components/message.checkin.success')));
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, 'No matching checkouts for that component join record'));
     }
-
 }
