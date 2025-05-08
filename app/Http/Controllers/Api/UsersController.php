@@ -38,7 +38,7 @@ class UsersController extends Controller
      *
      * @return array
      */
-    public function index(Request $request) : array
+    public function index(Request $request): array
     {
         $this->authorize('view', User::class);
 
@@ -84,7 +84,7 @@ class UsersController extends Controller
 
         ])->with('manager', 'groups', 'userloc', 'company', 'department', 'assets', 'licenses', 'accessories', 'consumables', 'createdBy', 'managesUsers', 'managedLocations')
             ->withCount([
-                'assets as assets_count' => function(Builder $query) {
+                'assets as assets_count' => function (Builder $query) {
                     $query->withoutTrashed();
                 },
                 'licenses as licenses_count',
@@ -160,7 +160,7 @@ class UsersController extends Controller
         }
 
         if ($request->filled('manager_id')) {
-            $users = $users->where('users.manager_id','=',$request->input('manager_id'));
+            $users = $users->where('users.manager_id', '=', $request->input('manager_id'));
         }
 
         if ($request->filled('ldap_import')) {
@@ -192,7 +192,7 @@ class UsersController extends Controller
         }
 
         if ($request->filled('assets_count')) {
-           $users->has('assets', '=', $request->input('assets_count'));
+            $users->has('assets', '=', $request->input('assets_count'));
         }
 
         if ($request->filled('consumables_count')) {
@@ -314,7 +314,7 @@ class UsersController extends Controller
         $total = $users->count();
         $users = $users->skip($offset)->take($limit)->get();
 
-        return (new UsersTransformer)->transformUsers($users, $total);
+        return (new UsersTransformer())->transformUsers($users, $total);
     }
 
     /**
@@ -324,7 +324,7 @@ class UsersController extends Controller
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
         $users = User::select(
             [
@@ -337,14 +337,14 @@ class UsersController extends Controller
                 'users.avatar',
                 'users.email',
             ]
-            )->where('show_in_list', '=', '1');
+        )->where('show_in_list', '=', '1');
 
         if ($request->filled('search')) {
             $users = $users->where(function ($query) use ($request) {
                 $query->SimpleNameSearch($request->get('search'))
-                    ->orWhere('username', 'LIKE', '%'.$request->get('search').'%')
-                    ->orWhere('email', 'LIKE', '%'.$request->get('search').'%')
-                    ->orWhere('employee_num', 'LIKE', '%'.$request->get('search').'%');
+                    ->orWhere('username', 'LIKE', '%' . $request->get('search') . '%')
+                    ->orWhere('email', 'LIKE', '%' . $request->get('search') . '%')
+                    ->orWhere('employee_num', 'LIKE', '%' . $request->get('search') . '%');
             });
         }
 
@@ -354,23 +354,23 @@ class UsersController extends Controller
         foreach ($users as $user) {
             $name_str = '';
             if ($user->last_name != '') {
-                $name_str .= $user->last_name.', ';
+                $name_str .= $user->last_name . ', ';
             }
             $name_str .= $user->first_name;
 
             if ($user->username != '') {
-                $name_str .= ' ('.$user->username.')';
+                $name_str .= ' (' . $user->username . ')';
             }
 
             if ($user->employee_num != '') {
-                $name_str .= ' - #'.$user->employee_num;
+                $name_str .= ' - #' . $user->employee_num;
             }
 
             $user->use_text = $name_str;
             $user->use_image = ($user->present()->gravatar) ? $user->present()->gravatar : null;
         }
 
-        return (new SelectlistTransformer)->transformSelectlist($users);
+        return (new SelectlistTransformer())->transformSelectlist($users);
     }
 
 
@@ -382,11 +382,11 @@ class UsersController extends Controller
      * @since [v4.0]
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(SaveUserRequest $request) : JsonResponse
+    public function store(SaveUserRequest $request): JsonResponse
     {
         $this->authorize('create', User::class);
 
-        $user = new User;
+        $user = new User();
         $user->fill($request->all());
         $user->company_id = Company::getIdForCurrentUser($request->input('company_id'));
         $user->created_by = auth()->id();
@@ -401,7 +401,7 @@ class UsersController extends Controller
             $user->permissions = $permissions_array;
         }
 
-        // 
+        //
         if ($request->filled('password')) {
             $user->password = bcrypt($request->get('password'));
         } else {
@@ -409,7 +409,7 @@ class UsersController extends Controller
         }
 
         app('App\Http\Requests\ImageUploadRequest')->handleImages($user, 600, 'image', 'avatars', 'avatar');
-        
+
         if ($user->save()) {
             if ($request->filled('groups')) {
                 $user->groups()->sync($request->input('groups'));
@@ -417,7 +417,7 @@ class UsersController extends Controller
                 $user->groups()->sync([]);
             }
 
-            return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer)->transformUser($user), trans('admin/users/message.success.create')));
+            return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer())->transformUser($user), trans('admin/users/message.success.create')));
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, $user->getErrors()));
@@ -429,17 +429,16 @@ class UsersController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @param  int  $id
      */
-    public function show($id) : JsonResponse | array
+    public function show($id): JsonResponse | array
     {
         $this->authorize('view', User::class);
 
         if ($user = User::withCount('assets as assets_count', 'licenses as licenses_count', 'accessories as accessories_count', 'consumables as consumables_count', 'managesUsers as manages_users_count', 'managedLocations as manages_locations_count')->find($id)) {
             $this->authorize('view', $user);
-            return (new UsersTransformer)->transformUser($user);
+            return (new UsersTransformer())->transformUser($user);
         }
-        
-        return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.user_not_found', compact('id'))));
 
+        return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.user_not_found', compact('id'))));
     }
 
 
@@ -466,60 +465,59 @@ class UsersController extends Controller
 
         if ((($user->id == 1) || ($user->id == 2)) && (config('app.lock_passwords'))) {
                 return response()->json(Helper::formatStandardApiResponse('error', null, 'Permission denied. You cannot update user information via API on the demo.'));
-            }
+        }
 
             $user->fill($request->all());
 
-            if ($request->filled('company_id')) {
-                $user->company_id = Company::getIdForCurrentUser($request->input('company_id'));
-            }
+        if ($request->filled('company_id')) {
+            $user->company_id = Company::getIdForCurrentUser($request->input('company_id'));
+        }
 
-            if ($user->id == $request->input('manager_id')) {
-                return response()->json(Helper::formatStandardApiResponse('error', null, 'You cannot be your own manager'));
-            }
+        if ($user->id == $request->input('manager_id')) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'You cannot be your own manager'));
+        }
 
-            if ($request->filled('password')) {
-                $user->password = bcrypt($request->input('password'));
-            }
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
 
             // We need to use has()  instead of filled()
             // here because we need to overwrite permissions
             // if someone needs to null them out
-            if ($request->has('permissions')) {
-                $permissions_array = $request->input('permissions');
+        if ($request->has('permissions')) {
+            $permissions_array = $request->input('permissions');
 
-                // Strip out the individual superuser permission if the API user isn't a superadmin
-                if (!auth()->user()->isSuperUser()) {
-                    unset($permissions_array['superuser']);
-                }
-
-                $user->permissions = $permissions_array;
+            // Strip out the individual superuser permission if the API user isn't a superadmin
+            if (!auth()->user()->isSuperUser()) {
+                unset($permissions_array['superuser']);
             }
 
-            if($request->has('location_id')) {
-                // Update the location of any assets checked out to this user
-                Asset::where('assigned_type', User::class)
-                    ->where('assigned_to', $user->id)->update(['location_id' => $request->input('location_id', null)]);
-            }
+            $user->permissions = $permissions_array;
+        }
+
+        if ($request->has('location_id')) {
+            // Update the location of any assets checked out to this user
+            Asset::where('assigned_type', User::class)
+                ->where('assigned_to', $user->id)->update(['location_id' => $request->input('location_id', null)]);
+        }
             app('App\Http\Requests\ImageUploadRequest')->handleImages($user, 600, 'image', 'avatars', 'avatar');
 
-            if ($user->save()) {
-                // Check if the request has groups passed and has a value, AND that the user us a superuser
-                if (($request->has('groups')) && (auth()->user()->isSuperUser())) {
+        if ($user->save()) {
+            // Check if the request has groups passed and has a value, AND that the user us a superuser
+            if (($request->has('groups')) && (auth()->user()->isSuperUser())) {
+                $validator = Validator::make($request->only('groups'), [
+                    'groups.*' => 'integer|exists:permission_groups,id',
+                ]);
 
-                    $validator = Validator::make($request->only('groups'), [
-                        'groups.*' => 'integer|exists:permission_groups,id',
-                    ]);
-
-                    if ($validator->fails()) {
-                        return response()->json(Helper::formatStandardApiResponse('error', null, $validator->errors()));
-                    }
-
-                    // Sync the groups since the user is a superuser and the groups pass validation
-                    $user->groups()->sync($request->input('groups'));
+                if ($validator->fails()) {
+                    return response()->json(Helper::formatStandardApiResponse('error', null, $validator->errors()));
                 }
-                return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer)->transformUser($user), trans('admin/users/message.success.update')));
+
+                // Sync the groups since the user is a superuser and the groups pass validation
+                $user->groups()->sync($request->input('groups'));
             }
+            return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer())->transformUser($user), trans('admin/users/message.success.update')));
+        }
             return response()->json(Helper::formatStandardApiResponse('error', null, $user->getErrors()));
     }
 
@@ -530,16 +528,14 @@ class UsersController extends Controller
      * @since [v4.0]
      * @param  int  $id
      */
-    public function destroy(DeleteUserRequest $request, $id) : JsonResponse
+    public function destroy(DeleteUserRequest $request, $id): JsonResponse
     {
         $this->authorize('delete', User::class);
 
         if ($user = User::withTrashed()->find($id)) {
-
             $this->authorize('delete', $user);
 
             if ($user->delete()) {
-
                 // Remove the user's avatar if they have one
                 if (Storage::disk('public')->exists('avatars/' . $user->avatar)) {
                     try {
@@ -553,11 +549,9 @@ class UsersController extends Controller
             }
 
             return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.error.delete')));
-
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.user_not_found')));
-
     }
 
     /**
@@ -567,7 +561,7 @@ class UsersController extends Controller
      * @since [v3.0]
      * @param $userId
      */
-    public function assets(Request $request, $id) : JsonResponse | array
+    public function assets(Request $request, $id): JsonResponse | array
     {
         $this->authorize('view', User::class);
         $this->authorize('view', Asset::class);
@@ -586,7 +580,6 @@ class UsersController extends Controller
 
             // Filter on model ID
             if ($request->filled('model_id')) {
-
                 $model_ids = $request->input('model_id');
                 if (!is_array($model_ids)) {
                     $model_ids = array($model_ids);
@@ -596,11 +589,10 @@ class UsersController extends Controller
 
             $assets = $assets->get();
 
-            return (new AssetsTransformer)->transformAssets($assets, $assets->count(), $request);
+            return (new AssetsTransformer())->transformAssets($assets, $assets->count(), $request);
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.user_not_found', compact('id'))));
-
     }
 
     /**
@@ -611,8 +603,7 @@ class UsersController extends Controller
      * @param Request $request
      * @param $id
      */
-    public function emailAssetList(Request $request, $id) : JsonResponse
-
+    public function emailAssetList(Request $request, $id): JsonResponse
     {
         $this->authorize('update', User::class);
 
@@ -628,8 +619,6 @@ class UsersController extends Controller
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.user_not_found', compact('id'))));
- 
-
     }
 
     /**
@@ -639,14 +628,14 @@ class UsersController extends Controller
      * @since [v3.0]
      * @param $userId
      */
-    public function consumables(Request $request, $id) : array
+    public function consumables(Request $request, $id): array
     {
         $this->authorize('view', User::class);
         $this->authorize('view', Consumable::class);
         $user = User::findOrFail($id);
         $this->authorize('view', $user);
         $consumables = $user->consumables;
-        return (new ConsumablesTransformer)->transformConsumables($consumables, $consumables->count(), $request);
+        return (new ConsumablesTransformer())->transformConsumables($consumables, $consumables->count(), $request);
     }
 
     /**
@@ -656,7 +645,7 @@ class UsersController extends Controller
      * @since [v4.6.14]
      * @param $userId
      */
-    public function accessories($id) : array
+    public function accessories($id): array
     {
         $this->authorize('view', User::class);
         $user = User::findOrFail($id);
@@ -664,7 +653,7 @@ class UsersController extends Controller
         $this->authorize('view', Accessory::class);
         $accessories = $user->accessories;
 
-        return (new AccessoriesTransformer)->transformAccessories($accessories, $accessories->count());
+        return (new AccessoriesTransformer())->transformAccessories($accessories, $accessories->count());
     }
 
     /**
@@ -674,11 +663,11 @@ class UsersController extends Controller
      * @since [v5.0]
      * @param $userId
      */
-    public function licenses($id) : JsonResponse | array
+    public function licenses($id): JsonResponse | array
     {
         $this->authorize('view', User::class);
         $this->authorize('view', License::class);
-        
+
         if ($user = User::where('id', $id)->withTrashed()->first()) {
             $this->authorize('update', $user);
             $licenses = $user->licenses()->get();
@@ -686,7 +675,6 @@ class UsersController extends Controller
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.user_not_found', compact('id'))));
-
     }
 
     /**
@@ -696,7 +684,7 @@ class UsersController extends Controller
      * @since [v3.0]
      * @param $userId
      */
-    public function postTwoFactorReset(Request $request) : JsonResponse
+    public function postTwoFactorReset(Request $request): JsonResponse
     {
         $this->authorize('update', User::class);
 
@@ -724,8 +712,6 @@ class UsersController extends Controller
             }
         }
         return response()->json(['message' => 'No ID provided'], 500);
-
-
     }
 
     /**
@@ -735,9 +721,9 @@ class UsersController extends Controller
      * @since [v4.4.2]
      * @param  \Illuminate\Http\Request  $request
      */
-    public function getCurrentUserInfo(Request $request) : array
+    public function getCurrentUserInfo(Request $request): array
     {
-        return (new UsersTransformer)->transformUser($request->user());
+        return (new UsersTransformer())->transformUser($request->user());
     }
 
     /**
@@ -747,12 +733,11 @@ class UsersController extends Controller
      * @param int $userId
      * @since [v6.0.0]
      */
-    public function restore($userId) : JsonResponse
+    public function restore($userId): JsonResponse
     {
         $this->authorize('delete', User::class);
 
         if ($user = User::withTrashed()->find($userId)) {
-
             $this->authorize('delete', $user);
 
             if ($user->deleted_at == '') {
@@ -760,7 +745,6 @@ class UsersController extends Controller
             }
 
             if ($user->restore()) {
-
                 $logaction = new Actionlog();
                 $logaction->item_type = User::class;
                 $logaction->item_id = $user->id;
@@ -770,10 +754,8 @@ class UsersController extends Controller
 
                 return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/users/message.success.restored')), 200);
             }
-
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/users/message.user_not_found')), 200);
-
     }
 }

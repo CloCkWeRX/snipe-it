@@ -16,7 +16,6 @@ use Illuminate\Http\JsonResponse;
 
 class ProfileController extends Controller
 {
-
     /**
      * The token repository implementation.
      *
@@ -43,7 +42,7 @@ class ProfileController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.3.0]
      */
-    public function requestedAssets() :  array
+    public function requestedAssets(): array
     {
         $checkoutRequests = CheckoutRequest::where('user_id', '=', auth()->id())->get();
 
@@ -54,13 +53,12 @@ class ProfileController extends Controller
 
         $all_custom_fields = CustomField::all(); //used as a 'cache' of custom fields throughout this page load
         foreach ($all_custom_fields as $field) {
-            if (($field->field_encrypted=='0') && ($field->show_in_requestable_list=='1')) {
+            if (($field->field_encrypted == '0') && ($field->show_in_requestable_list == '1')) {
                 $showable_fields[] = $field->db_column_name();
             }
         }
 
         foreach ($checkoutRequests as $checkoutRequest) {
-
             // Make sure the asset and request still exist
             if ($checkoutRequest && $checkoutRequest->itemRequested()) {
                 $assets = [
@@ -74,14 +72,12 @@ class ProfileController extends Controller
                 ];
 
                 foreach ($showable_fields as $showable_field_name) {
-                    $show_field['custom_fields.'.$showable_field_name] =  $checkoutRequest->itemRequested()->{$showable_field_name};
+                    $show_field['custom_fields.' . $showable_field_name] =  $checkoutRequest->itemRequested()->{$showable_field_name};
                 }
 
                 // Merge the plain asset data and the custom fields data
                 $results['rows'][] = array_merge($assets, $show_field);
             }
-
-
         }
 
         return $results;
@@ -94,7 +90,7 @@ class ProfileController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v6.0.5]
      */
-    public function createApiToken(Request $request) : JsonResponse
+    public function createApiToken(Request $request): JsonResponse
     {
 
         if (!Gate::allows('self.api')) {
@@ -104,16 +100,14 @@ class ProfileController extends Controller
         $accessTokenName = $request->input('name', 'Auth Token');
 
         if ($accessToken = auth()->user()->createToken($accessTokenName)->accessToken) {
-
             // Get the ID so we can return that with the payload
-            $token = DB::table('oauth_access_tokens')->where('user_id', '=', auth()->id())->where('name','=',$accessTokenName)->orderBy('created_at', 'desc')->first();
+            $token = DB::table('oauth_access_tokens')->where('user_id', '=', auth()->id())->where('name', '=', $accessTokenName)->orderBy('created_at', 'desc')->first();
             $accessTokenData['id'] = $token->id;
             $accessTokenData['token'] = $accessToken;
             $accessTokenData['name'] = $accessTokenName;
             return response()->json(Helper::formatStandardApiResponse('success', $accessTokenData, trans('account/general.personal_api_keys_success', ['key' => $accessTokenName])));
         }
         return response()->json(Helper::formatStandardApiResponse('error', null, 'Token could not be created.'));
-
     }
 
 
@@ -123,7 +117,7 @@ class ProfileController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v6.0.5]
      */
-    public function deleteApiToken($tokenId) : Response
+    public function deleteApiToken($tokenId): Response
     {
 
         if (!Gate::allows('self.api')) {
@@ -131,7 +125,8 @@ class ProfileController extends Controller
         }
 
         $token = $this->tokenRepository->findForUser(
-            $tokenId, auth()->user()->getAuthIdentifier()
+            $tokenId,
+            auth()->user()->getAuthIdentifier()
         );
 
         if (is_null($token)) {
@@ -141,7 +136,6 @@ class ProfileController extends Controller
         $token->revoke();
 
         return new Response('', Response::HTTP_NO_CONTENT);
-
     }
 
 
@@ -151,22 +145,18 @@ class ProfileController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v6.0.5]
      */
-    public function showApiTokens() : JsonResponse
+    public function showApiTokens(): JsonResponse
     {
 
         if (!Gate::allows('self.api')) {
             abort(403);
         }
-        
+
         $tokens = $this->tokenRepository->forUser(auth()->user()->getAuthIdentifier());
         $token_values = $tokens->load('client')->filter(function ($token) {
             return $token->client->personal_access_client && ! $token->revoked;
         })->values();
 
         return response()->json(Helper::formatStandardApiResponse('success', $token_values, null));
-
     }
-
-
-
 }
