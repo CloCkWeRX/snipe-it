@@ -9,8 +9,8 @@ use App\Models\Accessory;
 use App\Models\AccessoryCheckout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AccessoryCheckinController extends Controller
 {
@@ -22,7 +22,7 @@ class AccessoryCheckinController extends Controller
      * @param int $accessoryUserId
      * @param string $backto
      */
-    public function create($accessoryUserId = null, $backto = null) : View | RedirectResponse
+    public function create($accessoryUserId = null, $backto = null): View | RedirectResponse
     {
         if (is_null($accessory_user = DB::table('accessories_checkout')->find($accessoryUserId))) {
             return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.not_found'));
@@ -39,7 +39,6 @@ class AccessoryCheckinController extends Controller
         $this->authorize('checkin', $accessory);
 
         return view('accessories/checkin', compact('accessory', 'target_option'))->with('backto', $backto);
-
     }
 
     /**
@@ -50,7 +49,7 @@ class AccessoryCheckinController extends Controller
      * @param null $accessoryCheckoutId
      * @param string $backto
      */
-    public function store(Request $request, $accessoryCheckoutId = null, $backto = null) : RedirectResponse
+    public function store(Request $request, $accessoryCheckoutId = null, $backto = null): RedirectResponse
     {
         if (is_null($accessory_checkout = AccessoryCheckout::find($accessoryCheckoutId))) {
             return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.does_not_exist'));
@@ -69,7 +68,7 @@ class AccessoryCheckinController extends Controller
         $checkin_hours = date('H:i:s');
         $checkin_at = date('Y-m-d H:i:s');
         if ($request->filled('checkin_at')) {
-            $checkin_at = $request->input('checkin_at').' '.$checkin_hours;
+            $checkin_at = $request->input('checkin_at') . ' ' . $checkin_hours;
         }
 
         // Was the accessory updated?
