@@ -80,10 +80,10 @@ class PredefinedKitsController extends Controller
     {
         $this->authorize('update', PredefinedKit::class);
 
-            return view('kits/edit')
-                ->with('item', $kit)
-                ->with('models', $kit->models)
-                ->with('licenses', $kit->licenses);
+        return view('kits/edit')
+            ->with('item', $kit)
+            ->with('models', $kit->models)
+            ->with('licenses', $kit->licenses);
     }
 
     /**
@@ -119,8 +119,8 @@ class PredefinedKitsController extends Controller
     public function destroy($kit_id)
     {
         $this->authorize('delete', PredefinedKit::class);
-        // Check if the kit exists
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_not_found'));
         }
 
@@ -159,15 +159,16 @@ class PredefinedKitsController extends Controller
     public function editModel($kit_id, $model_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (
-            ($kit = PredefinedKit::find($kit_id))
-            && ($model = $kit->models()->find($model_id))
-        ) {
-            return view('kits/model-edit', [
-                'kit' => $kit,
-                'model' => $model,
-                'item' => $model->pivot,
-            ]);
+        $kit = PredefinedKit::find($kit_id);
+        if ($kit) {
+            $model = $kit->models()->find($model_id);
+            if ($model) {
+                return view('kits/model-edit', [
+                    'kit' => $kit,
+                    'model' => $model,
+                    'item' => $model->pivot,
+                ]);
+            }
         }
 
         return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
@@ -213,7 +214,8 @@ class PredefinedKitsController extends Controller
     public function detachModel($kit_id, $model_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             // Redirect to the kits management page
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
@@ -236,7 +238,8 @@ class PredefinedKitsController extends Controller
     public function editLicense($kit_id, $license_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (! ($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
         if (! ($license = $kit->licenses()->find($license_id))) {
@@ -261,7 +264,8 @@ class PredefinedKitsController extends Controller
     public function updateLicense(Request $request, $kit_id, $license_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             // Redirect to the kits management page
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
@@ -292,7 +296,8 @@ class PredefinedKitsController extends Controller
     public function detachLicense($kit_id, $license_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             // Redirect to the kits management page
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
@@ -315,7 +320,8 @@ class PredefinedKitsController extends Controller
     public function editAccessory($kit_id, $accessory_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (! ($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
         if (! ($accessory = $kit->accessories()->find($accessory_id))) {
@@ -340,7 +346,8 @@ class PredefinedKitsController extends Controller
     public function updateAccessory(Request $request, $kit_id, $accessory_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             // Redirect to the kits management page
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
@@ -370,7 +377,8 @@ class PredefinedKitsController extends Controller
     public function detachAccessory($kit_id, $accessory_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             // Redirect to the kits management page
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
@@ -393,7 +401,8 @@ class PredefinedKitsController extends Controller
     public function editConsumable($kit_id, $consumable_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (! ($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
         if (! ($consumable = $kit->consumables()->find($consumable_id))) {
@@ -418,7 +427,8 @@ class PredefinedKitsController extends Controller
     public function updateConsumable(Request $request, $kit_id, $consumable_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             // Redirect to the kits management page
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
@@ -448,7 +458,8 @@ class PredefinedKitsController extends Controller
     public function detachConsumable($kit_id, $consumable_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (is_null($kit = PredefinedKit::find($kit_id))) {
+        $kit = PredefinedKit::find($kit_id);
+        if (is_null($kit)) {
             // Redirect to the kits management page
             return redirect()->route('kits.index')->with('error', trans('admin/kits/general.kit_none'));
         }
