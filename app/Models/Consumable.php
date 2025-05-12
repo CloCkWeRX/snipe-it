@@ -26,7 +26,8 @@ class Consumable extends SnipeModel
 
     protected $presenter = ConsumablePresenter::class;
     use CompanyableTrait;
-    use Loggable, Presentable;
+    use Loggable;
+    use Presentable;
     use SoftDeletes;
     use Acceptable;
 
@@ -38,7 +39,7 @@ class Consumable extends SnipeModel
         'company_id'     => 'integer',
         'supplier_id',
         'qty'            => 'integer',
-        'min_amt'        => 'integer',    
+        'min_amt'        => 'integer',
      ];
 
     /**
@@ -244,10 +245,9 @@ class Consumable extends SnipeModel
     public function getImageUrl()
     {
         if ($this->image) {
-            return Storage::disk('public')->url(app('consumables_upload_path').$this->image);
+            return Storage::disk('public')->url(app('consumables_upload_path') . $this->image);
         }
         return false;
-
     }
 
     /**
@@ -256,7 +256,7 @@ class Consumable extends SnipeModel
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v3.0]
      */
-    public function users() : Relation
+    public function users(): Relation
     {
         return $this->belongsToMany(User::class, 'consumables_users', 'consumable_id', 'assigned_to')->withPivot('created_by')->withTrashed()->withTimestamps();
     }

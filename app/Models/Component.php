@@ -20,7 +20,8 @@ class Component extends SnipeModel
 
     protected $presenter = \App\Presenters\ComponentPresenter::class;
     use CompanyableTrait;
-    use Loggable, Presentable;
+    use Loggable;
+    use Presentable;
     use SoftDeletes;
     protected $casts = [
         'purchase_date' => 'datetime',
@@ -252,12 +253,12 @@ class Component extends SnipeModel
      *
      * This allows us to get the assets with assigned components without the company restriction
      */
-    public function uncontrainedAssets() {
+    public function uncontrainedAssets()
+    {
 
         return $this->belongsToMany(\App\Models\Asset::class, 'components_assets')
                 ->withPivot('id', 'assigned_qty', 'created_at', 'created_by', 'note')
-                ->withoutGlobalScope(new CompanyableScope);
-
+                ->withoutGlobalScope(new CompanyableScope());
     }
 
 

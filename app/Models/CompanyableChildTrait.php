@@ -11,6 +11,6 @@ trait CompanyableChildTrait
      */
     public static function bootCompanyableChildTrait()
     {
-        static::addGlobalScope(new CompanyableChildScope);
+        static::addGlobalScope(new CompanyableChildScope());
     }
 }

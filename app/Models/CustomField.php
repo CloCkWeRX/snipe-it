@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Schema;
 use Watson\Validating\ValidatingTrait;
+
 class CustomField extends Model
 {
     use HasFactory;
-    use ValidatingTrait,
-        UniqueUndeletedTrait;
+    use ValidatingTrait;
+    use UniqueUndeletedTrait;
 
     /**
      * Custom field predefined formats
@@ -108,7 +109,7 @@ class CustomField extends Model
      */
     public static function name_to_db_name($name)
     {
-        return '_snipeit_'.preg_replace('/[^a-zA-Z0-9]/', '_', strtolower($name));
+        return '_snipeit_' . preg_replace('/[^a-zA-Z0-9]/', '_', strtolower($name));
     }
 
     /**
@@ -226,7 +227,7 @@ class CustomField extends Model
 
     public function assetModels()
     {
-       return $this->fieldset()->with('models')->get()->pluck('models')->flatten()->unique('id'); 
+        return $this->fieldset()->with('models')->get()->pluck('models')->flatten()->unique('id');
     }
 
     /**
@@ -279,7 +280,7 @@ class CustomField extends Model
      */
     public function check_format($value)
     {
-        return preg_match('/^'.$this->attributes['format'].'$/', $value) === 1;
+        return preg_match('/^' . $this->attributes['format'] . '$/', $value) === 1;
     }
 
     /**
@@ -345,7 +346,7 @@ class CustomField extends Model
         $arr = preg_split('/\\r\\n|\\r|\\n/', $this->field_values ?? '');
 
         if (($this->element != 'checkbox') && ($this->element != 'radio')) {
-            $result[''] = 'Select '.strtolower($this->format);
+            $result[''] = 'Select ' . strtolower($this->format);
         }
 
         for ($x = 0; $x < count($arr); $x++) {
@@ -392,12 +393,12 @@ class CustomField extends Model
         $id = $this->id ? $this->id : 'xx';
 
         if (! function_exists('transliterator_transliterate')) {
-            $long_slug = '_snipeit_'.str_slug(mb_convert_encoding(trim($name),"UTF-8"), '_');
+            $long_slug = '_snipeit_' . str_slug(mb_convert_encoding(trim($name), "UTF-8"), '_');
         } else {
-            $long_slug = '_snipeit_'.Utf8Slugger::slugify($name, '_');
+            $long_slug = '_snipeit_' . Utf8Slugger::slugify($name, '_');
         }
 
-        return substr($long_slug, 0, 50).'_'.$id;
+        return substr($long_slug, 0, 50) . '_' . $id;
     }
 
     /**
