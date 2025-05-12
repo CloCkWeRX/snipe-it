@@ -10,8 +10,8 @@ use App\Http\Requests\AssetCheckoutRequest;
 use App\Models\Asset;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Session;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 
 class AssetCheckoutController extends Controller
@@ -27,7 +27,7 @@ class AssetCheckoutController extends Controller
      * @since [v1.0]
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(Asset $asset) : View | RedirectResponse
+    public function create(Asset $asset): View | RedirectResponse
     {
 
         $this->authorize('checkout', $asset);
@@ -44,7 +44,7 @@ class AssetCheckoutController extends Controller
             return redirect()->route('hardware.edit', $asset)->withErrors($asset->getErrors());
         }
 
-        
+
         if ($asset->availableForCheckout()) {
             return view('hardware/checkout', compact('asset'))
                 ->with('statusLabel_list', Helper::deployableStatusLabelList())
@@ -63,7 +63,7 @@ class AssetCheckoutController extends Controller
      * @param AssetCheckoutRequest $request
      * @since [v1.0]
      */
-    public function store(AssetCheckoutRequest $request, $assetId) : RedirectResponse
+    public function store(AssetCheckoutRequest $request, $assetId): RedirectResponse
     {
         try {
             // Check if the asset exists
@@ -99,9 +99,9 @@ class AssetCheckoutController extends Controller
             }
 
 
-            if(!empty($asset->licenseseats->all())){
-                if(request('checkout_to_type') == 'user') {
-                    foreach ($asset->licenseseats as $seat){
+            if (!empty($asset->licenseseats->all())) {
+                if (request('checkout_to_type') == 'user') {
+                    foreach ($asset->licenseseats as $seat) {
                         $seat->assigned_to = $target->id;
                         $seat->save();
                     }
@@ -115,7 +115,7 @@ class AssetCheckoutController extends Controller
 
             // We have to check whether $target->company_id is null here since locations don't have a company yet
             if (($settings->full_multiple_companies_support) && ((!is_null($target->company_id)) &&  (!is_null($asset->company_id)))) {
-                if ($target->company_id != $asset->company_id){
+                if ($target->company_id != $asset->company_id) {
                     return redirect()->route('hardware.checkout.create', $asset)->with('error', trans('general.error_user_company'));
                 }
             }
@@ -127,7 +127,7 @@ class AssetCheckoutController extends Controller
                     ->with('success', trans('admin/hardware/message.checkout.success'));
             }
             // Redirect to the asset management page with error
-            return redirect()->route("hardware.checkout.create", $asset)->with('error', trans('admin/hardware/message.checkout.error').$asset->getErrors());
+            return redirect()->route("hardware.checkout.create", $asset)->with('error', trans('admin/hardware/message.checkout.error') . $asset->getErrors());
         } catch (ModelNotFoundException $e) {
             return redirect()->back()->with('error', trans('admin/hardware/message.checkout.error'))->withErrors($asset->getErrors());
         } catch (CheckoutNotAllowed $e) {
