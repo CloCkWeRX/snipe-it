@@ -285,7 +285,7 @@ class LicensePresenter extends Presenter
                 'searchable' => false,
                 'sortable' => true,
                 'visible' => false,
-                'title' => trans('general.date'),
+                'title' => trans('general.updated_at'),
                 'formatter' => 'dateDisplayFormatter',
             ],
             [
