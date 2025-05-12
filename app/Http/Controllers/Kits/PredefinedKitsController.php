@@ -40,7 +40,7 @@ class PredefinedKitsController extends Controller
     {
         $this->authorize('create', PredefinedKit::class);
 
-        return view('kits/create')->with('item', new PredefinedKit);
+        return view('kits/create')->with('item', new PredefinedKit());
     }
 
     /**
@@ -53,7 +53,7 @@ class PredefinedKitsController extends Controller
     {
         $this->authorize('create', PredefinedKit::class);
         // Create a new Predefined Kit
-        $kit = new PredefinedKit;
+        $kit = new PredefinedKit();
         $kit->name = $request->input('name');
         $kit->created_by = auth()->id();
 
@@ -84,7 +84,6 @@ class PredefinedKitsController extends Controller
                 ->with('item', $kit)
                 ->with('models', $kit->models)
                 ->with('licenses', $kit->licenses);
-
     }
 
     /**
@@ -160,8 +159,10 @@ class PredefinedKitsController extends Controller
     public function editModel($kit_id, $model_id)
     {
         $this->authorize('update', PredefinedKit::class);
-        if (($kit = PredefinedKit::find($kit_id))
-            && ($model = $kit->models()->find($model_id))) {
+        if (
+            ($kit = PredefinedKit::find($kit_id))
+            && ($model = $kit->models()->find($model_id))
+        ) {
             return view('kits/model-edit', [
                 'kit' => $kit,
                 'model' => $model,

@@ -10,7 +10,7 @@ use App\Models\Consumable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 use App\Http\Requests\StoreConsumableRequest;
 
 /**
@@ -51,7 +51,7 @@ class ConsumablesController extends Controller
         $this->authorize('create', Consumable::class);
 
         return view('consumables.edit')->with('category_type', 'consumable')
-            ->with('item', new Consumable);
+            ->with('item', new Consumable());
     }
 
     /**
@@ -104,13 +104,12 @@ class ConsumablesController extends Controller
      * @see ConsumablesController::postEdit() method that stores the form data.
      * @since [v1.0]
      */
-    public function edit(Consumable $consumable) : View | RedirectResponse
+    public function edit(Consumable $consumable): View | RedirectResponse
     {
             $this->authorize($consumable);
             return view('consumables/edit')
                 ->with('item', $consumable)
                 ->with('category_type', 'consumable');
-
     }
 
     /**
@@ -204,7 +203,7 @@ class ConsumablesController extends Controller
         return view('consumables/view', compact('consumable'));
     }
 
-    public function clone(Consumable $consumable) : View
+    public function clone(Consumable $consumable): View
     {
         $this->authorize('create', $consumable);
         $consumable_to_close = $consumable;

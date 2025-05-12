@@ -30,14 +30,12 @@ class ComponentCheckoutController extends Controller
     {
 
         if ($component = Component::find($id)) {
-
             $this->authorize('checkout', $component);
 
             // Make sure the category is valid
             if ($component->category) {
-
                 // Make sure there is at least one available to checkout
-                if ($component->numRemaining() <= 0){
+                if ($component->numRemaining() <= 0) {
                     return redirect()->route('components.index')
                         ->with('error', trans('admin/components/message.checkout.unavailable'));
                 }
@@ -53,7 +51,6 @@ class ComponentCheckoutController extends Controller
 
         // Not found
         return redirect()->route('components.index')->with('error', trans('admin/components/message.not_found'));
-
     }
 
     /**

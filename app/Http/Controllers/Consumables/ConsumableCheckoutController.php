@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Consumable;
 use App\Models\User;
 use Illuminate\Http\Request;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ConsumableCheckoutController extends Controller
 {
@@ -21,18 +21,16 @@ class ConsumableCheckoutController extends Controller
      * @since [v1.0]
      * @param int $id
      */
-    public function create($id) : View | RedirectResponse
+    public function create($id): View | RedirectResponse
     {
 
         if ($consumable = Consumable::find($id)) {
-
             $this->authorize('checkout', $consumable);
 
             // Make sure the category is valid
             if ($consumable->category) {
-
                 // Make sure there is at least one available to checkout
-                if ($consumable->numRemaining() <= 0){
+                if ($consumable->numRemaining() <= 0) {
                     return redirect()->route('consumables.index')
                         ->with('error', trans('admin/consumables/message.checkout.unavailable', ['requested' => 1, 'remaining' => $consumable->numRemaining()]));
                 }
@@ -48,7 +46,6 @@ class ConsumableCheckoutController extends Controller
 
         // Not found
         return redirect()->route('consumables.index')->with('error', trans('admin/consumables/message.does_not_exist'));
-
     }
 
     /**
@@ -92,13 +89,13 @@ class ConsumableCheckoutController extends Controller
         // Update the consumable data
         $consumable->assigned_to = e($request->input('assigned_to'));
 
-        for ($i = 0; $i < $quantity; $i++){
-        $consumable->users()->attach($consumable->id, [
+        for ($i = 0; $i < $quantity; $i++) {
+            $consumable->users()->attach($consumable->id, [
             'consumable_id' => $consumable->id,
             'created_by' => $admin_user->id,
             'assigned_to' => e($request->input('assigned_to')),
             'note' => $request->input('note'),
-        ]);
+            ]);
         }
 
         $consumable->checkout_qty = $quantity;

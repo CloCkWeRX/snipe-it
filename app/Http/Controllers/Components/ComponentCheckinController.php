@@ -35,8 +35,10 @@ class ComponentCheckinController extends Controller
                 return redirect()->route('components.index')->with('error', trans('admin/components/messages.not_found'));
             }
             if (is_null($asset = Asset::find($component_assets->asset_id))) {
-                return redirect()->route('components.index')->with('error',
-                    trans('admin/components/message.not_found'));
+                return redirect()->route('components.index')->with(
+                    'error',
+                    trans('admin/components/message.not_found')
+                );
             }
             $this->authorize('checkin', $component);
 
@@ -61,9 +63,10 @@ class ComponentCheckinController extends Controller
     {
         if ($component_assets = DB::table('components_assets')->find($component_asset_id)) {
             if (is_null($component = Component::find($component_assets->component_id))) {
-
-                return redirect()->route('components.index')->with('error',
-                    trans('admin/components/message.not_found'));
+                return redirect()->route('components.index')->with(
+                    'error',
+                    trans('admin/components/message.not_found')
+                );
             }
 
             $this->authorize('checkin', $component);
@@ -85,8 +88,10 @@ class ComponentCheckinController extends Controller
             // We have to modify the record to reflect the new qty that's
             // actually checked out.
             $component_assets->assigned_qty = $qty_remaining_in_checkout;
-            DB::table('components_assets')->where('id',
-                $component_asset_id)->update(['assigned_qty' => $qty_remaining_in_checkout]);
+            DB::table('components_assets')->where(
+                'id',
+                $component_asset_id
+            )->update(['assigned_qty' => $qty_remaining_in_checkout]);
 
             // If the checked-in qty is exactly the same as the assigned_qty,
             // we can simply delete the associated components_assets record
@@ -100,8 +105,10 @@ class ComponentCheckinController extends Controller
 
             session()->put(['redirect_option' => $request->get('redirect_option')]);
 
-            return redirect()->to(Helper::getRedirectOption($request, $component->id, 'Components'))->with('success',
-                trans('admin/components/message.checkin.success'));
+            return redirect()->to(Helper::getRedirectOption($request, $component->id, 'Components'))->with(
+                'success',
+                trans('admin/components/message.checkin.success')
+            );
         }
 
         return redirect()->route('components.index')->with('error', trans('admin/components/message.does_not_exist'));

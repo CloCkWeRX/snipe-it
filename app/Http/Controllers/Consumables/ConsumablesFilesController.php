@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Consumable\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Log;
+
 class ConsumablesFilesController extends Controller
 {
     /**
@@ -27,7 +28,7 @@ class ConsumablesFilesController extends Controller
     public function store(UploadFileRequest $request, $consumableId = null)
     {
         if (config('app.lock_passwords')) {
-            return redirect()->route('consumables.show', ['consumable'=>$consumableId])->with('error', trans('general.feature_disabled'));
+            return redirect()->route('consumables.show', ['consumable' => $consumableId])->with('error', trans('general.feature_disabled'));
         }
 
         $consumable = Consumable::find($consumableId);
@@ -41,7 +42,7 @@ class ConsumablesFilesController extends Controller
                 }
 
                 foreach ($request->file('file') as $file) {
-                    $file_name = $request->handleFile('private_uploads/consumables/','consumable-'.$consumable->id, $file);
+                    $file_name = $request->handleFile('private_uploads/consumables/', 'consumable-' . $consumable->id, $file);
 
                     //Log the upload to the log
                     $consumable->logUpload($file_name, e($request->input('notes')));
@@ -49,7 +50,6 @@ class ConsumablesFilesController extends Controller
 
 
                 return redirect()->route('consumables.show', $consumable->id)->withFragment('files')->with('success', trans('general.file_upload_success'));
-
             }
 
             return redirect()->route('consumables.show', $consumable->id)->with('error', trans('general.no_files_uploaded'));
@@ -79,9 +79,9 @@ class ConsumablesFilesController extends Controller
             $log = Actionlog::find($fileId);
 
             // Remove the file if one exists
-            if (Storage::exists('consumables/'.$log->filename)) {
+            if (Storage::exists('consumables/' . $log->filename)) {
                 try {
-                    Storage::delete('consumables/'.$log->filename);
+                    Storage::delete('consumables/' . $log->filename);
                 } catch (\Exception $e) {
                     Log::debug($e);
                 }
@@ -116,17 +116,16 @@ class ConsumablesFilesController extends Controller
             $this->authorize('consumables.files', $consumable);
 
             if ($log = Actionlog::whereNotNull('filename')->where('item_id', $consumable->id)->find($fileId)) {
-                $file = 'private_uploads/consumables/'.$log->filename;
+                $file = 'private_uploads/consumables/' . $log->filename;
 
                 try {
                     return StorageHelper::showOrDownloadFile($file, $log->filename);
                 } catch (\Exception $e) {
-                    return redirect()->route('consumables.show', ['consumable' => $consumable])->with('error',  trans('general.file_not_found'));
+                    return redirect()->route('consumables.show', ['consumable' => $consumable])->with('error', trans('general.file_not_found'));
                 }
             }
             // The log record doesn't exist somehow
-            return redirect()->route('consumables.show', ['consumable' => $consumable])->with('error',  trans('general.log_record_not_found'));
-
+            return redirect()->route('consumables.show', ['consumable' => $consumable])->with('error', trans('general.log_record_not_found'));
         }
 
         return redirect()->route('consumables.index')->with('error', trans('general.file_does_not_exist', ['id' => $fileId]));
