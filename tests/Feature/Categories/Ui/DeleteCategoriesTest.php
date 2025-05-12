@@ -56,5 +56,4 @@ class DeleteCategoriesTest extends TestCase
 
         $this->assertNotSoftDeleted($category);
     }
-
 }
