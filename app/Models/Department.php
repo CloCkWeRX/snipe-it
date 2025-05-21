@@ -34,12 +34,12 @@ class Department extends SnipeModel
         'name'                  => 'required|max:255|is_unique_department',
         'location_id'           => 'numeric|nullable',
         'company_id'            => 'numeric|nullable',
-	'manager_id'            => 'numeric|nullable',
+        'manager_id'            => 'numeric|nullable',
         'fax'                   => 'min:7|max:35|nullable',
         'phone'                 => 'min:7|max:35|nullable',
         'email'                 => 'email|max:150|nullable',
-	'url'                   => 'url|nullable|max:191',
-	'wikidata'              => 'string|nullable|starts_with:Q'
+        'url'                   => 'url|nullable|max:191',
+        'wikidata'              => 'string|nullable|starts_with:Q'
     ];
 
     /**
