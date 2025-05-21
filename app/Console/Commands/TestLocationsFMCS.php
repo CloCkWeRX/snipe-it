@@ -45,7 +45,5 @@ class TestLocationsFMCS extends Command
         sort($mismatched);
 
         $this->table($header, $mismatched);
-
     }
-
 }

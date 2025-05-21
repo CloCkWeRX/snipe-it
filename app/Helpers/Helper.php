@@ -1761,19 +1761,19 @@ class Helper
             // Depending on the relationship, we must use different operations to retrieve the objects
             $keywords_relation = [
                 'many' => [
-                            'accessories',
-                            'assets',
-                            'assignedAccessories',
-                            'assignedAssets',
-                            'components',
-                            'consumables',
-                            'rtd_assets',
-                            'users',
-                        ],
-                    'one'  => [
-                        'manager',
-                        'parent',
-                    ]];
+                        'accessories',
+                        'assets',
+                        'assignedAccessories',
+                        'assignedAssets',
+                        'components',
+                        'consumables',
+                        'rtd_assets',
+                        'users',
+                    ],
+                'one'  => [
+                    'manager',
+                    'parent',
+                ]];
 
             // In case of a single location, the children must be checked as well, because we don't walk every location
             if ($location_id) {
