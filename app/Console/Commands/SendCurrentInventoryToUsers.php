@@ -49,6 +49,6 @@ class SendCurrentInventoryToUsers extends Command
             }
         }
 
-        $this->info($count.' users notified.');
+        $this->info($count . ' users notified.');
     }
 }
