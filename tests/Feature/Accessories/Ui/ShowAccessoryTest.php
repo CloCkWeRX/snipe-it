@@ -46,4 +46,13 @@ class ShowAccessoryTest extends TestCase
             ->get(route('accessories.show', Accessory::factory()->create()))
             ->assertOk();
     }
+
+    public function testHandlesAccessoryCreatorNotExisting()
+    {
+        $accessory = Accessory::factory()->create(['created_by' => 999999]);
+
+        $this->actingAs(User::factory()->superuser()->create())
+            ->get(route('accessories.show', $accessory))
+            ->assertOk();
+    }
 }
