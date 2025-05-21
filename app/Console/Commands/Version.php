@@ -40,7 +40,7 @@ class Version extends Command
         $use_branch = $this->option('branch');
         $use_type = $this->option('type');
         $git_branch = trim(shell_exec('git rev-parse --abbrev-ref HEAD'));
-        $build_version = trim(shell_exec('git rev-list --count '.$use_branch));
+        $build_version = trim(shell_exec('git rev-list --count ' . $use_branch));
         $versionFile = 'config/version.php';
         $full_hash_version = str_replace("\n", '', shell_exec('git describe master --tags'));
 
@@ -49,9 +49,9 @@ class Version extends Command
         $hash_version = (array_key_exists('2', $version)) ? $version[2] : '';
         $prerelease_version = '';
 
-        $this->line('Branch is: '.$use_branch);
-        $this->line('Type is: '.$use_type);
-        $this->line('Current version is: '.$full_hash_version);
+        $this->line('Branch is: ' . $use_branch);
+        $this->line('Type is: ' . $use_type);
+        $this->line('Current version is: ' . $full_hash_version);
 
         if (count($version) == 3) {
             $this->line('This does not look like an alpha/beta release.');
@@ -75,32 +75,32 @@ class Version extends Command
         }
 
         if ($use_type == 'major') {
-            $app_version = 'v'.($maj + 1).".$min.$patch";
+            $app_version = 'v' . ($maj + 1) . ".$min.$patch";
         } elseif ($use_type == 'minor') {
-            $app_version = 'v'."$maj.".($min + 1).".$patch";
+            $app_version = 'v' . "$maj." . ($min + 1) . ".$patch";
         } elseif ($use_type == 'pre') {
             $pre_raw = str_replace('beta', '', $prerelease_version);
             $pre_raw = str_replace('alpha', '', $pre_raw);
             $pre_raw = str_ireplace('rc', '', $pre_raw);
             $pre_raw = $pre_raw++;
-            $this->line('Setting the pre-release to '.$prerelease_version.'-'.$pre_raw);
-            $app_version = 'v'."$maj.".($min + 1).".$patch";
+            $this->line('Setting the pre-release to ' . $prerelease_version . '-' . $pre_raw);
+            $app_version = 'v' . "$maj." . ($min + 1) . ".$patch";
         } elseif ($use_type == 'patch') {
-            $app_version = 'v'."$maj.$min.".($patch + 1);
+            $app_version = 'v' . "$maj.$min." . ($patch + 1);
         // If nothing is passed, leave the version as it is, just increment the build
         } else {
-            $app_version = 'v'."$maj.$min.".$patch;
+            $app_version = 'v' . "$maj.$min." . $patch;
         }
 
         // Determine if this tag already exists, or if this prior to a release
-        $this->line('Running: git rev-parse master '.$current_app_version);
+        $this->line('Running: git rev-parse master ' . $current_app_version);
         // $pre_release = trim(shell_exec('git rev-parse '.$use_branch.' '.$current_app_version.' 2>&1 1> /dev/null'));
 
         if ($use_branch == 'develop') {
-            $app_version = $app_version.'-pre';
+            $app_version = $app_version . '-pre';
         }
 
-        $full_app_version = $app_version.' - build '.$build_version.'-'.$hash_version;
+        $full_app_version = $app_version . ' - build ' . $build_version . '-' . $hash_version;
 
         $array = var_export(
             [
@@ -122,6 +122,6 @@ CON;
 
         // And finally write the file and output the current version
         \File::put($versionFile, $content);
-        $this->info('Setting NEW version: '.$full_app_version.' ('.$git_branch.')');
+        $this->info('Setting NEW version: ' . $full_app_version . ' (' . $git_branch . ')');
     }
 }
