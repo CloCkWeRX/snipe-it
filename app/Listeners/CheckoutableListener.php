@@ -149,13 +149,13 @@ class CheckoutableListener
         /**
          * Send the appropriate notification
          */
-        if ($event->checkedOutTo && $event->checkoutable){
+        if ($event->checkedOutTo && $event->checkoutable) {
             $acceptances = CheckoutAcceptance::where('checkoutable_id', $event->checkoutable->id)
                                             ->where('assigned_to_id', $event->checkedOutTo->id)
                                             ->get();
 
-            foreach($acceptances as $acceptance){
-                if ($acceptance->isPending()){
+            foreach($acceptances as $acceptance) {
+                if ($acceptance->isPending()) {
                     $acceptance->delete();
                 }
             }
@@ -307,7 +307,7 @@ class CheckoutableListener
 
         return new $notificationClass($event->checkoutable, $event->checkedOutTo, $event->checkedOutBy, $acceptance, $event->note);
     }
-    private function getCheckoutMailType($event, $acceptance){
+    private function getCheckoutMailType($event, $acceptance) {
         $lookup = [
             Accessory::class => CheckoutAccessoryMail::class,
             Asset::class => CheckoutAssetMail::class,
@@ -319,7 +319,7 @@ class CheckoutableListener
         return new $mailable($event->checkoutable, $event->checkedOutTo, $event->checkedOutBy, $acceptance, $event->note);
 
     }
-    private function getCheckinMailType($event){
+    private function getCheckinMailType($event) {
         $lookup = [
             Accessory::class => CheckinAccessoryMail::class,
             Asset::class => CheckinAssetMail::class,
@@ -340,10 +340,10 @@ class CheckoutableListener
      * @param $event
      * @return mixed
      */
-    private function getNotifiableUsers($event){
+    private function getNotifiableUsers($event) {
 
         // If it's assigned to an asset, get that asset's assignedTo object
-        if ($event->checkedOutTo instanceof Asset){
+        if ($event->checkedOutTo instanceof Asset) {
             $event->checkedOutTo->load('assignedTo');
             return $event->checkedOutTo->assignedto;
 
@@ -356,8 +356,8 @@ class CheckoutableListener
             return $event->checkedOutTo;
         }
     }
-    private function webhookSelected(){
-        if (Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general'){
+    private function webhookSelected() {
+        if (Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general') {
             return 'slack';
         }
 
@@ -413,7 +413,7 @@ class CheckoutableListener
 
     private function checkoutableShouldSendEmail($event): bool
     {
-        if ($event->checkoutable instanceof LicenseSeat){
+        if ($event->checkoutable instanceof LicenseSeat) {
             return $event->checkoutable->license->checkin_email();
         }
         return (method_exists($event->checkoutable, 'checkin_email') && $event->checkoutable->checkin_email());

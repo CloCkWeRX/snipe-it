@@ -74,7 +74,7 @@ class SendAcceptanceReminder extends Command
             $locale = $acceptance->assignedTo?->locale;
             $email = $acceptance->assignedTo?->email;
 
-            if (!$email){
+            if (!$email) {
                 $no_email_list[] = [
                     'id' => $acceptance->assignedTo?->id,
                     'name' => $acceptance->assignedTo?->present()->fullName(),

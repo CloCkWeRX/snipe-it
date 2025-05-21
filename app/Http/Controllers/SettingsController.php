@@ -1225,7 +1225,7 @@ class SettingsController extends Controller
 
                 $find_user = DB::table('users')->where('username', $user->username)->exists();
 
-                if (!$find_user){
+                if (!$find_user) {
                     Log::warning('Attempting to restore user: ' . $user->username);
                     $new_user = $user->replicate();
                     $new_user->push();
