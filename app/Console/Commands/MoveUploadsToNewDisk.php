@@ -47,18 +47,18 @@ class MoveUploadsToNewDisk extends Command
         }
         $delete_local = $this->argument('delete_local');
 
-        $public_uploads['accessories'] = glob('public/uploads/accessories'."/*.*");
-        $public_uploads['assets'] = glob('public/uploads/assets'."/*.*");
-        $public_uploads['avatars'] = glob('public/uploads/avatars'."/*.*");
-        $public_uploads['categories'] = glob('public/uploads/categories'."/*.*");
-        $public_uploads['companies'] = glob('public/uploads/companies'."/*.*");
-        $public_uploads['components'] = glob('public/uploads/components'."/*.*");
-        $public_uploads['consumables'] = glob('public/uploads/consumables'."/*.*");
-        $public_uploads['departments'] = glob('public/uploads/departments'."/*.*");
-        $public_uploads['locations'] = glob('public/uploads/locations'."/*.*");
-        $public_uploads['manufacturers'] = glob('public/uploads/manufacturers'."/*.*");
-        $public_uploads['suppliers'] = glob('public/uploads/suppliers'."/*.*");
-        $public_uploads['assetmodels'] = glob('public/uploads/models'."/*.*");
+        $public_uploads['accessories'] = glob('public/uploads/accessories' . "/*.*");
+        $public_uploads['assets'] = glob('public/uploads/assets' . "/*.*");
+        $public_uploads['avatars'] = glob('public/uploads/avatars' . "/*.*");
+        $public_uploads['categories'] = glob('public/uploads/categories' . "/*.*");
+        $public_uploads['companies'] = glob('public/uploads/companies' . "/*.*");
+        $public_uploads['components'] = glob('public/uploads/components' . "/*.*");
+        $public_uploads['consumables'] = glob('public/uploads/consumables' . "/*.*");
+        $public_uploads['departments'] = glob('public/uploads/departments' . "/*.*");
+        $public_uploads['locations'] = glob('public/uploads/locations' . "/*.*");
+        $public_uploads['manufacturers'] = glob('public/uploads/manufacturers' . "/*.*");
+        $public_uploads['suppliers'] = glob('public/uploads/suppliers' . "/*.*");
+        $public_uploads['assetmodels'] = glob('public/uploads/models' . "/*.*");
 
 
         // iterate files
@@ -70,10 +70,10 @@ class MoveUploadsToNewDisk extends Command
                 $type_count++;
                 $filename = basename($public_upload[$i]);
 
-                try  {
-                    Storage::disk('public')->put('uploads/'.$public_type.'/'.$filename, file_get_contents($public_upload[$i]));
-                    $new_url = Storage::disk('public')->url('uploads/'.$public_type.'/'.$filename, $filename);
-                    $this->info($type_count.'. PUBLIC: '.$filename.' was copied to '.$new_url);
+                try {
+                    Storage::disk('public')->put('uploads/' . $public_type . '/' . $filename, file_get_contents($public_upload[$i]));
+                    $new_url = Storage::disk('public')->url('uploads/' . $public_type . '/' . $filename, $filename);
+                    $this->info($type_count . '. PUBLIC: ' . $filename . ' was copied to ' . $new_url);
                 } catch (\Exception $e) {
                     Log::debug($e);
                     $this->error($e);
@@ -82,7 +82,7 @@ class MoveUploadsToNewDisk extends Command
         }
 
         $logos = glob("public/uploads/setting*.*");
-        $this->info("- There are ".count($logos).' files that might be logos.');
+        $this->info("- There are " . count($logos) . ' files that might be logos.');
         $type_count = 0;
 
         foreach ($logos as $logo) {
@@ -93,34 +93,34 @@ class MoveUploadsToNewDisk extends Command
             $this->info($type_count . '. LOGO: ' . $filename . ' was copied to ' . env('PUBLIC_AWS_URL') . '/uploads/' . $filename);
         }
 
-        $private_uploads['assets'] = glob('storage/private_uploads/assets'."/*.*");
-        $private_uploads['signatures'] = glob('storage/private_uploads/signatures'."/*.*");
-        $private_uploads['audits'] = glob('storage/private_uploads/audits'."/*.*");
-        $private_uploads['assetmodels'] = glob('storage/private_uploads/assetmodels'."/*.*");
-        $private_uploads['imports'] = glob('storage/private_uploads/imports'."/*.*");
-        $private_uploads['licenses'] = glob('storage/private_uploads/licenses'."/*.*");
-        $private_uploads['users'] = glob('storage/private_uploads/users'."/*.*");
-        $private_uploads['backups'] = glob('storage/private_uploads/backups'."/*.*");
-        
+        $private_uploads['assets'] = glob('storage/private_uploads/assets' . "/*.*");
+        $private_uploads['signatures'] = glob('storage/private_uploads/signatures' . "/*.*");
+        $private_uploads['audits'] = glob('storage/private_uploads/audits' . "/*.*");
+        $private_uploads['assetmodels'] = glob('storage/private_uploads/assetmodels' . "/*.*");
+        $private_uploads['imports'] = glob('storage/private_uploads/imports' . "/*.*");
+        $private_uploads['licenses'] = glob('storage/private_uploads/licenses' . "/*.*");
+        $private_uploads['users'] = glob('storage/private_uploads/users' . "/*.*");
+        $private_uploads['backups'] = glob('storage/private_uploads/backups' . "/*.*");
+
 
         foreach ($private_uploads as $private_type => $private_upload) {
             {
                 $this->info('- There are ' . count($private_upload) . ' PRIVATE ' . $private_type . ' files.');
 
                 $type_count = 0;
-                for ($x = 0; $x < count($private_upload); $x++) {
-                    $type_count++;
-                    $filename = basename($private_upload[$x]);
+            for ($x = 0; $x < count($private_upload); $x++) {
+                $type_count++;
+                $filename = basename($private_upload[$x]);
 
-                    try {
-                        Storage::put($private_type . '/' . $filename, file_get_contents($private_upload[$i]));
-                        $new_url = Storage::url($private_type . '/' . $filename, $filename);
-                        $this->info($type_count . '. PRIVATE: ' . $filename . ' was copied to ' . $new_url);
-                    } catch (\Exception $e) {
-                        Log::debug($e);
-                        $this->error($e);
-                    }
+                try {
+                    Storage::put($private_type . '/' . $filename, file_get_contents($private_upload[$i]));
+                    $new_url = Storage::url($private_type . '/' . $filename, $filename);
+                    $this->info($type_count . '. PRIVATE: ' . $filename . ' was copied to ' . $new_url);
+                } catch (\Exception $e) {
+                    Log::debug($e);
+                    $this->error($e);
                 }
+            }
             }
 
 

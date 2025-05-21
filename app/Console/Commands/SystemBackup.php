@@ -42,13 +42,12 @@ class SystemBackup extends Command
 
             // Make sure the filename ends in .zip
             if (!ends_with($filename, '.zip')) {
-                $filename = $filename.'.zip';
+                $filename = $filename . '.zip';
             }
 
             $this->call('backup:run', ['--filename' => $filename]);
         } else {
             $this->call('backup:run');
         }
-
     }
 }

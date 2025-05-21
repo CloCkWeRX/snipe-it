@@ -45,7 +45,6 @@ class ToggleCustomfieldEncryption extends Command
         $fieldname = $this->argument('fieldname');
 
         if ($field = CustomField::where('db_column', $fieldname)->first()) {
-
             // If the field is not encrypted, make it encrypted and encrypt the data in the assets table for the
             // corresponding field.
             DB::transaction(function () use ($field) {
@@ -63,14 +62,13 @@ class ToggleCustomfieldEncryption extends Command
 
                 // This field is already encrypted. Do nothing.
                 } else {
-                    $this->error('The custom field ' . $field->db_column.' is already encrypted. No action was taken.');
+                    $this->error('The custom field ' . $field->db_column . ' is already encrypted. No action was taken.');
                 }
             });
 
         // No matching column name found
         } else {
-            $this->error('No matching results for unencrypted custom fields with db_column name: ' . $fieldname.'. Please check the fieldname.');
+            $this->error('No matching results for unencrypted custom fields with db_column name: ' . $fieldname . '. Please check the fieldname.');
         }
-
     }
 }

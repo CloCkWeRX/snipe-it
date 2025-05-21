@@ -49,9 +49,7 @@ class SyncAssetCounters extends Command
             ->withTrashed()->chunk(100, function ($assets) use ($bar) {
 
                 if ($assets->count() > 0) {
-
                     foreach ($assets as $asset) {
-
                         $asset->checkin_counter = (int) $asset->checkins_count;
                         $asset->checkout_counter = (int) $asset->checkouts_count;
                         $asset->requests_counter = (int) $asset->user_requests_count;
@@ -59,20 +57,16 @@ class SyncAssetCounters extends Command
                         $asset->save();
                         $bar->advance();
 
-                        Log::debug('Asset: '.$asset->id.' has '.$asset->checkin_counter.' checkins, '.$asset->checkout_counter.' checkouts, and '.$asset->requests_counter.' requests');
-
+                        Log::debug('Asset: ' . $asset->id . ' has ' . $asset->checkin_counter . ' checkins, ' . $asset->checkout_counter . ' checkouts, and ' . $asset->requests_counter . ' requests');
                     }
+                } else {
+                    $this->info('No assets to sync');
+                }
+            });
 
-            } else {
-                $this->info('No assets to sync');
-            }
-        });
-        
 
         $bar->finish();
         $time_elapsed_secs = microtime(true) - $start;
-        $this->info("\nSync of ".$assets_count.' assets executed in '.$time_elapsed_secs.' seconds');
-
-
+        $this->info("\nSync of " . $assets_count . ' assets executed in ' . $time_elapsed_secs . ' seconds');
     }
 }
