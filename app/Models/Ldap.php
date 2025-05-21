@@ -316,7 +316,7 @@ class Ldap extends Model
             // which helped me wrap my head around paged results!
             // if a $count is set and it's smaller than $page_size then use that as the page size
             $ldap_controls = [];
-            //if($count == -1) { //count is -1 means we have to employ paging to query the entire directory
+            //if ($count == -1) { //count is -1 means we have to employ paging to query the entire directory
                 $ldap_controls = [['oid' => LDAP_CONTROL_PAGEDRESULTS, 'iscritical' => false, 'value' => ['size' => $count == -1 || $count > $page_size ? $page_size : $count, 'cookie' => $cookie]]];
             //}
             $search_results = ldap_search($ldapconn, $base_dn, $filter, $attributes, 0, /* $page_size */ -1, -1, LDAP_DEREF_NEVER, $ldap_controls); // TODO - I hate the @, and I hate that we get a full page even if we ask for 10 records. Can we use an ldap_control?

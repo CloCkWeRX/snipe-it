@@ -283,7 +283,7 @@ class ReportsController extends Controller
                         }
                     }
 
-                    if($actionlog->item){
+                    if ($actionlog->item){
                         $item_name = e($actionlog->item->getDisplayNameAttribute());
                     } else {
                         $item_name = '';
@@ -1205,7 +1205,7 @@ class ReportsController extends Controller
             return redirect()->route('reports/unaccepted_assets')->with('error', trans('general.bad_data'));
         }
 
-        if($acceptance->delete()) {
+        if ($acceptance->delete()) {
             return redirect()->route('reports/unaccepted_assets')->with('success', trans('admin/reports/general.acceptance_deleted'));
         } else {
             return redirect()->route('reports/unaccepted_assets')->with('error', trans('general.deletion_failed'));
@@ -1226,7 +1226,7 @@ class ReportsController extends Controller
         /**
          * Get all assets with pending checkout acceptances
          */
-        if($showDeleted) {
+        if ($showDeleted) {
             $acceptances = CheckoutAcceptance::pending()->where('checkoutable_type', 'App\Models\Asset')->withTrashed()->with(['assignedTo', 'checkoutable.assignedTo', 'checkoutable.model'])->get();
         } else {
             $acceptances = CheckoutAcceptance::pending()->where('checkoutable_type', 'App\Models\Asset')->with(['assignedTo', 'checkoutable.assignedTo', 'checkoutable.model'])->get();

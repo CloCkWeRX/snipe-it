@@ -291,7 +291,7 @@ class ValidationServiceProvider extends ServiceProvider
                 array_key_exists('company_id', $data) && $data['company_id'] !== null
             ) {
                 //for updating existing departments
-                if(array_key_exists('id', $data) && $data['id'] !== null){
+                if (array_key_exists('id', $data) && $data['id'] !== null){
                     $count = Department::where('name', $data['name'])
                         ->where('location_id', $data['location_id'])
                         ->where('company_id', $data['company_id'])
@@ -328,18 +328,18 @@ class ValidationServiceProvider extends ServiceProvider
             $field = CustomField::where('db_column', $attribute)->first();
             $options = $field->formatFieldValuesAsArray();
 
-            if(is_array($value)) {
+            if (is_array($value)) {
                 $invalid = array_diff($value, $options);
-                if(count($invalid) > 0) {
+                if (count($invalid) > 0) {
                     return false;
                 }
             }
 
             // for legacy, allows users to submit a comma separated string of options
-            elseif(!is_array($value)) {
+            elseif (!is_array($value)) {
                 $exploded = array_map('trim', explode(',', $value));
                 $invalid = array_diff($exploded, $options);
-                if(count($invalid) > 0) {
+                if (count($invalid) > 0) {
                     return false;
                 }
             }

@@ -155,7 +155,7 @@ class CheckoutableListener
                                             ->get();
 
             foreach($acceptances as $acceptance){
-                if($acceptance->isPending()){
+                if ($acceptance->isPending()){
                     $acceptance->delete();
                 }
             }
@@ -163,7 +163,7 @@ class CheckoutableListener
         $settings = Setting::getSettings();
         $adminCcEmailsArray = [];
 
-        if($settings->admin_cc_email !== '') {
+        if ($settings->admin_cc_email !== '') {
             $adminCcEmail = $settings->admin_cc_email;
             $adminCcEmailsArray = array_map('trim', explode(',', $adminCcEmail));
         }
@@ -357,7 +357,7 @@ class CheckoutableListener
         }
     }
     private function webhookSelected(){
-        if(Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general'){
+        if (Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general'){
             return 'slack';
         }
 
@@ -384,7 +384,7 @@ class CheckoutableListener
 
     private function shouldNotSendAnyNotifications($checkoutable): bool
     {
-        if(in_array(get_class($checkoutable), $this->skipNotificationsFor)) {
+        if (in_array(get_class($checkoutable), $this->skipNotificationsFor)) {
             return true;
         }
         if ($this->shouldSendWebhookNotification()) {
@@ -413,7 +413,7 @@ class CheckoutableListener
 
     private function checkoutableShouldSendEmail($event): bool
     {
-        if($event->checkoutable instanceof LicenseSeat){
+        if ($event->checkoutable instanceof LicenseSeat){
             return $event->checkoutable->license->checkin_email();
         }
         return (method_exists($event->checkoutable, 'checkin_email') && $event->checkoutable->checkin_email());

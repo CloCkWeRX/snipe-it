@@ -82,7 +82,7 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
         $location = $params['location'];
         $setting = Setting::getSettings();
 
-        if(!Str::contains($setting->webhook_endpoint, 'workflows')) {
+        if (!Str::contains($setting->webhook_endpoint, 'workflows')) {
             return MicrosoftTeamsMessage::create()
                 ->to($setting->webhook_endpoint)
                 ->type('success')

@@ -110,7 +110,7 @@ class AssetObserver
         $logAction->item_id = $asset->id;
         $logAction->created_at = date('Y-m-d H:i:s');
         $logAction->created_by = auth()->id();
-        if($asset->imported) {
+        if ($asset->imported) {
             $logAction->setActionSource('importer');
         }
         $logAction->logaction('create');
@@ -171,9 +171,9 @@ class AssetObserver
 
        // determine if explicit and set eol_explicit to true
        if (!is_null($asset->asset_eol_date) && !is_null($asset->purchase_date)) {
-            if($asset->model->eol > 0) {
+            if ($asset->model->eol > 0) {
                 $months = (int) Carbon::parse($asset->asset_eol_date)->diffInMonths($asset->purchase_date, true);
-                if($months != $asset->model->eol) {
+                if ($months != $asset->model->eol) {
                     $asset->eol_explicit = true;
                 }
             }

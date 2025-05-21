@@ -82,14 +82,14 @@ class SlackSettingsForm extends Component
         $this->webhook_botname = $this->setting->webhook_botname;
         $this->webhook_options = $this->setting->webhook_selected;
         $this->teams_webhook_deprecated = !Str::contains($this->webhook_endpoint, 'workflows');
-        if($this->webhook_selected === 'microsoft' || $this->webhook_selected === 'google'){
+        if ($this->webhook_selected === 'microsoft' || $this->webhook_selected === 'google'){
             $this->webhook_channel = '#NA';
         }
 
-        if($this->setting->webhook_endpoint != null && $this->setting->webhook_channel != null){
+        if ($this->setting->webhook_endpoint != null && $this->setting->webhook_channel != null){
             $this->isDisabled= '';
         }
-        if($this->webhook_selected === 'microsoft' && $this->teams_webhook_deprecated) {
+        if ($this->webhook_selected === 'microsoft' && $this->teams_webhook_deprecated) {
             session()->flash('warning', trans('admin/settings/message.webhook.ms_teams_deprecation'));
         }
     }
@@ -106,11 +106,11 @@ class SlackSettingsForm extends Component
         $this->webhook_endpoint = null;
         $this->webhook_link = $this->webhook_text[$this->webhook_selected]["link"];
         $this->webhook_test = $this->webhook_text[$this->webhook_selected]["test"];
-        if($this->webhook_selected != 'slack'){
+        if ($this->webhook_selected != 'slack'){
             $this->isDisabled= '';
             $this->save_button = trans('general.save');
         }
-        if($this->webhook_selected == 'microsoft' || $this->webhook_selected == 'google'){
+        if ($this->webhook_selected == 'microsoft' || $this->webhook_selected == 'google'){
             $this->webhook_channel = '#NA';
         }
     }
@@ -161,7 +161,7 @@ class SlackSettingsForm extends Component
         try {
             $test = $webhook->post($this->webhook_endpoint, ['body' => $payload, ['headers' => ['Content-Type' => 'application/json']]]);
 
-            if(($test->getStatusCode() == 302)||($test->getStatusCode() == 301)){
+            if (($test->getStatusCode() == 302)||($test->getStatusCode() == 301)){
                 return session()->flash('error' , trans('admin/settings/message.webhook.error_redirect', ['endpoint' => $this->webhook_endpoint]));
             }
             $this->isDisabled='';
@@ -249,7 +249,7 @@ class SlackSettingsForm extends Component
 
         try {
 
-            if($this->teams_webhook_deprecated){
+            if ($this->teams_webhook_deprecated){
                 //will use the deprecated webhook format
                 $payload =
                     [
@@ -274,7 +274,7 @@ class SlackSettingsForm extends Component
                  ])->post($this->webhook_endpoint);
              }
 
-         if(($response->getStatusCode() == 302)||($response->getStatusCode() == 301)){
+         if (($response->getStatusCode() == 302)||($response->getStatusCode() == 301)){
              return session()->flash('error' , trans('admin/settings/message.webhook.error_redirect', ['endpoint' => $this->webhook_endpoint]));
          }
          $this->isDisabled='';
