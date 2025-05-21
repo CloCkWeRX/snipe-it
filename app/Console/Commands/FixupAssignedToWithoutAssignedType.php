@@ -30,7 +30,7 @@ class FixupAssignedToWithoutAssignedType extends Command
         $assets = Asset::whereNull("assigned_type")->whereNotNull("assigned_to")->withTrashed();
         $this->withProgressBar($assets->get(), function (Asset $asset) {
             //now check each action log, from the most recent backwards, to find the last checkin or checkout
-            foreach($asset->log()->orderBy("id","desc")->get() as $action_log) {
+            foreach ($asset->log()->orderBy("id","desc")->get() as $action_log) {
                 if ($this->option("debug")) {
                     $this->info("Asset id: " . $asset->id . " action log, action type is: " . $action_log->action_type);
                 }

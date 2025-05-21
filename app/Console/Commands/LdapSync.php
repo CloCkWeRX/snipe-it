@@ -95,7 +95,7 @@ class LdapSync extends Command
              */
             if ( $this->option('location_id') ) {
 
-                foreach($this->option('location_id') as $location_id) {
+                foreach ($this->option('location_id') as $location_id) {
                     $location_ou = Location::where('id', '=', $location_id)->value('ldap_ou');
                     $search_base = $location_ou;
                     Log::debug('Importing users from specified location OU: \"'.$search_base.'\".');
@@ -151,7 +151,7 @@ class LdapSync extends Command
 
         } elseif ($this->option('location_id')) {
             //TODO - figure out how or why this is an array?
-            foreach($this->option('location_id') as $location_id) {
+            foreach ($this->option('location_id') as $location_id) {
                 if ($default_location = Location::where('id', '=', $location_id)->first()) {
                     Log::debug('Location ID ' . $location_id . ' passed');
                     Log::debug('Importing to '.$default_location->name.' ('.$default_location->id.')');

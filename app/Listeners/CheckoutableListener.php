@@ -154,7 +154,7 @@ class CheckoutableListener
                                             ->where('assigned_to_id', $event->checkedOutTo->id)
                                             ->get();
 
-            foreach($acceptances as $acceptance) {
+            foreach ($acceptances as $acceptance) {
                 if ($acceptance->isPending()) {
                     $acceptance->delete();
                 }

@@ -55,7 +55,7 @@ class SQLStreamer {
             "<^/\*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' \*/;$>" => false, //same, now handle zero-values
         ];
 
-        foreach($allowed_statements as $statement => $statechange) {
+        foreach ($allowed_statements as $statement => $statechange) {
 //            $this->info("Checking regex: $statement...\n");
             $matches = [];
             if (preg_match($statement,$line,$matches)) {
@@ -96,7 +96,7 @@ class SQLStreamer {
         $check_tables = ['settings' => null, 'migrations' => null /* 'assets' => null */]; //TODO - move to static?
         //can't use 'users' because the 'accessories_checkout' table?
         // can't use 'assets' because 'ver1_components_assets'
-        foreach($check_tables as $check_table => $_ignore) {
+        foreach ($check_tables as $check_table => $_ignore) {
             foreach ($parser->tablenames as $tablename => $_count) {
 //                print "Comparing $tablename to $check_table\n";
                 if (str_ends_with($tablename,$check_table)) {

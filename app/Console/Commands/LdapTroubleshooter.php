@@ -93,7 +93,7 @@ class LdapTroubleshooter extends Command
         for($i = 0; $i < $array['count']; $i++) {
             $row = $array[$i];
             $clean_row = [];
-            foreach($row AS $key => $val ) {
+            foreach ($row AS $key => $val ) {
                 $this->debugout("Key is: ".$key);
                 if ($key == "count" || is_int($key) || $key == "dn") {
                     $this->debugout(" and we're gonna skip it\n");
@@ -106,7 +106,7 @@ class LdapTroubleshooter extends Command
                     } else {
                         unset($val['count']); //these counts are annoying
                         $elements = [];
-                        foreach($val as $entry) {
+                        foreach ($val as $entry) {
                             if (isset($ldap_constants[$entry])) {
                                 $elements[] = $ldap_constants[$entry];
                             } else {
@@ -221,7 +221,7 @@ class LdapTroubleshooter extends Command
             exit(-1);
         }
         $this->debugout("IP's? ".print_r($ips,true));
-        foreach($ips as $ip) {
+        foreach ($ips as $ip) {
             if (!isset($ip['ip'])) {
                 continue;
             }
@@ -241,7 +241,7 @@ class LdapTroubleshooter extends Command
         }
 
         $open_ports=[];
-        foreach($ports as $port ) {
+        foreach ($ports as $port ) {
             $errno = 0;
             $errstr = '';
             $timeout = 30.0;
@@ -269,7 +269,7 @@ class LdapTroubleshooter extends Command
 
         $ldap_urls = [];
         $pretty_ldap_urls = [];
-        foreach($open_ports as $port) {
+        foreach ($open_ports as $port) {
             $this->line("Trying TLS first for port $port");
             $ldap_url = "ldaps://".$parsed['host'].":$port";
             if ($this->test_anonymous_bind($ldap_url)) {
@@ -314,7 +314,7 @@ class LdapTroubleshooter extends Command
 
         if (count($ldap_urls) > 0 ) {
             $this->info("Found working LDAP URL's: ");
-            foreach($ldap_urls as $ldap_url) { // TODO maybe do this as a $this->table() instead?
+            foreach ($ldap_urls as $ldap_url) { // TODO maybe do this as a $this->table() instead?
                 $this->info("LDAP URL: ".$ldap_url[0]);
                 $this->info($ldap_url[0]. ($ldap_url[1] ? " certificate checks enabled" : " certificate checks disabled"). ($ldap_url[2] ? " STARTTLS Enabled ": " STARTTLS Disabled"));
             }
@@ -325,7 +325,7 @@ class LdapTroubleshooter extends Command
         }
 
         $this->info("STAGE 4: Test Administrative Bind for LDAP Sync");
-        foreach($ldap_urls AS $ldap_url) {
+        foreach ($ldap_urls AS $ldap_url) {
             $this->test_authed_bind($ldap_url[0], $ldap_url[1], $ldap_url[2], $settings->ldap_uname, Crypt::decrypt($settings->ldap_pword));
         }
 
@@ -333,14 +333,14 @@ class LdapTroubleshooter extends Command
         //grab all LDAP_ constants and fill up a reversed array mapping from weird LDAP dotted-strings to (Constant Name)
         $all_defined_constants = get_defined_constants();
         $ldap_constants = [];
-        foreach($all_defined_constants AS $key => $val) {
+        foreach ($all_defined_constants AS $key => $val) {
             if (starts_with($key,"LDAP_") && is_string($val)) {
                 $ldap_constants[$val] = $key; // INVERT the meaning here!
             }
         }
         $this->debugout("LDAP constants are: ".print_r($ldap_constants,true));
 
-        foreach($ldap_urls AS $ldap_url) {
+        foreach ($ldap_urls AS $ldap_url) {
             if ($this->test_informational_bind($ldap_url[0],$ldap_url[1],$ldap_url[2],$settings->ldap_uname,Crypt::decrypt($settings->ldap_pword),$settings)) {
                 $this->info("Success getting informational bind!");
             } else {
@@ -349,7 +349,7 @@ class LdapTroubleshooter extends Command
         }
 
         $this->info("STAGE 6: Test LDAP Login to Snipe-IT");
-        foreach($ldap_urls AS $ldap_url) {
+        foreach ($ldap_urls AS $ldap_url) {
             $this->info("Starting auth to ".$ldap_url[0]);
             while(true) {
                 $with_tls = $ldap_url[1] ? "with": "without";
