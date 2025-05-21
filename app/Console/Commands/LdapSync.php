@@ -47,7 +47,7 @@ class LdapSync extends Command
     {
 
         // If LDAP enabled isn't set to 1 (ldap_enabled!=1) then we should cut this short immediately without going any further
-        if (Setting::getSettings()->ldap_enabled!='1') {
+        if (Setting::getSettings()->ldap_enabled != '1') {
             $this->error('LDAP is not enabled. Aborting. See Settings > LDAP to enable it.');
             exit();
         }
@@ -93,13 +93,12 @@ class LdapSync extends Command
             /**
              * if a location ID has been specified, use that OU
              */
-            if ( $this->option('location_id') ) {
-
+            if ($this->option('location_id')) {
                 foreach ($this->option('location_id') as $location_id) {
                     $location_ou = Location::where('id', '=', $location_id)->value('ldap_ou');
                     $search_base = $location_ou;
-                    Log::debug('Importing users from specified location OU: \"'.$search_base.'\".');
-                 }
+                    Log::debug('Importing users from specified location OU: \"' . $search_base . '\".');
+                }
             }
 
             /**
@@ -108,7 +107,7 @@ class LdapSync extends Command
              */
             if ($this->option('base_dn') != '') {
                 $search_base = $this->option('base_dn');
-                Log::debug('Importing users from specified base DN: \"'.$search_base.'\".');
+                Log::debug('Importing users from specified base DN: \"' . $search_base . '\".');
             }
 
             /**
@@ -130,7 +129,6 @@ class LdapSync extends Command
             }
 
             $results = Ldap::findLdapUsers($search_base, -1, $filter, $attributes);
-
         } catch (\Exception $e) {
             if ($this->option('json_summary')) {
                 $json_summary = ['error' => true, 'error_message' => $e->getMessage(), 'summary' => []];
@@ -146,17 +144,15 @@ class LdapSync extends Command
         if ($this->option('location') != '') {
             if ($default_location = Location::where('name', '=', $this->option('location'))->first()) {
                 Log::debug('Location name ' . $this->option('location') . ' passed');
-                Log::debug('Importing to '.$default_location->name.' ('.$default_location->id.')');
+                Log::debug('Importing to ' . $default_location->name . ' (' . $default_location->id . ')');
             }
-
         } elseif ($this->option('location_id')) {
             //TODO - figure out how or why this is an array?
             foreach ($this->option('location_id') as $location_id) {
                 if ($default_location = Location::where('id', '=', $location_id)->first()) {
                     Log::debug('Location ID ' . $location_id . ' passed');
-                    Log::debug('Importing to '.$default_location->name.' ('.$default_location->id.')');
+                    Log::debug('Importing to ' . $default_location->name . ' (' . $default_location->id . ')');
                 }
-
             }
         }
         if (!isset($default_location)) {
@@ -191,7 +187,7 @@ class LdapSync extends Command
                     $location_users = Ldap::findLdapUsers($ldap_loc['ldap_ou']);
                 } catch (\Exception $e) { // TODO: this is stolen from line 77 or so above
                     if ($this->option('json_summary')) {
-                        $json_summary = ['error' => true, 'error_message' => trans('admin/users/message.error.ldap_could_not_search').' Location: '.$ldap_loc['name'].' (ID: '.$ldap_loc['id'].') cannot connect to "'.$ldap_loc['ldap_ou'].'" - '.$e->getMessage(), 'summary' => []];
+                        $json_summary = ['error' => true, 'error_message' => trans('admin/users/message.error.ldap_could_not_search') . ' Location: ' . $ldap_loc['name'] . ' (ID: ' . $ldap_loc['id'] . ') cannot connect to "' . $ldap_loc['ldap_ou'] . '" - ' . $e->getMessage(), 'summary' => []];
                         $this->info(json_encode($json_summary));
                     }
                     Log::info($e);
@@ -225,12 +221,10 @@ class LdapSync extends Command
         $manager_cache = [];
 
         if ($ldap_default_group != null) {
-
             $default = Group::find($ldap_default_group);
             if (!$default) {
                 $ldap_default_group = null; // un-set the default group if that group doesn't exist
             }
-
         }
 
 
@@ -267,7 +261,7 @@ class LdapSync extends Command
                 $item['createorupdate'] = 'updated';
             } else {
                 // Creating a new user.
-                $user = new User;
+                $user = new User();
                 $user->password = $user->noPassword();
                 $user->locale = app()->getLocale();
                 $user->activated = 1; // newly created users can log in by default, unless AD's UAC is in use, or an active flag is set (below)
@@ -327,7 +321,7 @@ class LdapSync extends Command
                                 ]
                             ];
                         }
-                        
+
                         $add_manager_to_cache = true;
                         if ($ldap_manager["count"] > 0) {
                             try {
@@ -354,7 +348,6 @@ class LdapSync extends Command
                         if ($add_manager_to_cache) {
                             $manager_cache[$item['manager']] = $ldap_manager && isset($ldap_manager->id)  ? $ldap_manager->id : null; // Store results in cache, even if 'failed'
                         }
-
                     }
                 }
             }
@@ -365,16 +358,15 @@ class LdapSync extends Command
                 // (Specifically, we don't handle a value of '0.0' correctly)
                 $raw_value = @$results[$i][$ldap_map["active_flag"]][0];
                 $filter_var = filter_var($raw_value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-                
+
                 $boolean_cast = (bool) $raw_value;
-                
+
                 if (Setting::getSettings()->ldap_invert_active_flag === 1) {
                     // Because ldap_active_flag is set, if filter_var is true or boolean_cast is true, then user is suspended
                     $user->activated = !($filter_var ?? $boolean_cast);
-                }else{
+                } else {
                     $user->activated = $filter_var ?? $boolean_cast; // if filter_var() was true or false, use that. If it's null, use the $boolean_cast
                 }
-
             } elseif (array_key_exists('useraccountcontrol', $results[$i])) {
                 // ....otherwise, (ie if no 'active' LDAP flag is defined), IF the UAC setting exists,
                 // ....then use the UAC setting on the account to determine can-log-in vs. cannot-log-in
@@ -439,11 +431,11 @@ class LdapSync extends Command
                 $item['status'] = 'success';
                 if ($item['createorupdate'] === 'created' && $ldap_default_group) {
                  // Check if the relationship already exists
-                if (!$user->groups()->where('group_id', $ldap_default_group)->exists()) {
-                $user->groups()->attach($ldap_default_group);
+                    if (!$user->groups()->where('group_id', $ldap_default_group)->exists()) {
+                        $user->groups()->attach($ldap_default_group);
                     }
                 }
-                
+
                 //updates assets location based on user's location
                 if ($user->wasChanged('location_id')) {
                     foreach ($user->assets as $asset) {
@@ -452,7 +444,6 @@ class LdapSync extends Command
                         $asset->save();
                     }
                 }
-
             } else {
                 foreach ($user->getErrors()->getMessages() as $key => $err) {
                     $errors .= $err[0];
@@ -467,9 +458,9 @@ class LdapSync extends Command
         if ($this->option('summary')) {
             for ($x = 0; $x < count($summary); $x++) {
                 if ($summary[$x]['status'] == 'error') {
-                    $this->error('ERROR: '.$summary[$x]['firstname'].' '.$summary[$x]['lastname'].' (username:  '.$summary[$x]['username'].') was not imported: '.$summary[$x]['note']);
+                    $this->error('ERROR: ' . $summary[$x]['firstname'] . ' ' . $summary[$x]['lastname'] . ' (username:  ' . $summary[$x]['username'] . ') was not imported: ' . $summary[$x]['note']);
                 } else {
-                    $this->info('User '.$summary[$x]['firstname'].' '.$summary[$x]['lastname'].' (username:  '.$summary[$x]['username'].') was '.strtoupper($summary[$x]['createorupdate']).'.');
+                    $this->info('User ' . $summary[$x]['firstname'] . ' ' . $summary[$x]['lastname'] . ' (username:  ' . $summary[$x]['username'] . ') was ' . strtoupper($summary[$x]['createorupdate']) . '.');
                 }
             }
         } elseif ($this->option('json_summary')) {
