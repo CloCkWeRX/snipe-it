@@ -46,7 +46,7 @@ class SendAcceptanceReminder extends Command
     public function handle()
     {
         $pending = CheckoutAcceptance::pending()->where('checkoutable_type', 'App\Models\Asset')
-                                                ->whereHas('checkoutable', function($query) {
+                                                ->whereHas('checkoutable', function ($query) {
                                                     $query->where('accepted_at', null)
                                                           ->where('declined_at', null);
                                                 })
@@ -55,16 +55,16 @@ class SendAcceptanceReminder extends Command
 
         $count = 0;
         $unacceptedAssetGroups = $pending
-            ->filter(function($acceptance) {
+            ->filter(function ($acceptance) {
                 return $acceptance->checkoutable_type == 'App\Models\Asset';
             })
-            ->map(function($acceptance) {
+            ->map(function ($acceptance) {
                 return ['assetItem' => $acceptance->checkoutable, 'acceptance' => $acceptance];
             })
-            ->groupBy(function($item) {
+            ->groupBy(function ($item) {
                 return $item['acceptance']->assignedTo ? $item['acceptance']->assignedTo->id : '';
             });
-            $no_email_list= [];
+            $no_email_list = [];
 
         foreach ($unacceptedAssetGroups as $unacceptedAssetGroup) {
             // The [0] is weird, but it allows for the item_count to work and grabs the appropriate info for each user.
@@ -89,10 +89,9 @@ class SendAcceptanceReminder extends Command
             } elseif ($email) {
                 Mail::to($email)->send((new UnacceptedAssetReminderMail($acceptance, $item_count)));
             }
-
         }
 
-        $this->info($count.' users notified.');
+        $this->info($count . ' users notified.');
         $headers = ['ID', 'Name'];
         $rows = [];
 
@@ -104,5 +103,4 @@ class SendAcceptanceReminder extends Command
 
         return 0;
     }
-
 }

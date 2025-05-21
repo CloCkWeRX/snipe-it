@@ -45,7 +45,6 @@ class SendExpirationAlerts extends Command
         $alert_interval = $settings->alert_interval;
 
         if (($settings->alert_email != '') && ($settings->alerts_enabled == 1)) {
-
             // Send a rollup to the admin, if settings dictate
             $recipients = collect(explode(',', $settings->alert_email))
                 ->map(fn($item) => trim($item)) // Trim each email

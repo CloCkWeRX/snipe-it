@@ -38,7 +38,7 @@ class SamlClearExpiredNonces extends Command
      */
     public function handle()
     {
-        SamlNonce::where('not_valid_after','<=',now())->delete();
+        SamlNonce::where('not_valid_after', '<=', now())->delete();
         return 0;
     }
 }

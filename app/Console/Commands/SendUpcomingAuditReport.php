@@ -62,6 +62,5 @@ class SendUpcomingAuditReport extends Command
             $this->info('Sending Admin SendUpcomingAuditNotification to: ' . $settings->alert_email);
             Mail::to($recipients)->send(new SendUpcomingAuditMail($assets, $settings->audit_warning_days));
         }
-
     }
 }
