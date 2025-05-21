@@ -95,7 +95,7 @@ class LdapSync extends Command
              */
             if ( $this->option('location_id') ) {
 
-                foreach($this->option('location_id') as $location_id){
+                foreach ($this->option('location_id') as $location_id) {
                     $location_ou = Location::where('id', '=', $location_id)->value('ldap_ou');
                     $search_base = $location_ou;
                     Log::debug('Importing users from specified location OU: \"'.$search_base.'\".');
@@ -151,7 +151,7 @@ class LdapSync extends Command
 
         } elseif ($this->option('location_id')) {
             //TODO - figure out how or why this is an array?
-            foreach($this->option('location_id') as $location_id) {
+            foreach ($this->option('location_id') as $location_id) {
                 if ($default_location = Location::where('id', '=', $location_id)->first()) {
                     Log::debug('Location ID ' . $location_id . ' passed');
                     Log::debug('Importing to '.$default_location->name.' ('.$default_location->id.')');
@@ -224,7 +224,7 @@ class LdapSync extends Command
 
         $manager_cache = [];
 
-        if($ldap_default_group != null) {
+        if ($ldap_default_group != null) {
 
             $default = Group::find($ldap_default_group);
             if (!$default) {
@@ -275,39 +275,39 @@ class LdapSync extends Command
             }
 
             //If a sync option is not filled in on the LDAP settings don't populate the user field
-            if($ldap_map["username"]  != null){
+            if ($ldap_map["username"]  != null) {
                 $user->username = $item['username'];
             }
-            if($ldap_map["last_name"] != null){
+            if ($ldap_map["last_name"] != null) {
                 $user->last_name = $item['lastname'];
             }
-            if($ldap_map["first_name"] != null){
+            if ($ldap_map["first_name"] != null) {
                 $user->first_name = $item['firstname'];
             }
-            if($ldap_map["emp_num"]  != null){
+            if ($ldap_map["emp_num"]  != null) {
                 $user->employee_num = e($item['employee_number']);
             }
-            if($ldap_map["email"] != null){
+            if ($ldap_map["email"] != null) {
                 $user->email = $item['email'];
             }
-            if($ldap_map["phone"] != null){
+            if ($ldap_map["phone"] != null) {
                 $user->phone = $item['telephone'];
             }
-            if($ldap_map["jobtitle"] != null){
+            if ($ldap_map["jobtitle"] != null) {
                 $user->jobtitle = $item['jobtitle'];
             }
-            if($ldap_map["country"] != null){
+            if ($ldap_map["country"] != null) {
                 $user->country = $item['country'];
             }
-            if($ldap_map["dept"]  != null){
+            if ($ldap_map["dept"]  != null) {
                 $user->department_id = $department->id;
             }
-            if($ldap_map["location"] != null){
+            if ($ldap_map["location"] != null) {
                 $user->location_id = $location?->id;
             }
 
-            if($ldap_map["manager"] != null){
-                if($item['manager'] != null) {
+            if ($ldap_map["manager"] != null) {
+                if ($item['manager'] != null) {
                     // Check Cache first
                     if (isset($manager_cache[$item['manager']])) {
                         // found in cache; use that and avoid extra lookups
@@ -386,7 +386,7 @@ class LdapSync extends Command
                     to allow to log in.
 
                  $useraccountcontrol = $results[$i]['useraccountcontrol'][0];
-                 if(
+                 if (
                      // based on MS docs at: https://support.microsoft.com/en-us/help/305144/how-to-use-useraccountcontrol-to-manipulate-user-account-properties
                      ($useraccountcontrol & 0x200) && // is a NORMAL_ACCOUNT
                      !($useraccountcontrol & 0x02) && // *and* _not_ ACCOUNTDISABLE

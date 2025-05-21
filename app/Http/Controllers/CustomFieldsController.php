@@ -259,7 +259,7 @@ class CustomFieldsController extends Controller
             $field->format = $request->get('format');
         }
 
-        if ($field->element == 'checkbox' || $field->element == 'radio'){
+        if ($field->element == 'checkbox' || $field->element == 'radio') {
             $field->format = 'ANY';
         }
 

@@ -52,11 +52,11 @@ class CheckoutLicenseSeatNotification extends Notification
     {
         $notifyBy = [];
 
-        if (Setting::getSettings()->webhook_selected == 'google'){
+        if (Setting::getSettings()->webhook_selected == 'google') {
 
             $notifyBy[] = GoogleChatChannel::class;
         }
-        if (Setting::getSettings()->webhook_selected == 'microsoft'){
+        if (Setting::getSettings()->webhook_selected == 'microsoft') {
 
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
@@ -107,7 +107,7 @@ class CheckoutLicenseSeatNotification extends Notification
         $item = $this->item;
         $note = $this->note;
 
-        if(!Str::contains(Setting::getSettings()->webhook_endpoint, 'workflows')) {
+        if (!Str::contains(Setting::getSettings()->webhook_endpoint, 'workflows')) {
             return MicrosoftTeamsMessage::create()
                 ->to($this->settings->webhook_endpoint)
                 ->type('success')

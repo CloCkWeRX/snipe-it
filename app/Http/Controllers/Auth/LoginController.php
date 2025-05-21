@@ -205,7 +205,7 @@ class LoginController extends Controller
             $user->first_name = $ldap_attr['firstname'];
             $user->last_name = $ldap_attr['lastname']; //FIXME (or TODO?) - do we need to map additional fields that we now support? E.g. country, phone, etc.
             $user->saveQuietly();
-        } // End if(!user)
+        } // End if (!user)
         return $user;
     }
 

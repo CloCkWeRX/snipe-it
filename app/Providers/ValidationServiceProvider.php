@@ -291,7 +291,7 @@ class ValidationServiceProvider extends ServiceProvider
                 array_key_exists('company_id', $data) && $data['company_id'] !== null
             ) {
                 //for updating existing departments
-                if(array_key_exists('id', $data) && $data['id'] !== null){
+                if (array_key_exists('id', $data) && $data['id'] !== null) {
                     $count = Department::where('name', $data['name'])
                         ->where('location_id', $data['location_id'])
                         ->where('company_id', $data['company_id'])
@@ -324,22 +324,22 @@ class ValidationServiceProvider extends ServiceProvider
 
         // This is only used in Models/CustomFieldset.php - it does automatic validation for checkboxes by making sure
         // that the submitted values actually exist in the options.
-        Validator::extend('checkboxes', function ($attribute, $value, $parameters, $validator){
+        Validator::extend('checkboxes', function ($attribute, $value, $parameters, $validator) {
             $field = CustomField::where('db_column', $attribute)->first();
             $options = $field->formatFieldValuesAsArray();
 
-            if(is_array($value)) {
+            if (is_array($value)) {
                 $invalid = array_diff($value, $options);
-                if(count($invalid) > 0) {
+                if (count($invalid) > 0) {
                     return false;
                 }
             }
 
             // for legacy, allows users to submit a comma separated string of options
-            elseif(!is_array($value)) {
+            elseif (!is_array($value)) {
                 $exploded = array_map('trim', explode(',', $value));
                 $invalid = array_diff($exploded, $options);
-                if(count($invalid) > 0) {
+                if (count($invalid) > 0) {
                     return false;
                 }
             }
@@ -356,7 +356,7 @@ class ValidationServiceProvider extends ServiceProvider
         });
 
         // Validates that the company of the validated object matches the company of the location in case of scoped locations
-        Validator::extend('fmcs_location', function ($attribute, $value, $parameters, $validator){
+        Validator::extend('fmcs_location', function ($attribute, $value, $parameters, $validator) {
             $settings = Setting::getSettings();
             if ($settings->full_multiple_companies_support == '1' && $settings->scope_locations_fmcs == '1') {
                 $company_id = array_get($validator->getData(), 'company_id');

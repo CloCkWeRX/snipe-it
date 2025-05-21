@@ -26,15 +26,15 @@ class AssetObserver
 
 
         // This is a gross hack to prevent the double logging when restoring an asset
-        if (array_key_exists('deleted_at', $attributes)  && array_key_exists('deleted_at', $attributesOriginal)){
+        if (array_key_exists('deleted_at', $attributes)  && array_key_exists('deleted_at', $attributesOriginal)) {
             $restoring_or_deleting = (($attributes['deleted_at'] != $attributesOriginal['deleted_at']));
         }
 
-        if (array_key_exists('checkout_counter', $attributes) && array_key_exists('checkout_counter', $attributesOriginal)){
+        if (array_key_exists('checkout_counter', $attributes) && array_key_exists('checkout_counter', $attributesOriginal)) {
             $same_checkout_counter = (($attributes['checkout_counter'] == $attributesOriginal['checkout_counter']));
         }
 
-        if (array_key_exists('checkin_counter', $attributes)  && array_key_exists('checkin_counter', $attributesOriginal)){
+        if (array_key_exists('checkin_counter', $attributes)  && array_key_exists('checkin_counter', $attributesOriginal)) {
             $same_checkin_counter = (($attributes['checkin_counter'] == $attributesOriginal['checkin_counter']));
         }
 
@@ -55,7 +55,7 @@ class AssetObserver
                 }
 	    }
 
-	    if (empty($changed)){
+	    if (empty($changed)) {
 	        return;
 	    }
 
@@ -110,7 +110,7 @@ class AssetObserver
         $logAction->item_id = $asset->id;
         $logAction->created_at = date('Y-m-d H:i:s');
         $logAction->created_by = auth()->id();
-        if($asset->imported) {
+        if ($asset->imported) {
             $logAction->setActionSource('importer');
         }
         $logAction->logaction('create');
@@ -164,16 +164,16 @@ class AssetObserver
     public function saving(Asset $asset)
     {
         // determine if calculated eol and then calculate it - this should only happen on a new asset
-        if (is_null($asset->asset_eol_date) && !is_null($asset->purchase_date) && ($asset->model->eol > 0)){
+        if (is_null($asset->asset_eol_date) && !is_null($asset->purchase_date) && ($asset->model->eol > 0)) {
             $asset->asset_eol_date = $asset->purchase_date->addMonths($asset->model->eol)->format('Y-m-d');
             $asset->eol_explicit = false; 
         } 
 
        // determine if explicit and set eol_explicit to true
        if (!is_null($asset->asset_eol_date) && !is_null($asset->purchase_date)) {
-            if($asset->model->eol > 0) {
+            if ($asset->model->eol > 0) {
                 $months = (int) Carbon::parse($asset->asset_eol_date)->diffInMonths($asset->purchase_date, true);
-                if($months != $asset->model->eol) {
+                if ($months != $asset->model->eol) {
                     $asset->eol_explicit = true;
                 }
             }

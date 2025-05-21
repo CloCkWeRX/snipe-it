@@ -54,7 +54,7 @@ class ConsumableObserver
         $logAction->item_id = $consumable->id;
         $logAction->created_at = date('Y-m-d H:i:s');
         $logAction->created_by = auth()->id();
-        if($consumable->imported) {
+        if ($consumable->imported) {
             $logAction->setActionSource('importer');
         }
         $logAction->logaction('create');

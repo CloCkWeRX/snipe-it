@@ -85,7 +85,7 @@ class LicenseCheckinController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        if($licenseSeat->assigned_to != null){
+        if ($licenseSeat->assigned_to != null) {
             $return_to = User::find($licenseSeat->assigned_to);
             session()->put('checkedInFrom', $return_to->id);
         } else {

@@ -33,7 +33,7 @@ class SQLStreamer {
         // remove *only* line-feeds & carriage-returns; helpful for regexes against lines from
         // Windows dumps
         $line = trim($line, "\r\n");
-        if($this->statement_is_permitted && $line[0] === ' ') {
+        if ($this->statement_is_permitted && $line[0] === ' ') {
             return $line . "\n"; //re-add the newline
         }
 
@@ -55,7 +55,7 @@ class SQLStreamer {
             "<^/\*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' \*/;$>" => false, //same, now handle zero-values
         ];
 
-        foreach($allowed_statements as $statement => $statechange) {
+        foreach ($allowed_statements as $statement => $statechange) {
 //            $this->info("Checking regex: $statement...\n");
             $matches = [];
             if (preg_match($statement,$line,$matches)) {
@@ -96,7 +96,7 @@ class SQLStreamer {
         $check_tables = ['settings' => null, 'migrations' => null /* 'assets' => null */]; //TODO - move to static?
         //can't use 'users' because the 'accessories_checkout' table?
         // can't use 'assets' because 'ver1_components_assets'
-        foreach($check_tables as $check_table => $_ignore) {
+        foreach ($check_tables as $check_table => $_ignore) {
             foreach ($parser->tablenames as $tablename => $_count) {
 //                print "Comparing $tablename to $check_table\n";
                 if (str_ends_with($tablename,$check_table)) {
@@ -107,11 +107,11 @@ class SQLStreamer {
         }
         $guessed_prefix = null;
         foreach ($check_tables as $clean_table => $prefix_guess) {
-            if(is_null($prefix_guess)) {
+            if (is_null($prefix_guess)) {
                 print("Couldn't find table $clean_table\n");
                 die();
             }
-            if(is_null($guessed_prefix)) {
+            if (is_null($guessed_prefix)) {
                 $guessed_prefix = $prefix_guess;
             } else {
                 if ($guessed_prefix != $prefix_guess) {
@@ -146,7 +146,7 @@ class SQLStreamer {
                 }
             }
             // if we got a newline at the end of this, then the _next_ read is the beginning of a line
-            if($buffer[strlen($buffer)-1] === "\n") {
+            if ($buffer[strlen($buffer)-1] === "\n") {
                 $this->reading_beginning_of_line = true;
             } else {
                 $this->reading_beginning_of_line = false;
@@ -201,7 +201,7 @@ class RestoreFromBackup extends Command
     public function handle()
     {
         $dir = getcwd();
-        if( $dir != base_path() ) { // usually only the case when running via webserver, not via command-line
+        if ( $dir != base_path() ) { // usually only the case when running via webserver, not via command-line
             Log::debug("Current working directory is: $dir, changing directory to: ".base_path());
             chdir(base_path()); // TODO - is this *safe* to change on a running script?!
         }
@@ -398,7 +398,7 @@ class RestoreFromBackup extends Command
         // TODO notes: we are stealing the dump_binary_path (which *probably* also has your copy of the mysql binary in it. But it might not, so we might need to extend this)
         //             we unilaterally prepend a slash to the `mysql` command. This might mean your path could look like /blah/blah/blah//mysql - which should be fine. But maybe in some environments it isn't?
         $mysql_binary = config('database.connections.mysql.dump.dump_binary_path').\DIRECTORY_SEPARATOR.'mysql'.(\DIRECTORY_SEPARATOR == '\\' ? ".exe" : "");
-        if( ! file_exists($mysql_binary) ) {
+        if ( ! file_exists($mysql_binary) ) {
             return $this->error("mysql tool at: '$mysql_binary' does not exist, cannot restore. Please edit DB_DUMP_PATH in your .env to point to a directory that contains the mysqldump and mysql binary");
         }
         $proc_results = proc_open("$mysql_binary -h ".escapeshellarg(config('database.connections.mysql.host')).' -u '.escapeshellarg(config('database.connections.mysql.username')).' '.escapeshellarg(config('database.connections.mysql.database')), // yanked -p since we pass via ENV

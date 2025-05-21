@@ -66,7 +66,7 @@ class SendAcceptanceReminder extends Command
             });
             $no_email_list= [];
 
-        foreach($unacceptedAssetGroups as $unacceptedAssetGroup) {
+        foreach ($unacceptedAssetGroups as $unacceptedAssetGroup) {
             // The [0] is weird, but it allows for the item_count to work and grabs the appropriate info for each user.
             // Collapsing and flattening the collection doesn't work above.
             $acceptance = $unacceptedAssetGroup[0]['acceptance'];
@@ -74,7 +74,7 @@ class SendAcceptanceReminder extends Command
             $locale = $acceptance->assignedTo?->locale;
             $email = $acceptance->assignedTo?->email;
 
-            if(!$email){
+            if (!$email) {
                 $no_email_list[] = [
                     'id' => $acceptance->assignedTo?->id,
                     'name' => $acceptance->assignedTo?->present()->fullName(),

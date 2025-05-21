@@ -38,7 +38,7 @@ class AccessoryObserver
         $logAction->item_id = $accessory->id;
         $logAction->created_at = date('Y-m-d H:i:s');
         $logAction->created_by = auth()->id();
-        if($accessory->imported) {
+        if ($accessory->imported) {
             $logAction->setActionSource('importer');
         }
         $logAction->logaction('create');

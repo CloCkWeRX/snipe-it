@@ -193,7 +193,7 @@ class Label implements View
                     }, new Collection());
 
                 $emptyRowsCount = $settings->label2_empty_row_count;
-                if($emptyRowsCount) {
+                if ($emptyRowsCount) {
                     // Create empty rows
                     $emptyRows = collect(range(1, $emptyRowsCount))->map(function () {
                         return [

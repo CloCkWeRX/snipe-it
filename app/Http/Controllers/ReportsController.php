@@ -283,7 +283,7 @@ class ReportsController extends Controller
                         }
                     }
 
-                    if($actionlog->item){
+                    if ($actionlog->item) {
                         $item_name = e($actionlog->item->getDisplayNameAttribute());
                     } else {
                         $item_name = '';
@@ -1126,7 +1126,7 @@ class ReportsController extends Controller
                         Asset::class => ['assignedTo'],
                     ])->with('model.category');
                 },
-                'assignedTo' => function($query){
+                'assignedTo' => function($query) {
                          $query->withTrashed();
                     }
             ]);
@@ -1166,13 +1166,13 @@ class ReportsController extends Controller
 
         Log::debug(print_r($assetItem, true));
 
-        if (is_null($acceptance->created_at)){
+        if (is_null($acceptance->created_at)) {
             Log::debug('No acceptance created_at');
             return redirect()->route('reports/unaccepted_assets')->with('error', trans('general.bad_data'));
         } else {
             $logItem_res = $assetItem->checkouts()->where('created_at', '=', $acceptance->created_at)->get();
 
-            if ($logItem_res->isEmpty()){
+            if ($logItem_res->isEmpty()) {
                 Log::debug('Acceptance date mismatch');
                 return redirect()->route('reports/unaccepted_assets')->with('error', trans('general.bad_data'));
             }
@@ -1205,7 +1205,7 @@ class ReportsController extends Controller
             return redirect()->route('reports/unaccepted_assets')->with('error', trans('general.bad_data'));
         }
 
-        if($acceptance->delete()) {
+        if ($acceptance->delete()) {
             return redirect()->route('reports/unaccepted_assets')->with('success', trans('admin/reports/general.acceptance_deleted'));
         } else {
             return redirect()->route('reports/unaccepted_assets')->with('error', trans('general.deletion_failed'));
@@ -1226,7 +1226,7 @@ class ReportsController extends Controller
         /**
          * Get all assets with pending checkout acceptances
          */
-        if($showDeleted) {
+        if ($showDeleted) {
             $acceptances = CheckoutAcceptance::pending()->where('checkoutable_type', 'App\Models\Asset')->withTrashed()->with(['assignedTo', 'checkoutable.assignedTo', 'checkoutable.model'])->get();
         } else {
             $acceptances = CheckoutAcceptance::pending()->where('checkoutable_type', 'App\Models\Asset')->with(['assignedTo', 'checkoutable.assignedTo', 'checkoutable.model'])->get();
@@ -1255,7 +1255,7 @@ class ReportsController extends Controller
 
         foreach ($assetsForReport as $item) {
 
-            if ($item['assetItem'] != null){
+            if ($item['assetItem'] != null) {
             
                 $row    = [ ];
                 $row[]  = str_replace(',', '', e($item['assetItem']->model->category->name));
