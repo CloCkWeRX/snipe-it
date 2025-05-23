@@ -28,6 +28,7 @@ class SuppliersTransformer
                 'name' => e($supplier->name),
                 'image' =>   ($supplier->image) ? Storage::disk('public')->url('suppliers/' . e($supplier->image)) : null,
                 'url' => e($supplier->url),
+                'formattedAddress' -> $supplier->present()->formattedAddress(),
                 'address' => e($supplier->address),
                 'address2' => e($supplier->address2),
                 'city' => e($supplier->city),

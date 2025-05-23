@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use App\Helpers\Helper;
 use App\Models\Setting;
+use App\Models\Traits\Addressable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +15,8 @@ use Illuminate\Support\Str;
  */
 class UserPresenter extends Presenter
 {
+    use Addressable;
+
     /**
      * Json Column Layout for bootstrap table
      * @return string
@@ -131,6 +134,14 @@ class UserPresenter extends Presenter
                 'title' => trans('general.website'),
                 'visible' => false,
                 'formatter'    => 'externalLinkFormatter',
+            ],
+            [
+                'field' => 'formattedAddress',
+                'searchable' => true,
+                'sortable' => true,
+                'switchable' => true,
+                'title' => trans('general.address'),
+                'visible' => false,
             ],
             [
                 'field' => 'address',
