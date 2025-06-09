@@ -177,7 +177,7 @@ trait Loggable
         $log->note = $note;
         $log->action_date = $action_date;
 
-        if (! $log->action_date) {
+        if (!$action_date) {
             $log->action_date = date('Y-m-d H:i:s');
         }
 

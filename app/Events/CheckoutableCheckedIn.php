@@ -29,7 +29,7 @@ class CheckoutableCheckedIn
         $this->checkedOutTo = $checkedOutTo;
         $this->checkedInBy = $checkedInBy;
         $this->note = $note;
-        $this->action_date = $action_date ?? date('Y-m-d');
+        $this->action_date = $action_date ?? date('Y-m-d H:i:s');
         $this->originalValues = $originalValues;
     }
 }
