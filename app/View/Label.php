@@ -27,6 +27,16 @@ class Label implements View
      */
     protected $data;
 
+
+    /**
+     * TCPDF output destination.
+     * "I" - inline by default.
+     * See TCPDF's Output method for details.
+     *
+     * @var string
+     */
+    private string $destination = 'I';
+
     public function __construct()
     {
         $this->data = new Collection();
@@ -142,7 +152,9 @@ class Label implements View
                                 $barcode2DTarget = $asset->serial;
                                 break;
                             case 'location':
-                                $barcode2DTarget = route('locations.show', $asset->location_id);
+                                $barcode2DTarget = $asset->location_id
+                                    ? route('locations.show', $asset->location_id)
+                                    : null;
                                 break;
                             case 'hardware_id':
                             default:
@@ -221,8 +233,13 @@ class Label implements View
         }
         $template->writeAll($pdf, $data);
 
+<<<<<<< HEAD
         $filename = $assets->count() > 1 ? 'assets.pdf' : $assets->first()->asset_tag . '.pdf';
         $pdf->Output($filename, 'I');
+=======
+        $filename = $assets->count() > 1 ? 'assets.pdf' : $assets->first()->asset_tag.'.pdf';
+        $pdf->Output($filename, $this->destination);
+>>>>>>> df71bdcada018c762fb79391a5031d68bf4350f5
     }
 
     /**
