@@ -16,6 +16,7 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 #[AllowDynamicProperties] class AuditNotification extends Notification
 {
     use Queueable;
+
     /**
      * @var
      */
@@ -41,12 +42,11 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
     public function via()
     {
         $notifyBy = [];
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             Log::debug('use webhook');
             $notifyBy[] = SlackWebhookChannel::class;
         }
         if (Setting::getSettings()->webhook_selected == 'microsoft' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
         return $notifyBy;
@@ -55,16 +55,16 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
     public function toSlack()
     {
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
-        return (new SlackMessage)
+        return (new SlackMessage())
             ->success()
-            ->content(class_basename(get_class($this->params['item'])).' Audited')
+            ->content(class_basename(get_class($this->params['item'])) . ' Audited')
             ->from(($this->settings->webhook_botname) ? $this->settings->webhook_botname : 'Snipe-Bot')
             ->to($channel)
             ->attachment(function ($attachment) {
                 $item = $this->params['item'];
                 $admin_user = $this->params['admin'];
                 $fields = [
-                    'By' => '<'.$admin_user->present()->viewUrl().'|'.$admin_user->present()->fullName().'>',
+                    'By' => '<' . $admin_user->present()->viewUrl() . '|' . $admin_user->present()->fullName() . '>',
                 ];
                 array_key_exists('note', $this->params) && $fields['Notes'] = $this->params['note'];
                 array_key_exists('location', $this->params) && $fields['Location'] = $this->params['location'];
@@ -91,7 +91,7 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
                 ->fact(trans('mail.asset'), $item)
                 ->fact(trans('general.administrator'), $admin_user->present()->viewUrl() . '|' . $admin_user->present()->fullName());
         }
-            $message = class_basename(get_class($params['item'])) . ' Audited By '.$admin_user->present()->fullName();
+            $message = class_basename(get_class($params['item'])) . ' Audited By ' . $admin_user->present()->fullName();
             $details = [
                 trans('mail.asset') => htmlspecialchars_decode($item->present()->name),
                 trans('mail.notes') => $note ?: '',

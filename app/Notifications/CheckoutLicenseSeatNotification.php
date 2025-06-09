@@ -22,6 +22,7 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 class CheckoutLicenseSeatNotification extends Notification
 {
     use Queueable;
+
     /**
      * @var
      */
@@ -53,15 +54,13 @@ class CheckoutLicenseSeatNotification extends Notification
         $notifyBy = [];
 
         if (Setting::getSettings()->webhook_selected == 'google') {
-
             $notifyBy[] = GoogleChatChannel::class;
         }
         if (Setting::getSettings()->webhook_selected == 'microsoft') {
-
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = SlackWebhookChannel::class;
         }
 
@@ -78,8 +77,8 @@ class CheckoutLicenseSeatNotification extends Notification
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
 
         $fields = [
-            trans('general.to') => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
-            trans('general.by') => '<'.$admin->present()->viewUrl().'|'.$admin->present()->fullName().'>',
+            trans('general.to') => '<' . $target->present()->viewUrl() . '|' . $target->present()->fullName() . '>',
+            trans('general.by') => '<' . $admin->present()->viewUrl() . '|' . $admin->present()->fullName() . '>',
         ];
 
         if ($item->location) {
@@ -90,7 +89,7 @@ class CheckoutLicenseSeatNotification extends Notification
             $fields[trans('general.company')] = $item->company->name;
         }
 
-        return (new SlackMessage)
+        return (new SlackMessage())
             ->content(':arrow_up: :floppy_disk: License Checked Out')
             ->from($botname)
             ->to($channel)
@@ -115,7 +114,7 @@ class CheckoutLicenseSeatNotification extends Notification
                 ->title(trans('mail.License_Checkout_Notification'))
                 ->addStartGroupToSection('activityText')
                 ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityTitle')
-                ->fact(trans('mail.License_Checkout_Notification')." by ", $admin->present()->fullName())
+                ->fact(trans('mail.License_Checkout_Notification') . " by ", $admin->present()->fullName())
                 ->fact(trans('mail.assigned_to'), $target->present()->fullName())
                 ->fact(trans('admin/consumables/general.remaining'), $item->availCount()->count())
                 ->fact(trans('mail.notes'), $note ?: '');
@@ -125,7 +124,7 @@ class CheckoutLicenseSeatNotification extends Notification
         $details = [
             trans('mail.assigned_to') => $target->present()->fullName(),
             trans('mail.license_for') => htmlspecialchars_decode($item->present()->name),
-            trans('mail.License_Checkout_Notification').' by' => $admin->present()->fullName(),
+            trans('mail.License_Checkout_Notification') . ' by' => $admin->present()->fullName(),
             trans('admin/consumables/general.remaining') => $item->availCount()->count(),
             trans('mail.notes') => $note ?: '',
         ];
@@ -142,7 +141,7 @@ class CheckoutLicenseSeatNotification extends Notification
             ->card(
                 Card::create()
                     ->header(
-                        '<strong>'.trans('mail.License_Checkout_Notification').'</strong>' ?: '',
+                        '<strong>' . trans('mail.License_Checkout_Notification') . '</strong>' ?: '',
                         htmlspecialchars_decode($item->present()->name) ?: '',
                     )
                     ->section(
@@ -150,12 +149,11 @@ class CheckoutLicenseSeatNotification extends Notification
                             KeyValue::create(
                                 trans('mail.assigned_to') ?: '',
                                 $target->present()->name ?: '',
-                                trans('admin/consumables/general.remaining').': '.$item->availCount()->count(),
+                                trans('admin/consumables/general.remaining') . ': ' . $item->availCount()->count(),
                             )
                                 ->onClick(route('users.show', $target->id))
                         )
                     )
             );
-
     }
 }

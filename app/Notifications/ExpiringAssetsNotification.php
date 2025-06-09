@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notification;
 class ExpiringAssetsNotification extends Notification
 {
     use Queueable;
+
     /**
      * @var
      */
@@ -46,11 +47,13 @@ class ExpiringAssetsNotification extends Notification
      */
     public function toMail()
     {
-        $message = (new MailMessage)->markdown('notifications.markdown.report-expiring-assets',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.report-expiring-assets',
             [
                 'assets'  => $this->assets,
                 'threshold'  => $this->threshold,
-            ])
+            ]
+        )
             ->subject(trans('mail.Expiring_Assets_Report'));
 
         return $message;

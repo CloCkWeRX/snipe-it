@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notification;
 class ExpectedCheckinAdminNotification extends Notification
 {
     use Queueable;
+
     /**
      * @var
      */
@@ -44,10 +45,12 @@ class ExpectedCheckinAdminNotification extends Notification
      */
     public function toMail()
     {
-        $message = (new MailMessage)->markdown('notifications.markdown.report-expected-checkins',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.report-expected-checkins',
             [
                 'assets'  => $this->assets,
-            ])
+            ]
+        )
             ->subject(trans('mail.Expected_Checkin_Report'));
 
         return $message;

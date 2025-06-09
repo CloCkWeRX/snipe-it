@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notification;
 class InventoryAlert extends Notification
 {
     use Queueable;
+
     /**
      * @var
      */
@@ -44,7 +45,7 @@ class InventoryAlert extends Notification
      */
     public function toMail()
     {
-        $message = (new MailMessage)->markdown(
+        $message = (new MailMessage())->markdown(
             'notifications.markdown.report-low-inventory',
             [
                 'items'  => $this->items,

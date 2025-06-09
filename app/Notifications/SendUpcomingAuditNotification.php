@@ -40,11 +40,13 @@ class SendUpcomingAuditNotification extends Notification
      */
     public function toMail()
     {
-        $message = (new MailMessage())->markdown('notifications.markdown.upcoming-audits',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.upcoming-audits',
             [
                 'assets'  => $this->assets,
                 'threshold'  => $this->threshold,
-            ])
+            ]
+        )
             ->subject(trans_choice('mail.upcoming-audits', $this->assets->count(), ['count' => $this->assets->count(), 'threshold' => $this->threshold]));
 
         return $message;

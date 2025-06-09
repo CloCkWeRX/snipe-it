@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notification;
 class ExpiringLicenseNotification extends Notification
 {
     use Queueable;
+
     /**
      * @var
      */
@@ -47,11 +48,13 @@ class ExpiringLicenseNotification extends Notification
      */
     public function toMail()
     {
-        $message = (new MailMessage)->markdown('notifications.markdown.report-expiring-licenses',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.report-expiring-licenses',
             [
                 'licenses'  => $this->licenses,
                 'threshold'  => $this->threshold,
-            ])
+            ]
+        )
             ->subject(trans('mail.Expiring_Licenses_Report'));
 
         return $message;
