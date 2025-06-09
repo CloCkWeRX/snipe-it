@@ -802,6 +802,7 @@ class Asset extends Depreciable
             ->whereNotNull('warranty_months')
             ->whereNotNull('purchase_date')
             ->whereNull('deleted_at')
+            ->NotArchived()
             ->whereRaw('DATE_ADD(`purchase_date`, INTERVAL `warranty_months` MONTH) <= DATE_ADD(NOW(), INTERVAL '
                                  . $days
                                  . ' DAY) AND DATE_ADD(`purchase_date`, INTERVAL `warranty_months` MONTH) > NOW()')
@@ -1288,7 +1289,7 @@ class Asset extends Depreciable
 
     public function scopeDueForAudit($query, $settings)
     {
-        $interval = $settings->audit_warning_days ?? 0;
+        $interval = (int) $settings->audit_warning_days ?? 0;
         $today = Carbon::now();
         $interval_date = $today->copy()->addDays($interval)->format('Y-m-d');
 
@@ -1355,7 +1356,7 @@ class Asset extends Depreciable
 
     public function scopeDueForCheckin($query, $settings)
     {
-        $interval = $settings->due_checkin_days ?? 0;
+        $interval = (int) $settings->due_checkin_days ?? 0;
         $today = Carbon::now();
         $interval_date = $today->copy()->addDays($interval)->format('Y-m-d');
 
