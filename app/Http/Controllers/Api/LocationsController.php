@@ -224,6 +224,7 @@ class LocationsController extends Controller
                 'locations.updated_at',
                 'locations.image',
                 'locations.currency',
+                'locations.company_id',
                 'locations.notes',
                 'locations.latitude',
                 'locations.longitude'
