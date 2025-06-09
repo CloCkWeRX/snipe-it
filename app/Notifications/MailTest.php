@@ -38,7 +38,7 @@ class MailTest extends Notification
      */
     public function toMail()
     {
-        return (new MailMessage)
+        return (new MailMessage())
         ->subject(trans('mail.test_email'))
         ->markdown('notifications.Test');
     }

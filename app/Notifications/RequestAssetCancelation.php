@@ -29,8 +29,11 @@ class RequestAssetCancelation extends Notification
         $this->last_checkout = '';
         $this->item_quantity = $params['item_quantity'];
         $this->expected_checkin = '';
-        $this->requested_date = Helper::getFormattedDateObject($params['requested_date'], 'datetime',
-            false);
+        $this->requested_date = Helper::getFormattedDateObject(
+            $params['requested_date'],
+            'datetime',
+            false
+        );
         $this->settings = Setting::getSettings();
 
         if (array_key_exists('note', $params)) {
@@ -38,13 +41,19 @@ class RequestAssetCancelation extends Notification
         }
 
         if ($this->item->last_checkout) {
-            $this->last_checkout = Helper::getFormattedDateObject($this->item->last_checkout, 'date',
-                false);
+            $this->last_checkout = Helper::getFormattedDateObject(
+                $this->item->last_checkout,
+                'date',
+                false
+            );
         }
 
         if ($this->item->expected_checkin) {
-            $this->expected_checkin = Helper::getFormattedDateObject($this->item->expected_checkin, 'date',
-                false);
+            $this->expected_checkin = Helper::getFormattedDateObject(
+                $this->item->expected_checkin,
+                'date',
+                false
+            );
         }
     }
 
@@ -79,14 +88,14 @@ class RequestAssetCancelation extends Notification
 
         $fields = [
             'QTY' => $qty,
-            'Canceled By' => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
+            'Canceled By' => '<' . $target->present()->viewUrl() . '|' . $target->present()->fullName() . '>',
         ];
 
         if (($this->expected_checkin) && ($this->expected_checkin != '')) {
             $fields['Expected Checkin'] = $this->expected_checkin;
         }
 
-        return (new SlackMessage)
+        return (new SlackMessage())
             ->content(trans('mail.a_user_canceled'))
             ->from($botname)
             ->to($channel)
@@ -112,7 +121,8 @@ class RequestAssetCancelation extends Notification
             $fields = $this->item->model->fieldset->fields;
         }
 
-        $message = (new MailMessage)->markdown('notifications.markdown.asset-requested',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.asset-requested',
             [
                 'item'          => $this->item,
                 'note'          => $this->note,
@@ -123,7 +133,8 @@ class RequestAssetCancelation extends Notification
                 'last_checkout' => $this->last_checkout,
                 'expected_checkin'  => $this->expected_checkin,
                 'intro_text'        => trans('mail.a_user_canceled'),
-            ])
+            ]
+        )
             ->subject(trans('Item Request Canceled'));
 
         return $message;

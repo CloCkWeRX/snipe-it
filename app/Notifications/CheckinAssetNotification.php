@@ -20,6 +20,7 @@ use NotificationChannels\GoogleChat\Widgets\KeyValue;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 use Illuminate\Support\Facades\Log;
+
 class CheckinAssetNotification extends Notification
 {
     use Queueable;
@@ -40,8 +41,11 @@ class CheckinAssetNotification extends Notification
         $this->expected_checkin = '';
 
         if ($this->item->expected_checkin) {
-            $this->expected_checkin = Helper::getFormattedDateObject($this->item->expected_checkin, 'date',
-                false);
+            $this->expected_checkin = Helper::getFormattedDateObject(
+                $this->item->expected_checkin,
+                'date',
+                false
+            );
         }
     }
 
@@ -53,15 +57,13 @@ class CheckinAssetNotification extends Notification
     public function via()
     {
         if (Setting::getSettings()->webhook_selected == 'google' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = GoogleChatChannel::class;
         }
 
         if (Setting::getSettings()->webhook_selected == 'microsoft' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             Log::debug('use webhook');
             $notifyBy[] = SlackWebhookChannel::class;
         }
@@ -78,7 +80,7 @@ class CheckinAssetNotification extends Notification
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
 
         $fields = [
-            trans('general.administrator') => '<'.$admin->present()->viewUrl().'|'.$admin->present()->fullName().'>',
+            trans('general.administrator') => '<' . $admin->present()->viewUrl() . '|' . $admin->present()->fullName() . '>',
             trans('general.status') => $item->assetstatus?->name,
             trans('general.location') => ($item->location) ? $item->location->name : '',
         ];
@@ -92,8 +94,8 @@ class CheckinAssetNotification extends Notification
         }
 
 
-        return (new SlackMessage)
-            ->content(':arrow_down: :computer: '.trans('mail.Asset_Checkin_Notification'))
+        return (new SlackMessage())
+            ->content(':arrow_down: :computer: ' . trans('mail.Asset_Checkin_Notification'))
             ->from($botname)
             ->to($channel)
             ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
@@ -126,7 +128,7 @@ class CheckinAssetNotification extends Notification
         $details = [
             trans('mail.asset') => htmlspecialchars_decode($item->present()->name),
             trans('mail.checked_into') => ($item->location) ? $item->location->name : '',
-            trans('mail.Asset_Checkin_Notification')." by " => $admin->present()->fullName(),
+            trans('mail.Asset_Checkin_Notification') . " by " => $admin->present()->fullName(),
             trans('admin/hardware/form.status') => $item->assetstatus?->name,
             trans('mail.notes') => $note ?: '',
         ];
@@ -144,7 +146,7 @@ class CheckinAssetNotification extends Notification
             ->card(
                 Card::create()
                     ->header(
-                        '<strong>'.trans('mail.Asset_Checkin_Notification').'</strong>' ?: '',
+                        '<strong>' . trans('mail.Asset_Checkin_Notification') . '</strong>' ?: '',
                         htmlspecialchars_decode($item->present()->name) ?: '',
                     )
                     ->section(
@@ -152,7 +154,7 @@ class CheckinAssetNotification extends Notification
                             KeyValue::create(
                                 trans('mail.checked_into') ?: '',
                                 ($item->location) ? $item->location->name : '',
-                                trans('admin/hardware/form.status').": ".$item->assetstatus?->name,
+                                trans('admin/hardware/form.status') . ": " . $item->assetstatus?->name,
                             )
                                 ->onClick(route('hardware.show', $item->id))
                         )

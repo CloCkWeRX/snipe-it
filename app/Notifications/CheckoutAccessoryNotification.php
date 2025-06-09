@@ -46,16 +46,14 @@ class CheckoutAccessoryNotification extends Notification
     {
         $notifyBy = [];
         if (Setting::getSettings()->webhook_selected == 'google' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = GoogleChatChannel::class;
         }
 
         if (Setting::getSettings()->webhook_selected == 'microsoft' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = 'slack';
         }
 
@@ -100,8 +98,8 @@ class CheckoutAccessoryNotification extends Notification
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
 
         $fields = [
-            trans('general.to') => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
-            trans('general.by') => '<'.$admin->present()->viewUrl().'|'.$admin->present()->fullName().'>',
+            trans('general.to') => '<' . $target->present()->viewUrl() . '|' . $target->present()->fullName() . '>',
+            trans('general.by') => '<' . $admin->present()->viewUrl() . '|' . $admin->present()->fullName() . '>',
         ];
 
         if ($item->location) {
@@ -112,12 +110,12 @@ class CheckoutAccessoryNotification extends Notification
             $fields[trans('general.company')] = $item->company->name;
         }
 
-        return (new SlackMessage)
+        return (new SlackMessage())
             ->content(':arrow_up: :keyboard: Accessory Checked Out')
             ->from($botname)
             ->to($channel)
             ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
-                $attachment->title(htmlspecialchars_decode($this->checkout_qty.' x '.$item->present()->name), $item->present()->viewUrl())
+                $attachment->title(htmlspecialchars_decode($this->checkout_qty . ' x ' . $item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($note);
             });
@@ -151,8 +149,8 @@ class CheckoutAccessoryNotification extends Notification
             trans('mail.accessory_name') => htmlspecialchars_decode($item->present()->name),
             trans('general.qty') => $this->checkout_qty,
             trans('mail.checkedout_from') => $item->location->name ? $item->location->name : '',
-            trans('mail.Accessory_Checkout_Notification'). ' by' => $admin->present()->fullName(),
-            trans('admin/consumables/general.remaining')=> $item->numRemaining(),
+            trans('mail.Accessory_Checkout_Notification') . ' by' => $admin->present()->fullName(),
+            trans('admin/consumables/general.remaining') => $item->numRemaining(),
             trans('mail.notes') => $note ?: '',
         ];
         return  array($message, $details);
@@ -168,7 +166,7 @@ class CheckoutAccessoryNotification extends Notification
             ->card(
                 Card::create()
                     ->header(
-                        '<strong>'.trans('mail.Accessory_Checkout_Notification').'</strong>' ?: '',
+                        '<strong>' . trans('mail.Accessory_Checkout_Notification') . '</strong>' ?: '',
                         htmlspecialchars_decode($item->present()->name) ?: '',
                     )
                     ->section(
@@ -176,13 +174,12 @@ class CheckoutAccessoryNotification extends Notification
                             KeyValue::create(
                                 trans('mail.assigned_to') ?: '',
                                 $target->present()->name ?: '',
-                                trans('admin/consumables/general.remaining').": ". $item->numRemaining(),
+                                trans('admin/consumables/general.remaining') . ": " . $item->numRemaining(),
                             )
                                 ->onClick(route('users.show', $target->id))
                         )
                     )
             );
-
     }
 
 
@@ -199,7 +196,8 @@ class CheckoutAccessoryNotification extends Notification
 
         $accept_url = is_null($this->acceptance) ? null : route('account.accept.item', $this->acceptance);
 
-        return (new MailMessage)->markdown('notifications.markdown.checkout-accessory',
+        return (new MailMessage())->markdown(
+            'notifications.markdown.checkout-accessory',
             [
                 'item'          => $this->item,
                 'admin'         => $this->admin,
@@ -209,7 +207,8 @@ class CheckoutAccessoryNotification extends Notification
                 'req_accept'    => $req_accept,
                 'accept_url'    => $accept_url,
                 'checkout_qty'  => $this->checkout_qty,
-            ])
+            ]
+        )
             ->subject(trans('mail.Confirm_accessory_delivery'));
     }
 }

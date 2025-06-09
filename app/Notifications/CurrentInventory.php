@@ -38,13 +38,15 @@ class CurrentInventory extends Notification
      */
     public function toMail()
     {
-        $message = (new MailMessage)->markdown('notifications.markdown.user-inventory',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.user-inventory',
             [
                 'assets'  => $this->user->assets,
                 'accessories'  => $this->user->accessories,
                 'licenses'  => $this->user->licenses,
                 'consumables'  => $this->user->consumables,
-            ])
+            ]
+        )
             ->subject(trans('mail.inventory_report'));
 
         return $message;

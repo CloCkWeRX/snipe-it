@@ -43,7 +43,6 @@ class AcceptanceAssetDeclinedNotification extends Notification
         $notifyBy = ['mail'];
 
         return $notifyBy;
-
     }
 
     public function shouldSend($notifiable, $channel)
@@ -59,7 +58,8 @@ class AcceptanceAssetDeclinedNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $message = (new MailMessage)->markdown('notifications.markdown.asset-acceptance',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.asset-acceptance',
             [
                 'item_tag'      => $this->item_tag,
                 'item_model'    => $this->item_model,
@@ -70,10 +70,10 @@ class AcceptanceAssetDeclinedNotification extends Notification
                 'assigned_to'   => $this->assigned_to,
                 'company_name'  => $this->company_name,
                 'intro_text'    => trans('mail.acceptance_asset_declined'),
-            ])
+            ]
+        )
             ->subject(trans('mail.acceptance_asset_declined'));
 
         return $message;
     }
-
 }
