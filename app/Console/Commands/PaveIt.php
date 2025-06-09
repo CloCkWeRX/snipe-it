@@ -64,7 +64,7 @@ class PaveIt extends Command
         // We only need to find out what these are so we can nuke these columns on the assets table.
         $custom_fields = CustomField::get();
         foreach ($custom_fields as $custom_field) {
-            $this->info('DROP the '.$custom_field->db_column.' column from assets as well.');
+            $this->info('DROP the ' . $custom_field->db_column . ' column from assets as well.');
 
             if (\Schema::hasColumn('assets', $custom_field->db_column)) {
                 \Schema::table('assets', function ($table) use ($custom_field) {
@@ -76,16 +76,15 @@ class PaveIt extends Command
         foreach ($tables as $table_obj) {
             $table = $table_obj['name'];
             if (in_array($table, $except_tables)) {
-                $this->info($table. ' is SKIPPED.');
+                $this->info($table . ' is SKIPPED.');
             } else {
-                \DB::statement('truncate '.$table);
-                $this->info($table. ' is TRUNCATED.');
+                \DB::statement('truncate ' . $table);
+                $this->info($table . ' is TRUNCATED.');
             }
         }
 
         // Leave in the demo oauth keys so we don't have to reset them every day in the demos
         \DB::statement('delete from oauth_clients WHERE id > 2');
         \DB::statement('delete from oauth_access_tokens WHERE id > 2');
-    
     }
 }
