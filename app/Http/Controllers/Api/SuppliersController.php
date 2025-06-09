@@ -24,11 +24,15 @@ class SuppliersController extends Controller
     public function index(Request $request): array
     {
         $this->authorize('view', Supplier::class);
-        $allowed_columns = ['
-            id',
+        $allowed_columns = [
+            'id',
             'name',
             'address',
             'address2',
+            'city',
+            'state',
+            'country',
+            'zip',
             'phone',
             'contact',
             'fax',
@@ -40,9 +44,6 @@ class SuppliersController extends Controller
             'components_count',
             'consumables_count',
             'url',
-            'city',
-            'state',
-            'zip',
             'latitude',
             'longitude',
             'wikidata'
@@ -79,8 +80,9 @@ class SuppliersController extends Controller
 
 
         if ($request->filled('search')) {
-            $suppliers = $suppliers->TextSearch($request->input('search'));
+            $suppliers->TextSearch($request->input('search'));
         }
+
 
         if ($request->filled('name')) {
             $suppliers->where('name', '=', $request->input('name'));
@@ -135,7 +137,15 @@ class SuppliersController extends Controller
 
         $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
         $sort = in_array($request->input('sort'), $allowed_columns) ? $request->input('sort') : 'created_at';
-        $suppliers->orderBy($sort, $order);
+
+        switch ($request->input('sort')) {
+            case 'created_by':
+                $suppliers->OrderByCreatedByName($order);
+                break;
+            default:
+                $suppliers->orderBy($sort, $order);
+                break;
+        }
 
         $total = $suppliers->count();
         $suppliers = $suppliers->skip($offset)->take($limit)->get();
