@@ -47,17 +47,16 @@ class RotateAppKey extends Command
     public function handle()
     {
         //make sure they specify only exactly one of --emergency, or a filename. Not neither, and not both.
-        if ( (!$this->option('emergency') && !$this->argument('previous_key')) || ( $this->option('emergency') && $this->argument('previous_key'))) {
+        if ((!$this->option('emergency') && !$this->argument('previous_key')) || ( $this->option('emergency') && $this->argument('previous_key'))) {
             $this->error("Specify only one of --emergency, or an app key value, in order to rotate keys");
             return 1;
         }
-        if ( $this->option('emergency') ) {
+        if ($this->option('emergency')) {
             $msg = "\n****************************************************\nTHIS WILL MODIFY YOUR APP_KEY AND DE-CRYPT YOUR ENCRYPTED CUSTOM FIELDS AND \nRE-ENCRYPT THEM WITH A NEWLY GENERATED KEY. \n\nThere is NO undo. \n\nMake SURE you have a database backup and a backup of your .env generated BEFORE running this command. \n\nIf you do not save the newly generated APP_KEY to your .env in this process, \nyour encrypted data will no longer be decryptable. \n\nAre you SURE you wish to continue, and have confirmed you have a database backup and an .env backup? ";
         } else {
             $msg = "\n****************************************************\nTHIS WILL DE-CRYPT YOUR ENCRYPTED CUSTOM FIELDS AND RE-ENCRYPT THEM WITH YOUR\nAPP_KEY.\n\nThere is NO undo. \n\nMake SURE you have a database backup BEFORE running this command. \n\nAre you SURE you wish to continue, and have confirmed you have a database backup? ";
         }
         if ($this->option('force') || $this->confirm($msg)) {
-
             // Get the existing app_key and ciphers
             // We put them in a variable since we clear the cache partway through here.
             if ($this->option('emergency')) {
@@ -99,14 +98,14 @@ class RotateAppKey extends Command
                         $asset->{$field->db_column} = $oldEncrypter->decrypt($asset->{$field->db_column});
                         $this->line('DECRYPTED: ' . $field->db_column);
                     } catch (DecryptException $e) {
-                        $this->line('Could not decrypt '. $field->db_column.' using "old key" - skipping...');
+                        $this->line('Could not decrypt ' . $field->db_column . ' using "old key" - skipping...');
                         continue;
                     } catch (\Exception $e) {
-                        $this->error("Error decrypting ".$field->db_column.", reason: ".$e->getMessage().". Aborting key rotation");
+                        $this->error("Error decrypting " . $field->db_column . ", reason: " . $e->getMessage() . ". Aborting key rotation");
                         throw $e;
                     }
                     $asset->{$field->db_column} = $newEncrypter->encrypt($asset->{$field->db_column});
-                    $this->line('ENCRYPTED: '.$field->db_column);
+                    $this->line('ENCRYPTED: ' . $field->db_column);
                     $asset->save();
                 }
             }
@@ -119,7 +118,7 @@ class RotateAppKey extends Command
                     $setting->ldap_pword = $newEncrypter->encrypt($setting->ldap_pword);
                     $setting->save();
                     $this->warn('LDAP password has been re-encrypted.');
-                } catch(DecryptException $e) {
+                } catch (DecryptException $e) {
                     $this->warn("Unable to decrypt old LDAP password; skipping");
                 }
             }
@@ -138,7 +137,7 @@ class RotateAppKey extends Command
     {
         file_put_contents($this->laravel->environmentFilePath(), preg_replace(
             $this->keyReplacementPattern(),
-            'APP_KEY="'.$key.'"',
+            'APP_KEY="' . $key . '"',
             file_get_contents($this->laravel->environmentFilePath())
         ));
     }
@@ -150,7 +149,7 @@ class RotateAppKey extends Command
      */
     protected function keyReplacementPattern()
     {
-        $escaped = '="?'.preg_quote($this->laravel['config']['app.key'], '/').'"?';
+        $escaped = '="?' . preg_quote($this->laravel['config']['app.key'], '/') . '"?';
 
         return "/^APP_KEY{$escaped}/m";
     }

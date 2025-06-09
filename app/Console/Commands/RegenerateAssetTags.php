@@ -48,7 +48,7 @@ class RegenerateAssetTags extends Command
 
             $start_tag = ($this->option('start')) ? $this->option('start') : (($settings->next_auto_tag_base) ? Setting::getSettings()->next_auto_tag_base : 1);
 
-            $this->info('Starting at '.$start_tag);
+            $this->info('Starting at ' . $start_tag);
 
             $total_assets = Asset::orderBy('id', 'asc')->get();
             $bar = $this->output->createProgressBar(count($total_assets));
@@ -60,15 +60,14 @@ class RegenerateAssetTags extends Command
             }
 
             foreach ($total_assets as $asset) {
-
-                $output['info'][] = 'Asset tag:'.$asset->asset_tag;
-                $asset->asset_tag = $settings->auto_increment_prefix.$settings->auto_increment_prefix.$start_tag;
+                $output['info'][] = 'Asset tag:' . $asset->asset_tag;
+                $asset->asset_tag = $settings->auto_increment_prefix . $settings->auto_increment_prefix . $start_tag;
 
                 if ($settings->zerofill_count > 0) {
-                    $asset->asset_tag = $settings->auto_increment_prefix.Asset::zerofill($start_tag, $settings->zerofill_count);
+                    $asset->asset_tag = $settings->auto_increment_prefix . Asset::zerofill($start_tag, $settings->zerofill_count);
                 }
 
-                $output['info'][] = 'New Asset tag:'.$asset->asset_tag;
+                $output['info'][] = 'New Asset tag:' . $asset->asset_tag;
 
                 // Use forceSave here to override model level validation
                 $asset->forceSave();
