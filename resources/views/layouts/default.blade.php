@@ -969,10 +969,24 @@ dir="{{ Helper::determineLanguageDirection() }}">
             <footer class="main-footer hidden-print" style="display:grid;flex-direction:column;">
 
                 <div class="1hidden-xs pull-left">
-                    <div class="pull-left" >
+<<<<<<< HEAD
+                    <div class="pull-left">
                         <a target="_blank" href="https://github.com/CloCkWeRX/snipe-it/" rel="noopener">This is open source software</a>
                     </div>
                     <div class="pull-right">
+=======
+
+                    @if ($snipeSettings->support_footer!='off')
+                        @if (($snipeSettings->support_footer=='on') || (($snipeSettings->support_footer=='admin') && (Auth::user()->isSuperUser()=='1')))
+                            <a target="_blank" class="btn btn-default btn-xs"
+                               href="https://snipe-it.readme.io/docs/overview"
+                               rel="noopener">{{ trans('general.user_manual') }}</a>
+                            <a target="_blank" class="btn btn-default btn-xs" href="https://snipeitapp.com/support/"
+                               rel="noopener">{{ trans('general.bug_report') }}</a>
+                        @endif
+                    @endif
+
+>>>>>>> 702499dd799b5ec0503c3be8c3c6e2d52b03f262
                     @if ($snipeSettings->privacy_policy_link!='')
                         <a target="_blank" class="btn btn-default btn-xs" rel="noopener"
                            href="{{  $snipeSettings->privacy_policy_link }}"
