@@ -42,11 +42,11 @@ class NormalizeUserNames extends Command
         $users = User::get();
             $this->info($users->count() . ' users');
 
-            foreach ($users as $user) {
-                $user->first_name = ucwords(strtolower($user->first_name));
-                $user->last_name = ucwords(strtolower($user->last_name));
-                $user->email = strtolower($user->email);
-                $user->save();
+        foreach ($users as $user) {
+            $user->first_name = ucwords(strtolower($user->first_name));
+            $user->last_name = ucwords(strtolower($user->last_name));
+            $user->email = strtolower($user->email);
+            $user->save();
         }
     }
 }
