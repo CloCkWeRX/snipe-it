@@ -56,25 +56,24 @@ class CheckinLicensesFromAllUsers extends Command
             return false;
         }
 
-        $this->info('Checking in ALL seats for '.$license->name);
+        $this->info('Checking in ALL seats for ' . $license->name);
 
         $licenseSeats = LicenseSeat::where('license_id', '=', $license_id)
             ->whereNotNull('assigned_to')
             ->with('user')
             ->get();
 
-        $this->info(' There are '.$licenseSeats->count().' seats checked out: ');
+        $this->info(' There are ' . $licenseSeats->count() . ' seats checked out: ');
 
         if (! $notify) {
             $this->info('No mail will be sent.');
         }
 
         foreach ($licenseSeats as $seat) {
-            $this->info($seat->user->username.' has a license seat for '.$license->name);
+            $this->info($seat->user->username . ' has a license seat for ' . $license->name);
             $seat->assigned_to = null;
 
             if ($seat->save()) {
-
                 // Override the email address so we don't notify on checkin
                 if (! $notify) {
                     $seat->user->email = null;
