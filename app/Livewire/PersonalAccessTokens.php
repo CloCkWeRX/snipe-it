@@ -36,11 +36,11 @@ class PersonalAccessTokens extends Component
 
     public function createToken(): void
     {
-       $this->validate();
+        $this->validate();
 
-       $newToken = auth()->user()->createToken($this->name);
+        $newToken = auth()->user()->createToken($this->name);
 
-       $this->newTokenString = $newToken->accessToken;
+        $this->newTokenString = $newToken->accessToken;
 
         $this->dispatch('tokenCreated', token: $newToken->accessToken);
     }

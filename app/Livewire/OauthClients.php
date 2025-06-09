@@ -94,6 +94,5 @@ class OauthClients extends Component
         }
 
         $this->dispatch('clientUpdated');
-
     }
 }

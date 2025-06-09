@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Models\CustomField;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
-
 use App\Models\CustomFieldset;
 use App\Models\AssetModel;
 
