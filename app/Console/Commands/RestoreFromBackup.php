@@ -6,7 +6,8 @@ use Illuminate\Console\Command;
 use ZipArchive;
 use Illuminate\Support\Facades\Log;
 
-class SQLStreamer {
+class SQLStreamer
+{
     private $input;
     private $output;
     // embed the prefix here?
@@ -27,7 +28,8 @@ class SQLStreamer {
         $this->prefix = $prefix;
     }
 
-    public function parse_sql(string $line): string {
+    public function parse_sql(string $line): string
+    {
         // take into account the 'start of line or not' setting as an instance variable?
         // 'continuation' lines for a permitted statement are PERMITTED.
         // remove *only* line-feeds & carriage-returns; helpful for regexes against lines from
@@ -58,7 +60,7 @@ class SQLStreamer {
         foreach ($allowed_statements as $statement => $statechange) {
 //            $this->info("Checking regex: $statement...\n");
             $matches = [];
-            if (preg_match($statement,$line,$matches)) {
+            if (preg_match($statement, $line, $matches)) {
                 $this->statement_is_permitted = $statechange;
                 // matches are: 1 => first part of the statement, 2 => tablename, 3 => rest of statement
                 // (with of course 0 being "the whole match")
@@ -68,8 +70,8 @@ class SQLStreamer {
                         @$this->tablenames[$matches[2]] += 1;
                         continue; //oh? FIXME
                     } else {
-                        $cleaned_tablename = \DB::getTablePrefix().preg_replace('/^'.$this->prefix.'/','',$matches[2]);
-                        $line = preg_replace($statement,'$1`'.$cleaned_tablename.'`$3' , $line);
+                        $cleaned_tablename = \DB::getTablePrefix() . preg_replace('/^' . $this->prefix . '/', '', $matches[2]);
+                        $line = preg_replace($statement, '$1`' . $cleaned_tablename . '`$3', $line);
                     }
                 } else {
                     // no explicit tablename in this one, leave the line alone
@@ -87,7 +89,7 @@ class SQLStreamer {
     // first - if you do the --sanitize-only one (which is mostly for testing/development)
     // next - when you run *without* a guessed prefix, this is run first to figure out the prefix
     // I think we have to *duplicate* the call to be able to run it again?
-    public static function guess_prefix($input):string
+    public static function guess_prefix($input): string
     {
         $parser = new self($input, null);
         $parser->should_guess = true;
@@ -99,9 +101,9 @@ class SQLStreamer {
         foreach ($check_tables as $check_table => $_ignore) {
             foreach ($parser->tablenames as $tablename => $_count) {
 //                print "Comparing $tablename to $check_table\n";
-                if (str_ends_with($tablename,$check_table)) {
+                if (str_ends_with($tablename, $check_table)) {
 //                    print "Found one!\n";
-                    $check_tables[$check_table] = substr($tablename,0,-strlen($check_table));
+                    $check_tables[$check_table] = substr($tablename, 0, -strlen($check_table));
                 }
             }
         }
@@ -122,7 +124,6 @@ class SQLStreamer {
         }
 
         return $guessed_prefix;
-
     }
 
     public function line_aware_piping(): int
@@ -146,15 +147,13 @@ class SQLStreamer {
                 }
             }
             // if we got a newline at the end of this, then the _next_ read is the beginning of a line
-            if ($buffer[strlen($buffer)-1] === "\n") {
+            if ($buffer[strlen($buffer) - 1] === "\n") {
                 $this->reading_beginning_of_line = true;
             } else {
                 $this->reading_beginning_of_line = false;
             }
-
         }
         return $bytes_read;
-
     }
 }
 
@@ -201,8 +200,8 @@ class RestoreFromBackup extends Command
     public function handle()
     {
         $dir = getcwd();
-        if ( $dir != base_path() ) { // usually only the case when running via webserver, not via command-line
-            Log::debug("Current working directory is: $dir, changing directory to: ".base_path());
+        if ($dir != base_path()) { // usually only the case when running via webserver, not via command-line
+            Log::debug("Current working directory is: $dir, changing directory to: " . base_path());
             chdir(base_path()); // TODO - is this *safe* to change on a running script?!
         }
         //
@@ -217,7 +216,7 @@ class RestoreFromBackup extends Command
         }
 
         if (config('database.default') != 'mysql') {
-            return $this->error('DB_CONNECTION must be MySQL in order to perform a restore. Detected: '.config('database.default'));
+            return $this->error('DB_CONNECTION must be MySQL in order to perform a restore. Detected: ' . config('database.default'));
         }
 
         $za = new ZipArchive();
@@ -229,14 +228,14 @@ class RestoreFromBackup extends Command
                 ZipArchive::ER_INCONS => 'Zip archive inconsistent.',
                 ZipArchive::ER_INVAL => 'Invalid argument.',
                 ZipArchive::ER_MEMORY => 'Malloc failure.',
-                ZipArchive::ER_NOENT => 'No such file ('.$filename.') in directory '.$dir.'.',
+                ZipArchive::ER_NOENT => 'No such file (' . $filename . ') in directory ' . $dir . '.',
                 ZipArchive::ER_NOZIP => 'Not a zip archive.',
                 ZipArchive::ER_OPEN => "Can't open file.",
                 ZipArchive::ER_READ => 'Read error.',
                 ZipArchive::ER_SEEK => 'Seek error.',
             ];
 
-            return $this->error('Could not access file: '.$filename.' - '.array_key_exists($errcode, $errors) ? $errors[$errcode] : " Unknown reason: $errcode");
+            return $this->error('Could not access file: ' . $filename . ' - ' . array_key_exists($errcode, $errors) ? $errors[$errcode] : " Unknown reason: $errcode");
         }
 
 
@@ -343,7 +342,7 @@ class RestoreFromBackup extends Command
                     if (!in_array($extension, $good_extensions)) {
                         // gathering potentially unsafe files here to return at exit
                         $unsafe_files[] = $raw_path;
-                        Log::debug('Potentially unsafe file '.$raw_path.' is being skipped');
+                        Log::debug('Potentially unsafe file ' . $raw_path . ' is being skipped');
                         $boring_files[] = $raw_path;
                         continue 2;
                     }
@@ -361,7 +360,7 @@ class RestoreFromBackup extends Command
         // print_r($interesting_files);exit(-1);
 
         if (count($sqlfiles) != 1) {
-            return $this->error('There should be exactly *one* sql backup file found, found: '.(count($sqlfiles) == 0 ? 'None' : implode(', ', $sqlfiles)));
+            return $this->error('There should be exactly *one* sql backup file found, found: ' . (count($sqlfiles) == 0 ? 'None' : implode(', ', $sqlfiles)));
         }
 
         if (strpos($sqlfiles[0], 'db-dumps') === false) {
@@ -378,7 +377,7 @@ class RestoreFromBackup extends Command
             $prefix = SQLStreamer::guess_prefix($sql_contents);
             $this->line($prefix);
 
-            return $this->info("Re-run this command with '--sanitize-with-prefix=".$prefix."' to see an attempt to sanitize your SQL.");
+            return $this->info("Re-run this command with '--sanitize-with-prefix=" . $prefix . "' to see an attempt to sanitize your SQL.");
         }
 
         // If we're doing --sql-stdout-only, handle that now so we don't have to open pipes to mysql and all of that silliness
@@ -397,15 +396,17 @@ class RestoreFromBackup extends Command
         $env_vars['MYSQL_PWD'] = config('database.connections.mysql.password');
         // TODO notes: we are stealing the dump_binary_path (which *probably* also has your copy of the mysql binary in it. But it might not, so we might need to extend this)
         //             we unilaterally prepend a slash to the `mysql` command. This might mean your path could look like /blah/blah/blah//mysql - which should be fine. But maybe in some environments it isn't?
-        $mysql_binary = config('database.connections.mysql.dump.dump_binary_path').\DIRECTORY_SEPARATOR.'mysql'.(\DIRECTORY_SEPARATOR == '\\' ? ".exe" : "");
-        if ( ! file_exists($mysql_binary) ) {
+        $mysql_binary = config('database.connections.mysql.dump.dump_binary_path') . \DIRECTORY_SEPARATOR . 'mysql' . (\DIRECTORY_SEPARATOR == '\\' ? ".exe" : "");
+        if (! file_exists($mysql_binary)) {
             return $this->error("mysql tool at: '$mysql_binary' does not exist, cannot restore. Please edit DB_DUMP_PATH in your .env to point to a directory that contains the mysqldump and mysql binary");
         }
-        $proc_results = proc_open("$mysql_binary -h ".escapeshellarg(config('database.connections.mysql.host')).' -u '.escapeshellarg(config('database.connections.mysql.username')).' '.escapeshellarg(config('database.connections.mysql.database')), // yanked -p since we pass via ENV
-                                  [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
-                                  $pipes,
-                                  null,
-                                  $env_vars); // this is not super-duper awesome-secure, but definitely more secure than showing it on the CLI, or dropping temporary files with passwords in them.
+        $proc_results = proc_open(
+            "$mysql_binary -h " . escapeshellarg(config('database.connections.mysql.host')) . ' -u ' . escapeshellarg(config('database.connections.mysql.username')) . ' ' . escapeshellarg(config('database.connections.mysql.database')), // yanked -p since we pass via ENV
+            [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
+            $pipes,
+            null,
+            $env_vars
+        ); // this is not super-duper awesome-secure, but definitely more secure than showing it on the CLI, or dropping temporary files with passwords in them.
         if ($proc_results === false) {
             return $this->error('Unable to invoke mysql via CLI');
         }
@@ -434,7 +435,7 @@ class RestoreFromBackup extends Command
         }
 
         try {
-            if ( $this->option('sanitize-with-prefix') === null) {
+            if ($this->option('sanitize-with-prefix') === null) {
                 // "Legacy" direct-piping
                 $bytes_read = 0;
                 while (($buffer = fgets($sql_contents, SQLStreamer::$buffer_size)) !== false) {
@@ -451,23 +452,23 @@ class RestoreFromBackup extends Command
                 $bytes_read = $sql_importer->line_aware_piping();
             }
         } catch (\Exception $e) {
-            Log::error("Error during restore!!!! ".$e->getMessage());
+            Log::error("Error during restore!!!! " . $e->getMessage());
             // FIXME - put these back and/or put them in the right places?!
             $err_out = fgets($pipes[1]);
             $err_err = fgets($pipes[2]);
-            Log::error("Error OUTPUT: ".$err_out);
+            Log::error("Error OUTPUT: " . $err_out);
             $this->info($err_out);
-            Log::error("Error ERROR : ".$err_err);
+            Log::error("Error ERROR : " . $err_err);
             $this->error($err_err);
             throw $e;
         }
         if (!feof($sql_contents) || $bytes_read == 0) {
             return $this->error("Not at end of file for sql file, or zero bytes read. aborting!");
         }
-    
+
         fclose($pipes[0]);
         fclose($sql_contents);
-        
+
         $this->line(stream_get_contents($pipes[1]));
         fclose($pipes[1]);
 
@@ -477,7 +478,7 @@ class RestoreFromBackup extends Command
         //wait, have to do fclose() on all pipes first?
         $close_results = proc_close($proc_results);
         if ($close_results != 0) {
-            return $this->error('There may have been a problem with the database import: Error number '.$close_results);
+            return $this->error('There may have been a problem with the database import: Error number ' . $close_results);
         }
 
         //and now copy the files over too (right?)
@@ -494,7 +495,7 @@ class RestoreFromBackup extends Command
             if (!is_dir($file_details['dest'])) {
                 mkdir($file_details['dest'], 0755, true); //0755 is what Laravel uses, so we do that
             }
-            $migrated_file = fopen($file_details['dest'].'/'.basename($pretty_file_name), 'w');
+            $migrated_file = fopen($file_details['dest'] . '/' . basename($pretty_file_name), 'w');
             while (($buffer = fgets($fp, SQLStreamer::$buffer_size)) !== false) {
                 fwrite($migrated_file, $buffer);
             }
@@ -509,15 +510,15 @@ class RestoreFromBackup extends Command
             $bar->finish();
             $this->line('');
         } else {
-            $this->info(count($interesting_files).' files were successfully transferred');
+            $this->info(count($interesting_files) . ' files were successfully transferred');
         }
         if (count($unsafe_files) > 0) {
             foreach ($unsafe_files as $unsafe_file) {
-                $this->warn('Potentially unsafe file '.$unsafe_file.' was skipped');
+                $this->warn('Potentially unsafe file ' . $unsafe_file . ' was skipped');
             }
         }
         foreach ($boring_files as $boring_file) {
-            $this->warn($boring_file.' was skipped.');
+            $this->warn($boring_file . ' was skipped.');
         }
     }
 }
