@@ -92,6 +92,5 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('forgotten_password', function (Request $request) {
             return Limit::perMinute(config('auth.password_reset.max_attempts_per_min'))->by(optional($request->user())->id ?: $request->ip());
         });
-
     }
 }
