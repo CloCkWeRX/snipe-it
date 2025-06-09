@@ -233,13 +233,8 @@ class Label implements View
         }
         $template->writeAll($pdf, $data);
 
-<<<<<<< HEAD
         $filename = $assets->count() > 1 ? 'assets.pdf' : $assets->first()->asset_tag . '.pdf';
-        $pdf->Output($filename, 'I');
-=======
-        $filename = $assets->count() > 1 ? 'assets.pdf' : $assets->first()->asset_tag.'.pdf';
         $pdf->Output($filename, $this->destination);
->>>>>>> df71bdcada018c762fb79391a5031d68bf4350f5
     }
 
     /**

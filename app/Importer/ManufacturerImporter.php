@@ -51,6 +51,15 @@ class ManufacturerImporter extends ItemImporter
         // Pull the records from the CSV to determine their values
         $this->item['name'] = trim($this->findCsvMatch($row, 'name'));
         $this->item['months'] = trim($this->findCsvMatch($row, 'months'));
+        $this->item['support_phone'] = trim($this->findCsvMatch($row, 'support_phone'));
+        $this->item['fax'] = trim($this->findCsvMatch($row, 'fax'));
+        $this->item['support_email'] = trim($this->findCsvMatch($row, 'support_email'));
+        $this->item['contact'] = trim($this->findCsvMatch($row, 'contact'));
+        $this->item['url'] = trim($this->findCsvMatch($row, 'url'));
+        $this->item['support_url'] = trim($this->findCsvMatch($row, 'support_url'));
+        $this->item['warranty_lookup_url'] = trim($this->findCsvMatch($row, 'warranty_lookup_url'));
+        $this->item['notes'] = trim($this->findCsvMatch($row, 'notes'));
+
 
         Log::debug('Item array is: ');
         Log::debug(print_r($this->item, true));
