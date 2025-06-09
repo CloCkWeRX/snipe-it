@@ -149,7 +149,7 @@ class AssetsController extends Controller
             $asset->byod                    = request('byod', 0);
 
             if (! empty($settings->audit_interval)) {
-                $asset->next_audit_date = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
+                $asset->next_audit_date = Carbon::now()->addMonths((int) $settings->audit_interval)->toDateString();
             }
 
             // Set location_id to rtd_location_id ONLY if the asset isn't being checked out
@@ -471,6 +471,7 @@ class AssetsController extends Controller
                 Log::debug($e);
             }
         }
+
 
         $asset->delete();
 
@@ -901,7 +902,7 @@ class AssetsController extends Controller
             return redirect()->route('hardware.edit', $asset)->withErrors($asset->getErrors());
         }
 
-        $dt = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
+        $dt = Carbon::now()->addMonths( (int) $settings->audit_interval)->toDateString();
         return view('hardware/audit')->with('asset', $asset)->with('item', $asset)->with('next_audit_date', $dt)->with('locations_list');
     }
 
