@@ -117,9 +117,7 @@ class Actionlog extends SnipeModel
             if ($actionlog->action_date == '') {
                 $actionlog->action_date = Carbon::now();
             }
-
         });
-
     }
 
 

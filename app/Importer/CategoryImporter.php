@@ -41,16 +41,16 @@ class CategoryImporter extends ItemImporter
 
         $category = Category::where('name', '=', $this->findCsvMatch($row, 'name'))->first();
 
-        if ($this->findCsvMatch($row, 'id')!='') {
+        if ($this->findCsvMatch($row, 'id') != '') {
             // Override category if an ID was given
-            \Log::debug('Finding category by ID: '.$this->findCsvMatch($row, 'id'));
+            \Log::debug('Finding category by ID: ' . $this->findCsvMatch($row, 'id'));
             $category = Category::find($this->findCsvMatch($row, 'id'));
         }
 
 
         if ($category) {
             if (! $this->updating) {
-                $this->log('A matching Category '.$this->item['name'].' already exists');
+                $this->log('A matching Category ' . $this->item['name'] . ' already exists');
                 return;
             }
 
@@ -58,7 +58,7 @@ class CategoryImporter extends ItemImporter
             $editingCategory = true;
         } else {
             $this->log('No Matching Category, Create a new one');
-            $category = new Category;
+            $category = new Category();
             $category->created_by = auth()->id();
         }
 
@@ -85,15 +85,12 @@ class CategoryImporter extends ItemImporter
         }
 
         if ($category->save()) {
-            $this->log('Category '.$category->name.' created or updated from CSV import');
+            $this->log('Category ' . $category->name . ' created or updated from CSV import');
             return $category;
-
         } else {
             Log::debug($category->getErrors());
-            $this->logError($category, 'Category "'.$this->item['name'].'"');
+            $this->logError($category, 'Category "' . $this->item['name'] . '"');
             return $category->errors;
         }
-
-
     }
 }

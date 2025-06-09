@@ -40,12 +40,13 @@ class AssetObserver
 
         // If the asset isn't being checked out or audited, log the update.
         // (Those other actions already create log entries.)
-        if (array_key_exists('assigned_to', $attributes) && array_key_exists('assigned_to', $attributesOriginal)
+        if (
+            array_key_exists('assigned_to', $attributes) && array_key_exists('assigned_to', $attributesOriginal)
             && ($attributes['assigned_to'] == $attributesOriginal['assigned_to'])
             && ($same_checkout_counter) && ($same_checkin_counter)
-            && ((isset( $attributes['next_audit_date']) ? $attributes['next_audit_date'] : null) == (isset($attributesOriginal['next_audit_date']) ? $attributesOriginal['next_audit_date']: null))
-            && ($attributes['last_checkout'] == $attributesOriginal['last_checkout']) && (!$restoring_or_deleting))
-        {
+            && ((isset($attributes['next_audit_date']) ? $attributes['next_audit_date'] : null) == (isset($attributesOriginal['next_audit_date']) ? $attributesOriginal['next_audit_date'] : null))
+            && ($attributes['last_checkout'] == $attributesOriginal['last_checkout']) && (!$restoring_or_deleting)
+        ) {
             $changed = [];
 
             foreach ($asset->getRawOriginal() as $key => $value) {
@@ -53,11 +54,11 @@ class AssetObserver
                     $changed[$key]['old'] = $asset->getRawOriginal()[$key];
                     $changed[$key]['new'] = $asset->getAttributes()[$key];
                 }
-	    }
+            }
 
-	    if (empty($changed)) {
-	        return;
-	    }
+            if (empty($changed)) {
+                return;
+            }
 
             $logAction = new Actionlog();
             $logAction->item_type = Asset::class;
@@ -86,7 +87,7 @@ class AssetObserver
             $number = substr($tag, strlen($prefix));
             // IF - auto_increment_assets is on, AND (there is no prefix OR the prefix matches the start of the tag)
             //      AND the rest of the string after the prefix is all digits, THEN...
-            if ($settings->auto_increment_assets && ($prefix=='' || strpos($tag, $prefix) === 0) && preg_match('/\d+/',$number) === 1) {
+            if ($settings->auto_increment_assets && ($prefix == '' || strpos($tag, $prefix) === 0) && preg_match('/\d+/', $number) === 1) {
                 // new way of auto-trueing-up auto_increment ID's
                 $next_asset_tag = intval($number, 10) + 1;
                 // we had to use 'intval' because the $number could be '01234' and
@@ -98,7 +99,6 @@ class AssetObserver
                     $settings->next_auto_tag_base = $next_asset_tag;
                     $settings->save();
                 }
-
             } else {
                 // legacy method
                 $settings->increment('next_auto_tag_base');
@@ -170,23 +170,22 @@ class AssetObserver
         // determine if calculated eol and then calculate it - this should only happen on a new asset
         if (is_null($asset->asset_eol_date) && !is_null($asset->purchase_date) && ($asset->model->eol > 0)) {
             $asset->asset_eol_date = $asset->purchase_date->addMonths($asset->model->eol)->format('Y-m-d');
-            $asset->eol_explicit = false; 
-        } 
+            $asset->eol_explicit = false;
+        }
 
        // determine if explicit and set eol_explicit to true
-       if (!is_null($asset->asset_eol_date) && !is_null($asset->purchase_date)) {
+        if (!is_null($asset->asset_eol_date) && !is_null($asset->purchase_date)) {
             if ($asset->model->eol > 0) {
                 $months = (int) Carbon::parse($asset->asset_eol_date)->diffInMonths($asset->purchase_date, true);
                 if ($months != $asset->model->eol) {
                     $asset->eol_explicit = true;
                 }
             }
-       } elseif (!is_null($asset->asset_eol_date) && is_null($asset->purchase_date)) {
-           $asset->eol_explicit = true;
-       }
-       if ((!is_null($asset->asset_eol_date)) && (!is_null($asset->purchase_date)) && (is_null($asset->model->eol) || ($asset->model->eol == 0))) {
-           $asset->eol_explicit = true;
-       }
-
+        } elseif (!is_null($asset->asset_eol_date) && is_null($asset->purchase_date)) {
+            $asset->eol_explicit = true;
+        }
+        if ((!is_null($asset->asset_eol_date)) && (!is_null($asset->purchase_date)) && (is_null($asset->model->eol) || ($asset->model->eol == 0))) {
+            $asset->eol_explicit = true;
+        }
     }
 }
