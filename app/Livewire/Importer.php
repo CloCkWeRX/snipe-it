@@ -355,6 +355,7 @@ class Importer extends Component
 
         $this->locations_fields = [
             'id' => trans('general.id'),
+            'name' => trans('general.name'),
             'address' => trans('general.address'),
             'address2' => trans('general.importer.address2'),
             'city' => trans('general.city'),
@@ -363,7 +364,6 @@ class Importer extends Component
             'ldap_ou' => trans('admin/locations/table.ldap_ou'),
             'manager' => trans('general.importer.manager_full_name'),
             'manager_username' => trans('general.importer.manager_username'),
-            'name' => trans('general.item_name_var', ['item' => trans('general.location')]),
             'notes' => trans('general.notes'),
             'parent_location' => trans('admin/locations/table.parent'),
             'state' => trans('general.state'),
@@ -372,7 +372,7 @@ class Importer extends Component
 
         $this->suppliers_fields = [
             'id' => trans('general.id'),
-            'name' => trans('general.item_name_var', ['item' => trans('general.supplier')]),
+            'name' => trans('general.name'),
             'address' => trans('general.address'),
             'address2' => trans('general.importer.address2'),
             'city' => trans('general.city'),
@@ -410,6 +410,8 @@ class Importer extends Component
                     'consumable name',
                     'component name',
                     'name',
+                    'supplier name',
+                    'location name',
                 ],
             'item_no' => [
                 'item number',
