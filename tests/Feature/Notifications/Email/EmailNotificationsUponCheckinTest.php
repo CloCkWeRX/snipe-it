@@ -4,6 +4,8 @@ namespace Tests\Feature\Notifications\Email;
 
 use App\Mail\CheckinAssetMail;
 use App\Models\Accessory;
+use App\Models\AssetModel;
+use App\Models\Category;
 use App\Models\Consumable;
 use App\Models\LicenseSeat;
 use Illuminate\Support\Facades\Mail;
@@ -11,8 +13,6 @@ use PHPUnit\Framework\Attributes\Group;
 use App\Events\CheckoutableCheckedIn;
 use App\Models\Asset;
 use App\Models\User;
-use App\Notifications\CheckinAssetNotification;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 #[Group('notifications')]
@@ -88,6 +88,21 @@ class EmailNotificationsUponCheckinTest extends TestCase
 
         Mail::assertNotSent(CheckinAssetMail::class, function ($mail) use ($user) {
             return $mail->hasTo($user->email);
+        });
+    }
+
+    public function testAdminCCEmailStillSentWhenCategoryEmailIsNotSetToSendEmailToUser()
+    {
+        $this->settings->enableAdminCC('cc@example.com');
+
+        $category = Category::factory()->create(['checkin_email' => false]);
+        $assetModel = AssetModel::factory()->create(['category_id' => $category->id]);
+        $asset = Asset::factory()->create(['model_id' => $assetModel->id]);
+
+        $this->fireCheckInEvent($asset, User::factory()->create());
+
+        Mail::assertSent(CheckinAssetMail::class, function ($mail) {
+            return $mail->hasTo('cc@example.com');
         });
     }
 
