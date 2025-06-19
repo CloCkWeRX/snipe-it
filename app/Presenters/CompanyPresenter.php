@@ -158,6 +158,7 @@ class CompanyPresenter extends Presenter
                 'title' => trans('table.actions'),
                 'visible' => true,
                 'formatter' => 'companiesActionsFormatter',
+                'printIgnore' => true,
             ],
         ];
 
