@@ -65,7 +65,7 @@
           <a href="#accessories" data-toggle="tab">
             <span class="hidden-lg hidden-md">
             <x-icon type="accessories" class="fa-2x" />
-            </span> 
+            </span>
             <span class="hidden-xs hidden-sm">{{ trans('general.accessories') }}
               {!! ($user->accessories->count() > 0 ) ? '<badge class="badge badge-secondary">'.number_format($user->accessories->count()).'</badge>' : '' !!}
             </span>
@@ -129,6 +129,30 @@
 
 
       @can('update', $user)
+<<<<<<< HEAD
+=======
+          <li class="dropdown pull-right">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <span class="hidden-xs"><i class="fas fa-cog" aria-hidden="true"></i></span>
+              <span class="hidden-lg hidden-md hidden-xl"><i class="fas fa-cog fa-2x" aria-hidden="true"></i></span>
+
+              <span class="hidden-xs hidden-sm">
+                {{ trans('button.actions') }}
+              </span>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ route('users.edit', $user->id) }}">{{ trans('admin/users/general.edit') }}</a></li>
+              <li><a href="{{ route('users.clone.show', $user->id) }}">{{ trans('admin/users/general.clone') }}</a></li>
+              @if ((Auth::user()->id !== $user->id) && (!config('app.lock_passwords')) && ($user->deleted_at=='') && ($user->isDeletable()))
+                <li><a href="{{ route('users.destroy', $user->id) }}">{{ trans('button.delete') }}</a></li>
+              @endif
+            </ul>
+          </li>
+        @endcan
+
+        @can('update', \App\Models\User::class)
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
           <li class="pull-right">
               <a href="#" data-toggle="modal" data-target="#uploadFileModal">
               <span class="hidden-xs"><x-icon type="paperclip" /></span>
@@ -143,11 +167,24 @@
         <div class="tab-pane active" id="details">
           <div class="row">
 
+<<<<<<< HEAD
         <div class="info-stack-container">
+=======
+
+            @if ($user->deleted_at!='')
+              <div class="col-md-12">
+                <div class="callout callout-warning">
+                  <i class="icon fas fa-exclamation-triangle"></i>
+                  {{ trans('admin/users/message.user_deleted_warning') }}
+                </div>
+              </div>
+            @endif
+
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
             <!-- Start button column -->
             <div class="col-md-3 col-xs-12 col-sm-push-9 info-stack">
 
-              
+
 
               <div class="col-md-12 text-center">
 
@@ -156,11 +193,16 @@
                         <div class="{{  ($user->isSuperUser()) ? 'text-danger' : ' text-orange'}}" style="font-weight: bold">{{  ($user->isSuperUser()) ? strtolower(trans('general.superuser')) : strtolower(trans('general.admin_user')) }}</div>
                   @endif
 
-                
+
               </div>
               <div class="col-md-12 text-center">
-                <img src="{{ $user->present()->gravatar() }}"  class=" img-thumbnail hidden-print" style="margin-bottom: 20px;" alt="{{ $user->present()->fullName() }}">  
+                <img src="{{ $user->present()->gravatar() }}"  class=" img-thumbnail hidden-print" style="margin-bottom: 20px;" alt="{{ $user->present()->fullName() }}">
                </div>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
 
               @can('update', $user)
                 <div class="col-md-12">
@@ -173,11 +215,16 @@
 
                 @can('view', $user)
                 <div class="col-md-12" style="padding-top: 5px;">
+<<<<<<< HEAD
                 @if($user->allAssignedCount() != '0') 
                   <a href="{{ route('users.print', $user->id) }}" style="width: 100%;" class="btn btn-sm btn-primary btn-social hidden-print" target="_blank" rel="noopener">
                       <x-icon type="print" />
                       {{ trans('admin/users/general.print_assigned') }}
                   </a>
+=======
+                @if($user->allAssignedCount() != '0')
+                  <a href="{{ route('users.print', $user->id) }}" style="width: 100%;" class="btn btn-sm btn-primary hidden-print" target="_blank" rel="noopener">{{ trans('admin/users/general.print_assigned') }}</a>
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                   @else
                   <button style="width: 100%;" class="btn btn-sm btn-primary btn-social hidden-print" rel="noopener" disabled title="{{ trans('admin/users/message.user_has_no_assets_assigned') }}">
                       <x-icon type="print" />
@@ -222,10 +269,14 @@
                       </button>
                       </form>
                     @else
+<<<<<<< HEAD
                       <button class="btn btn-block btn-sm btn-primary btn-social hidden-print" rel="noopener" disabled title="{{ trans('admin/users/message.user_has_no_email') }}">
                           <x-icon type="email" />
                           {{ trans('button.send_password_link') }}
                       </button>
+=======
+                      <button style="width: 100%;" class="btn btn-sm btn-primary hidden-print" rel="noopener" disabled title="{{ trans('admin/users/message.user_has_no_email') }}">{{ trans('button.send_password_link') }}</button>
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                     @endif
                   </div>
                   @endif
@@ -283,17 +334,27 @@
                 @endcan
                 <br><br>
             </div>
- 
+
             <!-- End button column -->
+<<<<<<< HEAD
           
             <div class="col-md-9 col-xs-12 col-sm-pull-3 info-stack">
+=======
+
+            <div class="col-md-9 col-xs-12 col-sm-pull-3">
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
 
                <div class="row-new-striped">
-                
+
                   <div class="row">
                     <!-- name -->
+<<<<<<< HEAD
     
                       <div class="col-md-3">
+=======
+
+                      <div class="col-md-3 col-sm-2">
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                         {{ trans('admin/users/table.name') }}
                       </div>
                       <div class="col-md-9">
@@ -302,7 +363,7 @@
 
                   </div>
 
-               
+
 
                    <!-- company -->
                     @if (!is_null($user->company))
@@ -322,7 +383,7 @@
                       </div>
 
                     </div>
-                   
+
                     @endif
 
                     <!-- username -->
@@ -351,7 +412,7 @@
                         {{ trans('general.address') }}
                       </div>
                       <div class="col-md-9">
-                      
+
                           @if ($user->address)
                           {{ $user->address }} <br>
                           @endif
@@ -443,7 +504,7 @@
                         <div class="col-md-9">
                           {{ $user->employee_num }}
                         </div>
-                        
+
                       </div>
                     @endif
 
@@ -464,7 +525,7 @@
 
                     @endif
 
-                    
+
                     @if ($user->email)
                     <!-- email -->
                     <div class="row">
@@ -529,17 +590,29 @@
 
 
                     @if ($user->department)
-                    <!-- empty -->
-                    <div class="row">
-                      <div class="col-md-3">
-                        {{ trans('general.department') }}
+                      <!-- empty -->
+                      <div class="row">
+                        <div class="col-md-3">
+                          {{ trans('general.department') }}
+                        </div>
+                        <div class="col-md-9">
+                          <a href="{{ route('departments.show', $user->department) }}">
+                            {{ $user->department->name }}
+                          </a>
+                        </div>
                       </div>
-                      <div class="col-md-9">
-                        <a href="{{ route('departments.show', $user->department) }}">
-                          {{ $user->department->name }}
-                        </a>
-                      </div>
-                    </div>
+                      @if($user->department->manager)
+                        <div class="row">
+                          <div class="col-md-3">
+                            {{ trans('admin/users/general.department_manager') }}
+                          </div>
+                          <div class="col-md-9">
+                            <a href="{{ route('users.show', $user->department->manager) }}">
+                              {{ $user->department->manager->full_name }}
+                            </a>
+                          </div>
+                        </div>
+                      @endif
                     @endif
 
                     @if ($user->created_at)
@@ -579,8 +652,8 @@
                               {{ trans('general.no') }}
                           @endif
                       </div>
-                    </div> 
-                    
+                    </div>
+
                     <!-- remote -->
                      <div class="row">
                       <div class="col-md-3">
@@ -655,6 +728,7 @@
                               {{ trans('admin/users/general.two_factor_active') }}
                             </div>
                             <div class="col-md-9">
+<<<<<<< HEAD
                                 @if ($user->two_factor_active())
                                     <x-icon type="checkmark" class="fa-fw text-success" />
                                     {{ trans('general.yes') }}
@@ -663,9 +737,14 @@
                                     {{ trans('general.no') }}
                                 @endif
                           
+=======
+
+                              {!! ($user->two_factor_active()) ? '<i class="fas fa-check fa-fw text-success" aria-hidden="true"></i> '.trans('general.yes') : '<i class="fas fa-times fa-fw text-danger" aria-hidden="true"></i> '.trans('general.no')  !!}
+
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                             </div>
                           </div>
-                          
+
                           <!-- 2FA enrolled -->
                           <div class="row two_factor_resetrow">
                             <div class="col-md-3">
@@ -682,16 +761,16 @@
 
                             </div>
                           </div>
-                          
+
                           @if ((Auth::user()->isSuperUser()) && ($user->two_factor_active_and_enrolled()) && ($snipeSettings->two_factor_enabled!='0') && ($snipeSettings->two_factor_enabled!=''))
-                          
+
                             <!-- 2FA reset -->
                             <div class="row">
                               <div class="col-md-3">
 
                               </div>
                               <div class="col-md-9">
-                                
+
                                 <a class="btn btn-default btn-sm" id="two_factor_reset" style="margin-right: 10px; margin-top: 10px;">
                                   {{ trans('admin/settings/general.two_factor_reset') }}
                                 </a>
@@ -702,16 +781,22 @@
                                 <span id="two_factor_resetstatus">
                                 </span>
                                 <br>
+<<<<<<< HEAD
                                 <p class="help-block" style="line-height: 1.6;">
                                     {{ trans('admin/settings/general.two_factor_reset_help') }}
                                 </p>
                           
                                 
+=======
+                                <p class="help-block" style="line-height: 1.6;">{{ trans('admin/settings/general.two_factor_reset_help') }}</p>
+
+
+>>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                               </div>
                             </div>
-                            @endif 
+                            @endif
                   @endif
-                    
+
 
                     @if ($user->notes)
                      <!-- empty -->
