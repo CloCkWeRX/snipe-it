@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Asset;
 use App\Models\CustomField;
-use Schema;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 
@@ -66,8 +66,8 @@ class PaveIt extends Command
         foreach ($custom_fields as $custom_field) {
             $this->info('DROP the ' . $custom_field->db_column . ' column from assets as well.');
 
-            if (\Schema::hasColumn('assets', $custom_field->db_column)) {
-                \Schema::table('assets', function ($table) use ($custom_field) {
+            if (Schema::hasColumn('assets', $custom_field->db_column)) {
+                Schema::table('assets', function ($table) use ($custom_field) {
                     $table->dropColumn($custom_field->db_column);
                 });
             }
