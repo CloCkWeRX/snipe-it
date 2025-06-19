@@ -129,8 +129,6 @@
 
 
       @can('update', $user)
-<<<<<<< HEAD
-=======
           <li class="dropdown pull-right">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
               <span class="hidden-xs"><i class="fas fa-cog" aria-hidden="true"></i></span>
@@ -152,7 +150,6 @@
         @endcan
 
         @can('update', \App\Models\User::class)
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
           <li class="pull-right">
               <a href="#" data-toggle="modal" data-target="#uploadFileModal">
               <span class="hidden-xs"><x-icon type="paperclip" /></span>
@@ -167,9 +164,7 @@
         <div class="tab-pane active" id="details">
           <div class="row">
 
-<<<<<<< HEAD
         <div class="info-stack-container">
-=======
 
             @if ($user->deleted_at!='')
               <div class="col-md-12">
@@ -180,7 +175,6 @@
               </div>
             @endif
 
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
             <!-- Start button column -->
             <div class="col-md-3 col-xs-12 col-sm-push-9 info-stack">
 
@@ -198,11 +192,6 @@
               <div class="col-md-12 text-center">
                 <img src="{{ $user->present()->gravatar() }}"  class=" img-thumbnail hidden-print" style="margin-bottom: 20px;" alt="{{ $user->present()->fullName() }}">
                </div>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
 
               @can('update', $user)
                 <div class="col-md-12">
@@ -215,16 +204,11 @@
 
                 @can('view', $user)
                 <div class="col-md-12" style="padding-top: 5px;">
-<<<<<<< HEAD
                 @if($user->allAssignedCount() != '0') 
                   <a href="{{ route('users.print', $user->id) }}" style="width: 100%;" class="btn btn-sm btn-primary btn-social hidden-print" target="_blank" rel="noopener">
                       <x-icon type="print" />
                       {{ trans('admin/users/general.print_assigned') }}
                   </a>
-=======
-                @if($user->allAssignedCount() != '0')
-                  <a href="{{ route('users.print', $user->id) }}" style="width: 100%;" class="btn btn-sm btn-primary hidden-print" target="_blank" rel="noopener">{{ trans('admin/users/general.print_assigned') }}</a>
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                   @else
                   <button style="width: 100%;" class="btn btn-sm btn-primary btn-social hidden-print" rel="noopener" disabled title="{{ trans('admin/users/message.user_has_no_assets_assigned') }}">
                       <x-icon type="print" />
@@ -269,14 +253,10 @@
                       </button>
                       </form>
                     @else
-<<<<<<< HEAD
                       <button class="btn btn-block btn-sm btn-primary btn-social hidden-print" rel="noopener" disabled title="{{ trans('admin/users/message.user_has_no_email') }}">
                           <x-icon type="email" />
                           {{ trans('button.send_password_link') }}
                       </button>
-=======
-                      <button style="width: 100%;" class="btn btn-sm btn-primary hidden-print" rel="noopener" disabled title="{{ trans('admin/users/message.user_has_no_email') }}">{{ trans('button.send_password_link') }}</button>
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                     @endif
                   </div>
                   @endif
@@ -336,25 +316,15 @@
             </div>
 
             <!-- End button column -->
-<<<<<<< HEAD
           
             <div class="col-md-9 col-xs-12 col-sm-pull-3 info-stack">
-=======
-
-            <div class="col-md-9 col-xs-12 col-sm-pull-3">
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
 
                <div class="row-new-striped">
 
                   <div class="row">
                     <!-- name -->
-<<<<<<< HEAD
     
                       <div class="col-md-3">
-=======
-
-                      <div class="col-md-3 col-sm-2">
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                         {{ trans('admin/users/table.name') }}
                       </div>
                       <div class="col-md-9">
@@ -728,7 +698,6 @@
                               {{ trans('admin/users/general.two_factor_active') }}
                             </div>
                             <div class="col-md-9">
-<<<<<<< HEAD
                                 @if ($user->two_factor_active())
                                     <x-icon type="checkmark" class="fa-fw text-success" />
                                     {{ trans('general.yes') }}
@@ -737,11 +706,6 @@
                                     {{ trans('general.no') }}
                                 @endif
                           
-=======
-
-                              {!! ($user->two_factor_active()) ? '<i class="fas fa-check fa-fw text-success" aria-hidden="true"></i> '.trans('general.yes') : '<i class="fas fa-times fa-fw text-danger" aria-hidden="true"></i> '.trans('general.no')  !!}
-
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                             </div>
                           </div>
 
@@ -781,17 +745,11 @@
                                 <span id="two_factor_resetstatus">
                                 </span>
                                 <br>
-<<<<<<< HEAD
                                 <p class="help-block" style="line-height: 1.6;">
                                     {{ trans('admin/settings/general.two_factor_reset_help') }}
                                 </p>
                           
                                 
-=======
-                                <p class="help-block" style="line-height: 1.6;">{{ trans('admin/settings/general.two_factor_reset_help') }}</p>
-
-
->>>>>>> a2ff8f9609f59c6f2cfd11124aff0b2f33871b52
                               </div>
                             </div>
                             @endif
