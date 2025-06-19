@@ -179,7 +179,6 @@
             <div class="col-md-3 col-xs-12 col-sm-push-9 info-stack">
 
 
-
               <div class="col-md-12 text-center">
 
                  @if (($user->isSuperUser()) || ($user->hasAccess('admin')))
