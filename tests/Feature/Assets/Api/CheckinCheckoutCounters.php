@@ -75,7 +75,7 @@ class CheckinCheckoutCounters extends TestCase
 
         //check the counters, again.
         $asset->refresh();
-        $this->assertEquals(1, $asset->checkin_counter); //wait, _this_ fails too?! WTH?
-        $this->assertEquals(1, $asset->checkout_counter); //okay, _nothing_ works. Now I'm confused.
+        $this->assertEquals(1, $asset->checkin_counter); 
+        $this->assertEquals(1, $asset->checkout_counter);
     }
 }

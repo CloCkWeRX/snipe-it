@@ -38,7 +38,7 @@ class ValidationServiceProvider extends ServiceProvider
                 $email_to_validate['alert_email'][] = $email;
             }
 
-            $rules = ['alert_email.*'=>'email'];
+            $rules = ['alert_email.*' => 'email'];
             $messages = [
                 'alert_email.*' => trans('validation.custom.email_array'),
             ];
@@ -66,9 +66,8 @@ class ValidationServiceProvider extends ServiceProvider
          */
         Validator::extend('unique_undeleted', function ($attribute, $value, $parameters, $validator) {
             if (count($parameters)) {
-
                 // This is a bit of a shim, but serial doesn't have any other rules around it other than that it's nullable
-                if (($parameters[0]=='assets') && ($attribute == 'serial') && (Setting::getSettings()->unique_serial != '1')) {
+                if (($parameters[0] == 'assets') && ($attribute == 'serial') && (Setting::getSettings()->unique_serial != '1')) {
                     return true;
                 }
 
@@ -81,7 +80,7 @@ class ValidationServiceProvider extends ServiceProvider
                 return $count < 1;
             }
         });
-        
+
         /**
          * Unique if undeleted for two columns
          *
@@ -98,13 +97,12 @@ class ValidationServiceProvider extends ServiceProvider
         Validator::extend('two_column_unique_undeleted', function ($attribute, $value, $parameters, $validator) {
 
             if (count($parameters)) {
-                
                 $count = DB::table($parameters[0])
                     ->select('id')
                     ->where($attribute, '=', $value)
                     ->where('id', '!=', $parameters[1]);
 
-                if ($parameters[3]!='') {
+                if ($parameters[3] != '') {
                     $count = $count->where($parameters[2], $parameters[3]);
                 }
 
@@ -127,7 +125,7 @@ class ValidationServiceProvider extends ServiceProvider
          * The $parameters passed coincide with the ones the two_column_unique_undeleted custom validator above
          * uses, so $parameter[0] is the first table and so $parameter[2] is the second table.
          */
-        Validator::replacer('two_column_unique_undeleted', function($message, $attribute, $rule, $parameters) {
+        Validator::replacer('two_column_unique_undeleted', function ($message, $attribute, $rule, $parameters) {
             $message = str_replace(':table1', $parameters[0], $message);
             $message = str_replace(':table2', $parameters[2], $message);
 
@@ -164,7 +162,6 @@ class ValidationServiceProvider extends ServiceProvider
 
             // If we’re editing an existing model and there is a parent value set…
             while ($data_pk && $value_pk) {
-
                 // It’s not valid for any parent id to be equal to the existing model’s id
                 if ($data_pk == $value_pk) {
                     return false;
@@ -191,7 +188,6 @@ class ValidationServiceProvider extends ServiceProvider
 
             // Make sure it's not just an ANY format
             if ($value != '') {
-
                 //  Check that the string starts with regex:
                 if (strpos($value, 'regex:') === false) {
                     return false;
@@ -301,21 +297,20 @@ class ValidationServiceProvider extends ServiceProvider
                         ->count('name');
 
                     return $count < 1;
-                }else // for entering in new departments
+                } else // for entering in new departments
                 {
-                $count = Department::where('name', $data['name'])
+                    $count = Department::where('name', $data['name'])
                     ->where('location_id', $data['location_id'])
                     ->where('company_id', $data['company_id'])
                     ->whereNotNull('company_id')
                     ->whereNotNull('location_id')
                     ->count('name');
 
-                return $count < 1;
-            }
-        }
-            else {
+                    return $count < 1;
+                }
+            } else {
                 return true;
-        }
+            }
         });
 
         Validator::extend('not_array', function ($attribute, $value, $parameters, $validator) {

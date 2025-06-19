@@ -29,8 +29,11 @@ class RequestAssetNotification extends Notification
         $this->note = '';
         $this->last_checkout = '';
         $this->expected_checkin = '';
-        $this->requested_date = Helper::getFormattedDateObject($params['requested_date'], 'datetime',
-            false);
+        $this->requested_date = Helper::getFormattedDateObject(
+            $params['requested_date'],
+            'datetime',
+            false
+        );
         $this->settings = Setting::getSettings();
 
         if (array_key_exists('note', $params)) {
@@ -38,13 +41,19 @@ class RequestAssetNotification extends Notification
         }
 
         if ($this->item->last_checkout) {
-            $this->last_checkout = Helper::getFormattedDateObject($this->item->last_checkout, 'date',
-                false);
+            $this->last_checkout = Helper::getFormattedDateObject(
+                $this->item->last_checkout,
+                'date',
+                false
+            );
         }
 
         if ($this->item->expected_checkin) {
-            $this->expected_checkin = Helper::getFormattedDateObject($this->item->expected_checkin, 'date',
-                false);
+            $this->expected_checkin = Helper::getFormattedDateObject(
+                $this->item->expected_checkin,
+                'date',
+                false
+            );
         }
     }
 
@@ -78,10 +87,10 @@ class RequestAssetNotification extends Notification
 
         $fields = [
             'QTY' => $qty,
-            'Requested By' => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
+            'Requested By' => '<' . $target->present()->viewUrl() . '|' . $target->present()->fullName() . '>',
         ];
 
-        return (new SlackMessage)
+        return (new SlackMessage())
             ->content(trans('mail.Item_Requested'))
             ->from($botname)
             ->to($channel)
@@ -106,7 +115,8 @@ class RequestAssetNotification extends Notification
             $fields = $this->item->model->fieldset->fields;
         }
 
-        $message = (new MailMessage)->markdown('notifications.markdown.asset-requested',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.asset-requested',
             [
                 'item'          => $this->item,
                 'note'          => $this->note,
@@ -117,7 +127,8 @@ class RequestAssetNotification extends Notification
                 'expected_checkin'  => $this->expected_checkin,
                 'intro_text'        => trans('mail.a_user_requested'),
                 'qty'           => $this->item_quantity,
-            ])
+            ]
+        )
             ->subject(trans('mail.Item_Requested'));
 
         return $message;

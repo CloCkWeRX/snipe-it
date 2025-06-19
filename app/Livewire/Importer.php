@@ -69,7 +69,6 @@ class Importer extends Component
             $tmp = array_filter($tmp);
         }
         return json_encode($tmp);
-
     }
 
     private function getColumns($type)
@@ -327,7 +326,7 @@ class Importer extends Component
         $this->manufacturers_fields = [
             'name' => trans('general.name'),
             'url' => trans('general.url'),
-            'support_url' =>trans('admin/manufacturers/table.support_url'),
+            'support_url' => trans('admin/manufacturers/table.support_url'),
             'support_email' => trans('admin/manufacturers/table.support_email'),
             'warranty_lookup_url' => trans('admin/manufacturers/table.warranty_lookup_url'),
             'wikidata' => "Wikidata",
@@ -641,7 +640,6 @@ class Importer extends Component
         $this->file_id = $id;
         $this->import_errors = null;
         $this->statusText = null;
-
     }
 
     public function destroy($id)

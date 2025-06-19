@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 class CheckoutConsumableNotification extends Notification
 {
     use Queueable;
+
     /**
      * @var
      */
@@ -54,16 +55,14 @@ class CheckoutConsumableNotification extends Notification
     {
         $notifyBy = [];
         if (Setting::getSettings()->webhook_selected == 'google' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = GoogleChatChannel::class;
         }
 
         if (Setting::getSettings()->webhook_selected == 'microsoft' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = SlackWebhookChannel::class;
         }
 
@@ -80,8 +79,8 @@ class CheckoutConsumableNotification extends Notification
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
 
         $fields = [
-            trans('general.to') => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
-            trans('general.by') => '<'.$admin->present()->viewUrl().'|'.$admin->present()->fullName().'>',
+            trans('general.to') => '<' . $target->present()->viewUrl() . '|' . $target->present()->fullName() . '>',
+            trans('general.by') => '<' . $admin->present()->viewUrl() . '|' . $admin->present()->fullName() . '>',
         ];
 
         if ($item->location) {
@@ -92,7 +91,7 @@ class CheckoutConsumableNotification extends Notification
             $fields[trans('general.company')] = $item->company->name;
         }
 
-        return (new SlackMessage)
+        return (new SlackMessage())
             ->content(':arrow_up: :paperclip: Consumable Checked Out')
             ->from($botname)
             ->to($channel)
@@ -117,7 +116,7 @@ class CheckoutConsumableNotification extends Notification
                 ->title(trans('mail.Consumable_checkout_notification'))
                 ->addStartGroupToSection('activityText')
                 ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityTitle')
-                ->fact(trans('mail.Consumable_checkout_notification')." by ", $admin->present()->fullName())
+                ->fact(trans('mail.Consumable_checkout_notification') . " by ", $admin->present()->fullName())
                 ->fact(trans('mail.assigned_to'), $target->present()->fullName())
                 ->fact(trans('admin/consumables/general.remaining'), $item->numRemaining())
                 ->fact(trans('mail.notes'), $note ?: '');
@@ -127,7 +126,7 @@ class CheckoutConsumableNotification extends Notification
         $details = [
             trans('mail.assigned_to') => $target->present()->fullName(),
             trans('mail.item') => htmlspecialchars_decode($item->present()->name),
-            trans('mail.Consumable_checkout_notification').' by' => $admin->present()->fullName(),
+            trans('mail.Consumable_checkout_notification') . ' by' => $admin->present()->fullName(),
             trans('admin/consumables/general.remaining') => $item->numRemaining(),
             trans('mail.notes') => $note ?: '',
         ];
@@ -145,7 +144,7 @@ class CheckoutConsumableNotification extends Notification
             ->card(
                 Card::create()
                     ->header(
-                        '<strong>'.trans('mail.Consumable_checkout_notification').'</strong>' ?: '',
+                        '<strong>' . trans('mail.Consumable_checkout_notification') . '</strong>' ?: '',
                         htmlspecialchars_decode($item->present()->name) ?: '',
                     )
                     ->section(
@@ -153,12 +152,11 @@ class CheckoutConsumableNotification extends Notification
                             KeyValue::create(
                                 trans('mail.assigned_to') ?: '',
                                 $target->present()->fullName() ?: '',
-                                trans('admin/consumables/general.remaining').': '.$item->numRemaining(),
+                                trans('admin/consumables/general.remaining') . ': ' . $item->numRemaining(),
                             )
                                 ->onClick(route('users.show', $target->id))
                         )
                     )
             );
-
     }
 }

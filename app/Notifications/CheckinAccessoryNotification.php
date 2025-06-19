@@ -47,16 +47,14 @@ class CheckinAccessoryNotification extends Notification
     {
         $notifyBy = [];
         if (Setting::getSettings()->webhook_selected == 'google' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = GoogleChatChannel::class;
         }
 
         if (Setting::getSettings()->webhook_selected == 'microsoft' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = SlackWebhookChannel::class;
         }
 
@@ -73,8 +71,8 @@ class CheckinAccessoryNotification extends Notification
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
 
         $fields = [
-            trans('general.from') => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
-            trans('general.by') => '<'.$admin->present()->viewUrl().'|'.$admin->present()->fullName().'>',
+            trans('general.from') => '<' . $target->present()->viewUrl() . '|' . $target->present()->fullName() . '>',
+            trans('general.by') => '<' . $admin->present()->viewUrl() . '|' . $admin->present()->fullName() . '>',
         ];
 
         if ($item->location) {
@@ -85,8 +83,8 @@ class CheckinAccessoryNotification extends Notification
             $fields[trans('general.company')] = $item->company->name;
         }
 
-        return (new SlackMessage)
-            ->content(':arrow_down: :keyboard: '.trans('mail.Accessory_Checkin_Notification'))
+        return (new SlackMessage())
+            ->content(':arrow_down: :keyboard: ' . trans('mail.Accessory_Checkin_Notification'))
             ->from($botname)
             ->to($channel)
             ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
@@ -109,7 +107,7 @@ class CheckinAccessoryNotification extends Notification
                 ->addStartGroupToSection('activityText')
                 ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityTitle')
                 ->fact(trans('mail.checked_into'), $item->location->name ? $item->location->name : '')
-                ->fact(trans('mail.Accessory_Checkin_Notification')." by ", $admin->present()->fullName())
+                ->fact(trans('mail.Accessory_Checkin_Notification') . " by ", $admin->present()->fullName())
                 ->fact(trans('admin/consumables/general.remaining'), $item->numRemaining())
                 ->fact(trans('mail.notes'), $note ?: '');
         }
@@ -118,8 +116,8 @@ class CheckinAccessoryNotification extends Notification
         $details = [
             trans('mail.accessory_name') => htmlspecialchars_decode($item->present()->name),
             trans('mail.checked_into') => $item->location->name ? $item->location->name : '',
-            trans('mail.Accessory_Checkin_Notification'). ' by' => $admin->present()->fullName(),
-            trans('admin/consumables/general.remaining')=> $item->numRemaining(),
+            trans('mail.Accessory_Checkin_Notification') . ' by' => $admin->present()->fullName(),
+            trans('admin/consumables/general.remaining') => $item->numRemaining(),
             trans('mail.notes') => $note ?: '',
         ];
         return  array($message, $details);
@@ -134,20 +132,19 @@ class CheckinAccessoryNotification extends Notification
             ->card(
                 Card::create()
                     ->header(
-                        '<strong>'.trans('mail.Accessory_Checkin_Notification').'</strong>' ?: '',
+                        '<strong>' . trans('mail.Accessory_Checkin_Notification') . '</strong>' ?: '',
                         htmlspecialchars_decode($item->present()->name) ?: '',
                     )
                     ->section(
                         Section::create(
                             KeyValue::create(
-                                trans('mail.checked_into').': '.$item->location->name ? $item->location->name : '',
-                                trans('admin/consumables/general.remaining').': '.$item->numRemaining(),
-                                trans('admin/hardware/form.notes').": ".$note ?: '',
+                                trans('mail.checked_into') . ': ' . $item->location->name ? $item->location->name : '',
+                                trans('admin/consumables/general.remaining') . ': ' . $item->numRemaining(),
+                                trans('admin/hardware/form.notes') . ": " . $note ?: '',
                             )
                                 ->onClick(route('accessories.show', $item->id))
                         )
                     )
             );
-
     }
 }

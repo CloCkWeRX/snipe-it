@@ -20,7 +20,7 @@ class ConsumableObserver
     {
 
         $changed = [];
-        
+
         foreach ($consumable->getRawOriginal() as $key => $value) {
             // Check and see if the value changed
             if ($consumable->getRawOriginal()[$key] != $consumable->getAttributes()[$key]) {
@@ -74,7 +74,7 @@ class ConsumableObserver
 
         foreach ($uploads as $file) {
             try {
-                Storage::delete('private_uploads/consumables/'.$file->filename);
+                Storage::delete('private_uploads/consumables/' . $file->filename);
                 $file->delete();
             } catch (\Exception $e) {
                 Log::info($e);
@@ -84,7 +84,7 @@ class ConsumableObserver
 
 
         try {
-            Storage::disk('public')->delete('consumables/'.$consumable->image);
+            Storage::disk('public')->delete('consumables/' . $consumable->image);
         } catch (\Exception $e) {
             Log::info($e);
         }

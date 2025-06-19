@@ -22,9 +22,8 @@ class SetAPIResponseHeaders extends ThrottleRequests
      */
     protected function getHeaders($maxAttempts,  $remainingAttempts, $retryAfter = null, ?Response $response = null)
     {
-        if ($response &&
-            ! is_null($response->headers->get('X-RateLimit-Remaining')) &&
-            (int) $response->headers->get('X-RateLimit-Remaining') <= (int) $remainingAttempts) {
+        $remaining = $response?->headers?->get('X-RateLimit-Remaining');
+        if (!is_null($remaining) && (int) $remaining <= (int) $remainingAttempts) {
             $headers = [];
             $headers['Retry-After'] = $retryAfter; // this is the only line we changed
             $headers['X-RateLimit-Reset'] = $retryAfter; // this is the only line we changed

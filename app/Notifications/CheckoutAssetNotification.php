@@ -45,13 +45,19 @@ class CheckoutAssetNotification extends Notification
         $this->expected_checkin = '';
 
         if ($this->item->last_checkout) {
-            $this->last_checkout = Helper::getFormattedDateObject($this->item->last_checkout, 'date',
-                false);
+            $this->last_checkout = Helper::getFormattedDateObject(
+                $this->item->last_checkout,
+                'date',
+                false
+            );
         }
 
         if ($this->item->expected_checkin) {
-            $this->expected_checkin = Helper::getFormattedDateObject($this->item->expected_checkin, 'date',
-                false);
+            $this->expected_checkin = Helper::getFormattedDateObject(
+                $this->item->expected_checkin,
+                'date',
+                false
+            );
         }
     }
     /**
@@ -64,18 +70,15 @@ class CheckoutAssetNotification extends Notification
         $notifyBy = [];
 
         if (Setting::getSettings()->webhook_selected === 'google' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = GoogleChatChannel::class;
         }
 
         if (Setting::getSettings()->webhook_selected === 'microsoft' && Setting::getSettings()->webhook_endpoint) {
-
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
 
-        if (Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general' ) {
-
+        if (Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general') {
             Log::debug('use webhook');
             $notifyBy[] = SlackWebhookChannel::class;
         }
@@ -83,7 +86,7 @@ class CheckoutAssetNotification extends Notification
         return $notifyBy;
     }
 
-    public function toSlack() :SlackMessage
+    public function toSlack(): SlackMessage
     {
         $target = $this->target;
         $admin = $this->admin;
@@ -93,8 +96,8 @@ class CheckoutAssetNotification extends Notification
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
 
         $fields = [
-            trans('general.to') => '<'.$target->present()->viewUrl().'|'.$target->present()->fullName().'>',
-            trans('general.by') => '<'.$admin->present()->viewUrl().'|'.$admin->present()->fullName().'>',
+            trans('general.to') => '<' . $target->present()->viewUrl() . '|' . $target->present()->fullName() . '>',
+            trans('general.by') => '<' . $admin->present()->viewUrl() . '|' . $admin->present()->fullName() . '>',
         ];
 
         if ($item->location) {
@@ -109,8 +112,8 @@ class CheckoutAssetNotification extends Notification
             $fields[trans('general.expected_checkin')] = $this->expected_checkin;
         }
 
-        return (new SlackMessage)
-            ->content(':arrow_up: :computer: '.trans('mail.Asset_Checkout_Notification'))
+        return (new SlackMessage())
+            ->content(':arrow_up: :computer: ' . trans('mail.Asset_Checkout_Notification'))
             ->from($botname)
             ->to($channel)
             ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
@@ -143,12 +146,12 @@ class CheckoutAssetNotification extends Notification
         $details = [
             trans('mail.assigned_to') => $target->present()->name,
             trans('mail.asset') => htmlspecialchars_decode($item->present()->name),
-            trans('mail.Asset_Checkout_Notification'). ' by' => $admin->present()->fullName(),
+            trans('mail.Asset_Checkout_Notification') . ' by' => $admin->present()->fullName(),
             trans('mail.notes') => $note ?: '',
         ];
-       return  array($message, $details);
+        return  array($message, $details);
     }
-public function toGoogleChat()
+    public function toGoogleChat()
     {
         $target = $this->target;
         $item = $this->item;
@@ -159,7 +162,7 @@ public function toGoogleChat()
             ->card(
                 Card::create()
                     ->header(
-                        '<strong>'.trans('mail.Asset_Checkout_Notification').'</strong>' ?: '',
+                        '<strong>' . trans('mail.Asset_Checkout_Notification') . '</strong>' ?: '',
                         htmlspecialchars_decode($item->present()->name) ?: '',
                     )
                     ->section(
@@ -173,6 +176,5 @@ public function toGoogleChat()
                         )
                     )
             );
-
     }
 }

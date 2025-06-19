@@ -41,16 +41,16 @@ class SupplierImporter extends ItemImporter
 
         $supplier = Supplier::where('name', '=', $this->findCsvMatch($row, 'name'))->first();
 
-        if ($this->findCsvMatch($row, 'id')!='') {
+        if ($this->findCsvMatch($row, 'id') != '') {
             // Override supplier if an ID was given
-            \Log::debug('Finding supplier by ID: '.$this->findCsvMatch($row, 'id'));
+            \Log::debug('Finding supplier by ID: ' . $this->findCsvMatch($row, 'id'));
             $supplier = Supplier::find($this->findCsvMatch($row, 'id'));
         }
 
 
         if ($supplier) {
             if (! $this->updating) {
-                $this->log('A matching Supplier '.$this->item['name'].' already exists');
+                $this->log('A matching Supplier ' . $this->item['name'] . ' already exists');
                 return;
             }
 
@@ -58,7 +58,7 @@ class SupplierImporter extends ItemImporter
             $editingSupplier = true;
         } else {
             $this->log('No Matching Supplier, Create a new one');
-            $supplier = new Supplier;
+            $supplier = new Supplier();
             $supplier->created_by = auth()->id();
         }
 
@@ -91,15 +91,12 @@ class SupplierImporter extends ItemImporter
         }
 
         if ($supplier->save()) {
-            $this->log('Supplier '.$supplier->name.' created or updated from CSV import');
+            $this->log('Supplier ' . $supplier->name . ' created or updated from CSV import');
             return $supplier;
-
         } else {
             Log::debug($supplier->getErrors());
-            $this->logError($supplier, 'Supplier "'.$this->item['name'].'"');
+            $this->logError($supplier, 'Supplier "' . $this->item['name'] . '"');
             return $supplier->errors;
         }
-
-
     }
 }

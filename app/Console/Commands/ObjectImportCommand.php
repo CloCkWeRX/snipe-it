@@ -67,7 +67,7 @@ class ObjectImportCommand extends Command
         // This $logFile/useFiles() bit is currently broken, so commenting it out for now
         // $logFile = $this->option('logfile');
         // Log::useFiles($logFile);
-        $this->progressIndicator->start('======= Importing Items from '.$filename.' =========');
+        $this->progressIndicator->start('======= Importing Items from ' . $filename . ' =========');
 
         $importer->import();
 
@@ -78,7 +78,7 @@ class ObjectImportCommand extends Command
     {
         $this->output->write("\x0D\x1B[2K");
 
-        $this->warn('Error: Item: '.$item->name.' failed validation: '.json_encode($error));
+        $this->warn('Error: Item: ' . $item->name . ' failed validation: ' . json_encode($error));
     }
 
     public function progress($importedItemsCount)

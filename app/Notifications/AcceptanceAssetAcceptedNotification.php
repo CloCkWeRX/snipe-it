@@ -30,7 +30,6 @@ class AcceptanceAssetAcceptedNotification extends Notification
         $this->note = $params['note'];
         $this->company_name = $params['company_name'];
         $this->settings = Setting::getSettings();
-
     }
 
     /**
@@ -45,7 +44,6 @@ class AcceptanceAssetAcceptedNotification extends Notification
         $notifyBy = ['mail'];
 
         return $notifyBy;
-
     }
 
     public function shouldSend($notifiable, $channel)
@@ -61,7 +59,8 @@ class AcceptanceAssetAcceptedNotification extends Notification
      */
     public function toMail()
     {
-        $message = (new MailMessage)->markdown('notifications.markdown.asset-acceptance',
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.asset-acceptance',
             [
                 'item_tag'      => $this->item_tag,
                 'item_model'    => $this->item_model,
@@ -72,10 +71,10 @@ class AcceptanceAssetAcceptedNotification extends Notification
                 'assigned_to'   => $this->assigned_to,
                 'company_name'  => $this->company_name,
                 'intro_text'    => trans('mail.acceptance_asset_accepted'),
-            ])
+            ]
+        )
             ->subject(trans('mail.acceptance_asset_accepted'));
 
         return $message;
     }
-
 }
