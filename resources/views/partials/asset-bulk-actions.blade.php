@@ -22,16 +22,23 @@
                 <option value="restore">{{trans('button.restore')}}</option>
             @endcan
         @else
+
             @can('update', \App\Models\Asset::class)
                 <option value="edit">{{ trans('button.edit') }}</option>
                 <option value="maintenance">{{ trans('button.add_maintenance') }}</option>
             @endcan
-            @can('checkout', \App\Models\Asset::class)
-                <option value="checkout">{{ trans('general.bulk_checkout') }}</option>
-            @endcan
-            @can('delete', \App\Models\Asset::class)
-                <option value="delete">{{ trans('button.delete') }}</option>
-            @endcan
+
+            @if((isset($status)) && (($status != 'Deployed') && ($status != 'Archived') && ($status != 'Deleted')))
+                @can('checkout', \App\Models\Asset::class)
+                    <option value="checkout">{{ trans('general.bulk_checkout') }}</option>
+                @endcan
+            @endif
+
+            @if ((isset($status) && ($status != 'Deleted')))
+                @can('delete', \App\Models\Asset::class)
+                    <option value="delete">{{ trans('button.delete') }}</option>
+                @endcan
+            @endif
             <option value="labels" {{$snipeSettings->shortcuts_enabled == 1 ? "accesskey=l" : ''}}>{{ trans_choice('button.generate_labels', 2) }}</option>
         @endif
     </select>
