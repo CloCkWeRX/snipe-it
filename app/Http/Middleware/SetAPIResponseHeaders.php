@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetAPIResponseHeaders extends ThrottleRequests
 {
-
     /**
      * Add the rate limit headers to the response.
      *
@@ -20,7 +19,7 @@ class SetAPIResponseHeaders extends ThrottleRequests
      * @param Response|null $response
      * @return array|int[]
      */
-    protected function getHeaders($maxAttempts,  $remainingAttempts, $retryAfter = null, ?Response $response = null)
+    protected function getHeaders($maxAttempts, $remainingAttempts, $retryAfter = null, ?Response $response = null)
     {
         $remaining = $response?->headers?->get('X-RateLimit-Remaining');
         if (!is_null($remaining) && (int) $remaining <= (int) $remainingAttempts) {
@@ -77,5 +76,4 @@ class SetAPIResponseHeaders extends ThrottleRequests
 
         return $response;
     }
-
 }
