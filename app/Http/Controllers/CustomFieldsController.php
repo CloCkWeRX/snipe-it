@@ -9,7 +9,7 @@ use App\Models\CustomFieldset;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 
 /**
  * This controller handles all actions related to Custom Asset Fields for
@@ -28,7 +28,7 @@ class CustomFieldsController extends Controller
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
      * @since [v1.8]
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('view', CustomField::class);
 
@@ -46,7 +46,7 @@ class CustomFieldsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v5.1.5]
      */
-    public function show() : RedirectResponse
+    public function show(): RedirectResponse
     {
         return redirect()->route('fields.index');
     }
@@ -59,7 +59,7 @@ class CustomFieldsController extends Controller
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
      * @since [v1.8]
      */
-    public function create(Request $request) : View
+    public function create(Request $request): View
     {
         $this->authorize('create', CustomField::class);
         $fieldsets = CustomFieldset::get();
@@ -79,7 +79,7 @@ class CustomFieldsController extends Controller
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
      * @since [v1.8]
      */
-    public function store(CustomFieldRequest $request) : RedirectResponse
+    public function store(CustomFieldRequest $request): RedirectResponse
     {
         $this->authorize('create', CustomField::class);
 
@@ -91,7 +91,7 @@ class CustomFieldsController extends Controller
             $show_in_email = '0';
             $display_in_user_view = '0';
         }
-        
+
         $field = new CustomField([
             "name" => trim($request->input("name")),
             "element" => $request->input("element"),
@@ -118,7 +118,6 @@ class CustomFieldsController extends Controller
         }
 
         if ($field->save()) {
-
             // Sync fields with fieldsets
             $fieldset_array = $request->input('associate_fieldsets');
             if ($request->has('associate_fieldsets') && (is_array($fieldset_array))) {
@@ -142,19 +141,18 @@ class CustomFieldsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v3.0]
      */
-    public function deleteFieldFromFieldset($field_id, $fieldset_id) : RedirectResponse
+    public function deleteFieldFromFieldset($field_id, $fieldset_id): RedirectResponse
     {
         $field = CustomField::find($field_id);
 
         $this->authorize('update', $field);
 
-        // Check that the field exists - this is mostly related to the demo, where we 
-        // rewrite the data every x minutes, so it's possible someone might be disassociating 
+        // Check that the field exists - this is mostly related to the demo, where we
+        // rewrite the data every x minutes, so it's possible someone might be disassociating
         // a field from a fieldset just as we're wiping the database
         if (($field) && ($fieldset_id)) {
-
-        if ($field->fieldset()->detach($fieldset_id)) {
-            return redirect()->route('fieldsets.show', ['fieldset' => $fieldset_id])
+            if ($field->fieldset()->detach($fieldset_id)) {
+                return redirect()->route('fieldsets.show', ['fieldset' => $fieldset_id])
                 ->with('success', trans('admin/custom_fields/message.field.delete.success'));
             } else {
                 return redirect()->back()->withErrors(['message' => "Field is in use and cannot be deleted."]);
@@ -162,8 +160,6 @@ class CustomFieldsController extends Controller
         }
 
         return redirect()->back()->withErrors(['message' => "Error deleting field from fieldset"]);
-
-       
     }
 
     /**
@@ -172,7 +168,7 @@ class CustomFieldsController extends Controller
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
      * @since [v1.8]
      */
-    public function destroy($field_id) : RedirectResponse
+    public function destroy($field_id): RedirectResponse
     {
         if ($field = CustomField::find($field_id)) {
             $this->authorize('delete', $field);
@@ -196,7 +192,7 @@ class CustomFieldsController extends Controller
      * @param  int $id
      * @since [v4.0]
      */
-    public function edit(Request $request, CustomField $field) : View | RedirectResponse
+    public function edit(Request $request, CustomField $field): View | RedirectResponse
     {
         $this->authorize('update', $field);
         $fieldsets = CustomFieldset::get();
@@ -211,7 +207,6 @@ class CustomFieldsController extends Controller
             'fieldsets'         => $fieldsets,
             'predefinedFormats' => Helper::predefined_formats(),
         ]);
-
     }
 
 
@@ -226,7 +221,7 @@ class CustomFieldsController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(CustomFieldRequest $request, CustomField $field) : RedirectResponse
+    public function update(CustomFieldRequest $request, CustomField $field): RedirectResponse
     {
         $this->authorize('update', $field);
         $show_in_email = $request->get("show_in_email", 0);
@@ -237,7 +232,7 @@ class CustomFieldsController extends Controller
             $show_in_email = '0';
             $display_in_user_view = '0';
         }
-        
+
         $field->name          = trim($request->get("name"));
         $field->element       = $request->get("element");
         $field->field_values  = $request->get("field_values");
@@ -264,8 +259,6 @@ class CustomFieldsController extends Controller
         }
 
         if ($field->save()) {
-
-
             // Sync fields with fieldsets
             $fieldset_array = $request->input('associate_fieldsets');
             if ($request->has('associate_fieldsets') && (is_array($fieldset_array))) {

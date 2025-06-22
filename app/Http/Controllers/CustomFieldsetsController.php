@@ -8,7 +8,7 @@ use App\Models\CustomFieldset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 
 /**
  * This controller handles all actions related to Custom Asset Fields for
@@ -21,8 +21,7 @@ use \Illuminate\Contracts\View\View;
  */
 class CustomFieldsetsController extends Controller
 {
-
-    public function index() : RedirectResponse
+    public function index(): RedirectResponse
     {
         return redirect()->route("fields.index")
         ->with("error", trans('admin/custom_fields/message.fieldset.does_not_exist'));
@@ -35,7 +34,7 @@ class CustomFieldsetsController extends Controller
      * @param int $id
      * @since [v1.8]
      */
-    public function show(CustomFieldset $fieldset) : View | RedirectResponse
+    public function show(CustomFieldset $fieldset): View | RedirectResponse
     {
         $cfset = CustomFieldset::with('fields')
             ->where('id', '=', $fieldset->id)
@@ -70,7 +69,7 @@ class CustomFieldsetsController extends Controller
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
      * @since [v1.8]
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', CustomField::class);
 
@@ -86,7 +85,7 @@ class CustomFieldsetsController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', CustomField::class);
 
@@ -124,7 +123,7 @@ class CustomFieldsetsController extends Controller
      * @param  int  $id
      * @since [v6.0.14]
      */
-    public function edit(CustomFieldset $fieldset) : View | RedirectResponse
+    public function edit(CustomFieldset $fieldset): View | RedirectResponse
     {
         $this->authorize('create', CustomField::class);
         return view('custom_fields.fieldsets.edit')->with('item', $fieldset);
@@ -137,7 +136,7 @@ class CustomFieldsetsController extends Controller
      * @param  int  $id
      * @since [v6.0.14]
      */
-    public function update(Request $request, CustomFieldset $fieldset) : RedirectResponse
+    public function update(Request $request, CustomFieldset $fieldset): RedirectResponse
     {
         $this->authorize('create', CustomField::class);
 
@@ -148,7 +147,6 @@ class CustomFieldsetsController extends Controller
         }
 
         return redirect()->back()->withInput()->withErrors($fieldset->getErrors());
-
     }
 
     /**
@@ -158,7 +156,7 @@ class CustomFieldsetsController extends Controller
      * @param  int $id
      * @since [v1.8]
      */
-    public function destroy($id) : RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         $fieldset = CustomFieldset::find($id);
 
@@ -184,7 +182,7 @@ class CustomFieldsetsController extends Controller
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
      * @since [v1.8]
      */
-    public function associate(Request $request, $id) : RedirectResponse
+    public function associate(Request $request, $id): RedirectResponse
     {
         $set = CustomFieldset::find($id);
 
@@ -211,7 +209,7 @@ class CustomFieldsetsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v5.0]
      */
-    public function makeFieldRequired($fieldset_id, $field_id) : RedirectResponse
+    public function makeFieldRequired($fieldset_id, $field_id): RedirectResponse
     {
         $this->authorize('update', CustomField::class);
         $field = CustomField::findOrFail($field_id);
@@ -229,7 +227,7 @@ class CustomFieldsetsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v5.0]
      */
-    public function makeFieldOptional($fieldset_id, $field_id) : RedirectResponse
+    public function makeFieldOptional($fieldset_id, $field_id): RedirectResponse
     {
         $this->authorize('update', CustomField::class);
         $field = CustomField::findOrFail($field_id);
