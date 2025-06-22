@@ -52,7 +52,7 @@ class UsersTransformer
                 ] : null,
                 'department_manager' => ($user->department?->manager) ? [
                     'id' => (int) $user->department->manager->id,
-                    'name'=> e($user->department->manager->full_name),
+                    'name' => e($user->department->manager->full_name),
                 ] : null,
                 'location' => ($user->userloc) ? [
                     'id' => (int) $user->userloc->id,

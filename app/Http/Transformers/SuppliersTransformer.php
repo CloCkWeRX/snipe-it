@@ -51,8 +51,8 @@ class SuppliersTransformer
                 'created_at' => Helper::getFormattedDateObject($supplier->created_at, 'datetime'),
                 'created_by' => $supplier->adminuser ? [
                     'id' => (int) $supplier->adminuser->id,
-                    'name'=> e($supplier->adminuser->present()->fullName),
-                ]: null,
+                    'name' => e($supplier->adminuser->present()->fullName),
+                ] : null,
                 'updated_at' => Helper::getFormattedDateObject($supplier->updated_at, 'datetime'),
 
             ];

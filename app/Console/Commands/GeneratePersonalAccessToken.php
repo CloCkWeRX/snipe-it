@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class GeneratePersonalAccessToken extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -56,39 +55,32 @@ class GeneratePersonalAccessToken extends Command
     {
 
         $accessTokenName = $this->option('name');
-        if ($accessTokenName=='') {
+        if ($accessTokenName == '') {
             $accessTokenName = 'CLI Auth Token';
         }
 
-        if ($this->option('user_id')=='') {
+        if ($this->option('user_id') == '') {
             return $this->error('ERROR: user_id cannot be blank.');
         }
 
         if ($user = User::find($this->option('user_id'))) {
-
             $createAccessToken = $user->createToken($accessTokenName)->accessToken;
 
             if ($this->option('key-only')) {
                 $this->info($createAccessToken);
-
             } else {
-
                 $this->warn('Your API Token has been created. Be sure to copy this token now, as it WILL NOT be accessible again.');
 
-                if ($token = DB::table('oauth_access_tokens')->where('user_id', '=', $user->id)->where('name','=',$accessTokenName)->orderBy('created_at', 'desc')->first()) {
-                    $this->info('API Token ID: '.$token->id);
+                if ($token = DB::table('oauth_access_tokens')->where('user_id', '=', $user->id)->where('name', '=', $accessTokenName)->orderBy('created_at', 'desc')->first()) {
+                    $this->info('API Token ID: ' . $token->id);
                 }
 
-                $this->info('API Token User: '.$user->present()->fullName.' ('.$user->username.')');
-                $this->info('API Token Name: '.$accessTokenName);
-                $this->info('API Token: '.$createAccessToken);
+                $this->info('API Token User: ' . $user->present()->fullName . ' (' . $user->username . ')');
+                $this->info('API Token Name: ' . $accessTokenName);
+                $this->info('API Token: ' . $createAccessToken);
             }
         } else {
-           return $this->error('ERROR: Invalid user. API key was not created.');
+            return $this->error('ERROR: Invalid user. API key was not created.');
         }
-
-
-
-
     }
 }

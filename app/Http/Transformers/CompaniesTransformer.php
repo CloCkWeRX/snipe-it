@@ -31,7 +31,7 @@ class CompaniesTransformer
                 'email' => ($company->email != '') ? e($company->email) : null,
                 'url' => ($company->url != '') ? e($company->url) : null,
                 'wikidata' => e($company->wikidata),
-                'image' => ($company->image) ? Storage::disk('public')->url('companies/'  .e($company->image)) : null,
+                'image' => ($company->image) ? Storage::disk('public')->url('companies/'  . e($company->image)) : null,
                 'assets_count' => (int) $company->assets_count,
                 'licenses_count' => (int) $company->licenses_count,
                 'accessories_count' => (int) $company->accessories_count,
