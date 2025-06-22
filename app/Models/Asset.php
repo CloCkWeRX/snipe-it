@@ -1562,22 +1562,22 @@ class Asset extends Depreciable
                         });
                     });
                 })->orWhere(function ($query) use ($search) {
-                    $query->where('assets_users.first_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('assets_users.last_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('assets_users.username', 'LIKE', '%'.$search.'%')
-                        ->orWhere('assets_users.jobtitle', 'LIKE', '%'.$search.'%')
+                    $query->where('assets_users.first_name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('assets_users.last_name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('assets_users.username', 'LIKE', '%' . $search . '%')
+                        ->orWhere('assets_users.jobtitle', 'LIKE', '%' . $search . '%')
                         ->orWhereMultipleColumns([
                             'assets_users.first_name',
                             'assets_users.last_name',
                             'assets_users.jobtitle',
                         ], $search)
-                        ->orWhere('assets_locations.name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('assigned_assets.name', 'LIKE', '%'.$search.'%');
-                })->orWhere('assets.name', 'LIKE', '%'.$search.'%')
-                    ->orWhere('assets.asset_tag', 'LIKE', '%'.$search.'%')
-                    ->orWhere('assets.serial', 'LIKE', '%'.$search.'%')
-                    ->orWhere('assets.order_number', 'LIKE', '%'.$search.'%')
-                    ->orWhere('assets.notes', 'LIKE', '%'.$search.'%');
+                        ->orWhere('assets_locations.name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('assigned_assets.name', 'LIKE', '%' . $search . '%');
+                })->orWhere('assets.name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('assets.asset_tag', 'LIKE', '%' . $search . '%')
+                    ->orWhere('assets.serial', 'LIKE', '%' . $search . '%')
+                    ->orWhere('assets.order_number', 'LIKE', '%' . $search . '%')
+                    ->orWhere('assets.notes', 'LIKE', '%' . $search . '%');
             }
         })->withTrashed()->whereNull('assets.deleted_at'); //workaround for laravel bug
     }

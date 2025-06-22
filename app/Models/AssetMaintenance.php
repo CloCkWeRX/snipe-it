@@ -166,7 +166,7 @@ class AssetMaintenance extends Model implements ICompanyableChild
         return $this->belongsTo(\App\Models\Asset::class, 'asset_id')
                     ->withTrashed();
     }
-    
+
 
     /**
      * Get the admin who created the maintenance
