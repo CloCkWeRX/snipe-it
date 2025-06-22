@@ -411,7 +411,8 @@ class AssetModelsController extends Controller
             ->with('error', trans('admin/models/message.bulkdelete.error'));
     }
 
-    public function parse(AssetModel $model) {
+    public function parse(AssetModel $model)
+    {
         if (empty($model->url)) {
             return redirect()->route('models.show', ["model" => $model])->with('error', 'No URL provided');
         }
@@ -459,7 +460,7 @@ class AssetModelsController extends Controller
         }
         $model->save();
 
-        return redirect()->route('models.show', ["model" => $model])->with('success', 'Model updated');      
+        return redirect()->route('models.show', ["model" => $model])->with('success', 'Model updated');
     }
 
     /**

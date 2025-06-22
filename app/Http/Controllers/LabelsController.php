@@ -70,13 +70,13 @@ class LabelsController extends Controller
         collect(explode(';', Setting::getSettings()->label2_fields))
             ->filter()
             ->each(function ($item) use ($customFieldColumns, $exampleAsset) {
-               $pair = explode('=', $item);
-               
+                $pair = explode('=', $item);
+
                 if (array_key_exists(1, $pair)) {
-                        if ($customFieldColumns->contains($pair[1])) {
-                            $exampleAsset->{$pair[1]} = "{{$pair[0]}}";
-                        }
+                    if ($customFieldColumns->contains($pair[1])) {
+                        $exampleAsset->{$pair[1]} = "{{$pair[0]}}";
                     }
+                }
             });
 
         $settings = Setting::getSettings();
@@ -93,6 +93,5 @@ class LabelsController extends Controller
             ->with('template', $template)
             ->with('bulkedit', false)
             ->with('count', 0);
-
     }
 }
