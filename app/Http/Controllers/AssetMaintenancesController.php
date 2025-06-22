@@ -90,16 +90,15 @@ class AssetMaintenancesController extends Controller
             $assetMaintenance->completion_date = $request->input('completion_date');
             $assetMaintenance->created_by = auth()->id();
 
-            if (
-                ($assetMaintenance->completion_date !== null)
+            $completed_date_with_start =  ($assetMaintenance->completion_date !== null)
                 && ($assetMaintenance->start_date !== '')
-                && ($assetMaintenance->start_date !== '0000-00-00')
-            ) {
+                && ($assetMaintenance->start_date !== '0000-00-00');
+
+            if ($$completed_date_with_start) {
                 $startDate = Carbon::parse($assetMaintenance->start_date);
                 $completionDate = Carbon::parse($assetMaintenance->completion_date);
                 $assetMaintenance->asset_maintenance_time = (int) $completionDate->diffInDays($startDate, true);
             }
-
 
             // Was the asset maintenance created?
             if (!$assetMaintenance->save()) {
@@ -166,11 +165,10 @@ class AssetMaintenancesController extends Controller
             }
         }
 
-        if (
-            ($maintenance->completion_date !== null)
+        $completed_date_with_start = ($maintenance->completion_date !== null)
             && ($maintenance->start_date !== '')
-            && ($maintenance->start_date !== '0000-00-00')
-        ) {
+            && ($maintenance->start_date !== '0000-00-00');
+        if ($completed_date_with_start) {
             $startDate = Carbon::parse($maintenance->start_date);
             $completionDate = Carbon::parse($maintenance->completion_date);
             $maintenance->asset_maintenance_time = (int) $completionDate->diffInDays($startDate, true);
