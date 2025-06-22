@@ -94,7 +94,7 @@ class AssetMaintenancesController extends Controller
                 && ($assetMaintenance->start_date !== '')
                 && ($assetMaintenance->start_date !== '0000-00-00');
 
-            if ($$completed_date_with_start) {
+            if ($completed_date_with_start) {
                 $startDate = Carbon::parse($assetMaintenance->start_date);
                 $completionDate = Carbon::parse($assetMaintenance->completion_date);
                 $assetMaintenance->asset_maintenance_time = (int) $completionDate->diffInDays($startDate, true);
