@@ -85,7 +85,7 @@ class HistoryPresenter extends Presenter
                 'field' => 'item.serial',
                 'title' => trans('admin/hardware/table.serial'),
                 'visible' => false,
-            ]
+                ]
             ];
         }
 
@@ -168,5 +168,4 @@ class HistoryPresenter extends Presenter
         $merged = array_merge($layout_start, $extra, $layout_end);
         return json_encode($merged);
     }
-
 }

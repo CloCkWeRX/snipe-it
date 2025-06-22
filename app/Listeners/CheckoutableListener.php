@@ -231,7 +231,7 @@ class CheckoutableListener
             return null;
         }
 
-        $acceptance = new CheckoutAcceptance;
+        $acceptance = new CheckoutAcceptance();
         $acceptance->checkoutable()->associate($event->checkoutable);
         $acceptance->assignedTo()->associate($event->checkedOutTo);
         $acceptance->save();
@@ -262,13 +262,13 @@ class CheckoutableListener
                 break;
         }
 
-        Log::debug('Notification class: '.$notificationClass);
+        Log::debug('Notification class: ' . $notificationClass);
 
         return new $notificationClass($event->checkoutable, $event->checkedOutTo, $event->checkedInBy, $event->note);
     }
     /**
      * Get the appropriate notification for the event
-     * 
+     *
      * @param  CheckoutableCheckedOut $event
      * @param  CheckoutAcceptance|null $acceptance
      * @return Notification
@@ -295,30 +295,30 @@ class CheckoutableListener
 
         return new $notificationClass($event->checkoutable, $event->checkedOutTo, $event->checkedOutBy, $acceptance, $event->note);
     }
-    private function getCheckoutMailType($event, $acceptance) {
+    private function getCheckoutMailType($event, $acceptance)
+    {
         $lookup = [
             Accessory::class => CheckoutAccessoryMail::class,
             Asset::class => CheckoutAssetMail::class,
             LicenseSeat::class => CheckoutLicenseMail::class,
             Consumable::class => CheckoutConsumableMail::class,
         ];
-        $mailable= $lookup[get_class($event->checkoutable)];
+        $mailable = $lookup[get_class($event->checkoutable)];
 
         return new $mailable($event->checkoutable, $event->checkedOutTo, $event->checkedOutBy, $acceptance, $event->note);
-
     }
 
-    private function getCheckinMailType($event) {
+    private function getCheckinMailType($event)
+    {
         $lookup = [
             Accessory::class => CheckinAccessoryMail::class,
             Asset::class => CheckinAssetMail::class,
             LicenseSeat::class => CheckinLicenseMail::class,
         ];
 
-        $mailable= $lookup[get_class($event->checkoutable)];
+        $mailable = $lookup[get_class($event->checkoutable)];
 
         return new $mailable($event->checkoutable, $event->checkedOutTo, $event->checkedInBy, $event->note);
-
     }
 
     /**
@@ -347,8 +347,9 @@ class CheckoutableListener
         }
     }
 
-    private function webhookSelected() {
-        if(Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general'){
+    private function webhookSelected()
+    {
+        if (Setting::getSettings()->webhook_selected === 'slack' || Setting::getSettings()->webhook_selected === 'general') {
             return 'slack';
         }
 
