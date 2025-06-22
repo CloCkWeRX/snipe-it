@@ -60,14 +60,14 @@ class AssetModelsFilesController extends Controller
     public function show(AssetModel $model, $fileId = null): StreamedResponse | Response | RedirectResponse | BinaryFileResponse
     {
 
-            $this->authorize('view', $model);
+        $this->authorize('view', $model);
 
         if (! $log = Actionlog::find($fileId)) {
             return response('No matching record for that model/file', 500)
                 ->header('Content-Type', 'text/plain');
         }
 
-            $file = 'private_uploads/assetmodels/' . $log->filename;
+        $file = 'private_uploads/assetmodels/' . $log->filename;
 
         if (! Storage::exists($file)) {
             return response('File ' . $file . ' not found on server', 404)
@@ -82,7 +82,7 @@ class AssetModelsFilesController extends Controller
             return Storage::download($file, $log->filename, $headers);
         }
 
-            return StorageHelper::downloader($file);
+        return StorageHelper::downloader($file);
     }
 
     /**
@@ -103,8 +103,6 @@ class AssetModelsFilesController extends Controller
                 Storage::delete($rel_path . '/' . $log->filename);
             }
             $log->delete();
-
-            return redirect()->back()->withFragment('files')->with('success', trans('admin/hardware/message.deletefile.success'));
         }
 
         return redirect()->back()->withFragment('files')->with('success', trans('admin/hardware/message.deletefile.success'));
