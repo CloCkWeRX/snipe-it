@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Session;
-
 
 /**
  * This controller handles all actions related to the Admin Dashboard
@@ -24,7 +23,7 @@ class DashboardController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v1.0]
      */
-    public function index() : View | RedirectResponse
+    public function index(): View | RedirectResponse
     {
         // Show the page
         if (auth()->user()->hasAccess('admin')) {
@@ -38,7 +37,7 @@ class DashboardController extends Controller
             $counts['user'] = \App\Models\Company::scopeCompanyables(auth()->user())->count();
             $counts['grand_total'] = $counts['asset'] + $counts['accessory'] + $counts['license'] + $counts['consumable'];
 
-            if ((! file_exists(storage_path().'/oauth-private.key')) || (! file_exists(storage_path().'/oauth-public.key'))) {
+            if ((! file_exists(storage_path() . '/oauth-private.key')) || (! file_exists(storage_path() . '/oauth-public.key'))) {
                 Artisan::call('migrate', ['--force' => true]);
                 Artisan::call('passport:install', ['--no-interaction' => true]);
             }

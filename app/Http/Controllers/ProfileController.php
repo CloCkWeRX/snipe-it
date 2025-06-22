@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
+
 /**
  * This controller handles all actions related to User Profiles for
  * the Snipe-IT Asset Management application.
@@ -26,7 +27,7 @@ class ProfileController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v1.0]
      */
-    public function getIndex() : View
+    public function getIndex(): View
     {
         $this->authorize('self.profile');
         $user = auth()->user();
@@ -39,7 +40,7 @@ class ProfileController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v1.0]
      */
-    public function postIndex(ImageUploadRequest $request) : RedirectResponse
+    public function postIndex(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('self.profile');
         $user = auth()->user();
@@ -106,11 +107,11 @@ class ProfileController extends Controller
      * User change email page.
      *
      */
-    public function password() : View | RedirectResponse
+    public function password(): View | RedirectResponse
     {
 
         $user = auth()->user();
-        if ($user->ldap_import=='1') {
+        if ($user->ldap_import == '1') {
             return redirect()->route('account')->with('error', trans('admin/users/message.error.password_ldap'));
         }
         return view('account/change-password', compact('user'));
@@ -119,7 +120,7 @@ class ProfileController extends Controller
     /**
      * Users change password form processing page.
      */
-    public function passwordSave(Request $request) : RedirectResponse
+    public function passwordSave(Request $request): RedirectResponse
     {
         if (config('app.lock_passwords')) {
             return redirect()->route('account.password.index')->with('error', trans('admin/users/table.lock_passwords'));
@@ -132,7 +133,7 @@ class ProfileController extends Controller
 
         $rules = [
             'current_password'     => 'required',
-            'password'         => Setting::passwordComplexityRulesSaving('store').'|confirmed',
+            'password'         => Setting::passwordComplexityRulesSaving('store') . '|confirmed',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -152,29 +153,27 @@ class ProfileController extends Controller
 
             // First let's see if that option is enabled in the settings
             if (strpos(Setting::passwordComplexityRulesSaving('store'), 'disallow_same_pwd_as_user_fields') !== false) {
-                if (($request->input('password') == $user->username) ||
+                if (
+                    ($request->input('password') == $user->username) ||
                     ($request->input('password') == $user->email) ||
                     ($request->input('password') == $user->first_name) ||
-                    ($request->input('password') == $user->last_name)) {
+                    ($request->input('password') == $user->last_name)
+                ) {
                     $validator->errors()->add('password', trans('validation.disallow_same_pwd_as_user_fields'));
                 }
             }
         });
 
         if (! $validator->fails()) {
-
             $user->password = Hash::make($request->input('password'));
             // We have to use saveQuietly here because for some reason this method was calling the User Oserver twice :(
             $user->saveQuietly();
-            
+
             // Log the user out of other devices
             Auth::logoutOtherDevices($request->input('password'));
             return redirect()->route('account')->with('success', trans('passwords.password_change'));
-
         }
         return redirect()->back()->withInput()->withErrors($validator);
-
-
     }
 
     /**
@@ -187,7 +186,7 @@ class ProfileController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v4.0]
      */
-    public function getMenuState(Request $request) : void
+    public function getMenuState(Request $request): void
     {
         if ($request->input('state') == 'open') {
             $request->session()->put('menu_state', 'open');
@@ -203,9 +202,9 @@ class ProfileController extends Controller
      * @author A. Gianotto
      * @since [v6.0.12]
      */
-    public function printInventory() : View
+    public function printInventory(): View
     {
-        $show_users = User::where('id',auth()->user()->id)->get();
+        $show_users = User::where('id', auth()->user()->id)->get();
 
         return view('users/print')
             ->with('assets', auth()->user()->assets())
@@ -222,7 +221,7 @@ class ProfileController extends Controller
      * @author A. Gianotto
      * @since [v6.0.12]
      */
-    public function emailAssetList() : RedirectResponse
+    public function emailAssetList(): RedirectResponse
     {
 
         if (!$user = User::find(auth()->id())) {

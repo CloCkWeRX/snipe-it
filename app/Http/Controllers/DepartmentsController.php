@@ -7,7 +7,7 @@ use App\Models\Department;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
@@ -28,7 +28,7 @@ class DepartmentsController extends Controller
      * @since [v4.0]
      * @param Request $request
      */
-    public function index(Request $request) : View
+    public function index(Request $request): View
     {
         $this->authorize('index', Department::class);
         $company = null;
@@ -46,10 +46,10 @@ class DepartmentsController extends Controller
      * @since [v4.0]
      * @param ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('create', Department::class);
-        $department = new Department;
+        $department = new Department();
         $department->fill($request->all());
         $department->created_by = auth()->id();
         $department->manager_id = ($request->filled('manager_id') ? $request->input('manager_id') : null);
@@ -76,7 +76,7 @@ class DepartmentsController extends Controller
      * @param int $id
      * @since [v4.0]
      */
-    public function show(Department $department) : View | RedirectResponse
+    public function show(Department $department): View | RedirectResponse
     {
         $this->authorize('view', $department);
         return view('departments/view', compact('department'));
@@ -89,11 +89,11 @@ class DepartmentsController extends Controller
      * @see DepartmentsController::postCreate() method that validates and stores the data
      * @since [v4.0]
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Department::class);
 
-        return view('departments/edit')->with('item', new Department);
+        return view('departments/edit')->with('item', new Department());
     }
 
     /**
@@ -103,7 +103,7 @@ class DepartmentsController extends Controller
      * @param int $locationId
      * @since [v4.0]
      */
-    public function destroy($id) : RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         if (is_null($department = Department::find($id))) {
             return redirect()->to(route('departments.index'))->with('error', trans('admin/departments/message.not_found'));
@@ -117,7 +117,7 @@ class DepartmentsController extends Controller
 
         if ($department->image) {
             try {
-                Storage::disk('public')->delete('departments'.'/'.$department->image);
+                Storage::disk('public')->delete('departments' . '/' . $department->image);
             } catch (\Exception $e) {
                 Log::debug($e);
             }
@@ -135,7 +135,7 @@ class DepartmentsController extends Controller
      * @param int $departmentId
      * @since [v1.0]
      */
-    public function edit(Department $department) : View | RedirectResponse
+    public function edit(Department $department): View | RedirectResponse
     {
         $this->authorize('update', $department);
         return view('departments/edit')->with('item', $department);
@@ -149,7 +149,7 @@ class DepartmentsController extends Controller
      * @param int $departmentId
      * @since [v1.0]
      */
-    public function update(ImageUploadRequest $request, Department $department) : RedirectResponse
+    public function update(ImageUploadRequest $request, Department $department): RedirectResponse
     {
 
         $this->authorize('update', $department);

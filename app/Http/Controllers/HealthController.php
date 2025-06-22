@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\DB;
  */
 class HealthController extends BaseController
 {
-
     public function __construct()
     {
         $this->middleware('health');
@@ -29,22 +28,16 @@ class HealthController extends BaseController
     public function get()
     {
         try {
-
             if (DB::select('select 2 + 2')) {
                 return response()->json([
                     'status' => 'ok',
                 ]);
             }
-
         } catch (\Exception $e) {
             \Log::error('Could not connect to database');
             return response()->json([
                 'status' => 'database connection failed',
             ], 500);
-
         }
-
-
-
     }
 }

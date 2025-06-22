@@ -6,7 +6,8 @@ use App\Models\Depreciation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
+
 /**
  * This controller handles all actions related to Depreciations for
  * the Snipe-IT Asset Management application.
@@ -23,7 +24,7 @@ class DepreciationsController extends Controller
      * @see DepreciationsController::getDatatable() method that generates the JSON response
      * @since [v1.0]
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('view', Depreciation::class);
         return view('depreciations/index');
@@ -36,12 +37,12 @@ class DepreciationsController extends Controller
      * @see DepreciationsController::postCreate()
      * @since [v1.0]
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Depreciation::class);
 
         // Show the page
-        return view('depreciations/edit')->with('item', new Depreciation);
+        return view('depreciations/edit')->with('item', new Depreciation());
     }
 
     /**
@@ -52,7 +53,7 @@ class DepreciationsController extends Controller
      * @since [v1.0]
      * @param Request $request
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Depreciation::class);
 
@@ -95,7 +96,7 @@ class DepreciationsController extends Controller
      * @param int $depreciationId
      * @since [v1.0]
      */
-    public function edit(Depreciation $depreciation) : RedirectResponse | View
+    public function edit(Depreciation $depreciation): RedirectResponse | View
     {
 
         $this->authorize('update', $depreciation);
@@ -111,7 +112,7 @@ class DepreciationsController extends Controller
      * @param int $depreciationId
      * @since [v1.0]
      */
-    public function update(Request $request, Depreciation $depreciation) : RedirectResponse
+    public function update(Request $request, Depreciation $depreciation): RedirectResponse
     {
 
         $this->authorize('update', $depreciation);
@@ -151,7 +152,7 @@ class DepreciationsController extends Controller
      * @since [v1.0]
      * @param int $depreciationId
      */
-    public function destroy($depreciationId) : RedirectResponse
+    public function destroy($depreciationId): RedirectResponse
     {
         // Check if the depreciation exists
         if (is_null($depreciation = Depreciation::withCount('models as models_count')->find($depreciationId))) {
@@ -178,7 +179,7 @@ class DepreciationsController extends Controller
      * @param int $depreciationId
      * @since [v1.0]
      */
-    public function show(Depreciation $depreciation) : View | RedirectResponse
+    public function show(Depreciation $depreciation): View | RedirectResponse
     {
         $depreciation = Depreciation::withCount('assets as assets_count')
             ->withCount('models as models_count')
@@ -189,11 +190,8 @@ class DepreciationsController extends Controller
 
         if ($depreciation) {
             return view('depreciations/view', compact('depreciation'));
-
         }
 
         return redirect()->route('depreciations.index')->with('error', trans('admin/depreciations/message.does_not_exist'));
-
-
     }
 }

@@ -15,7 +15,7 @@ class ReportTemplatesController extends Controller
         $this->authorize('reports.view');
 
         // Ignore "options" rules since data does not come in under that key...
-        $validated = $request->validate(Arr::except((new ReportTemplate)->getRules(), 'options'));
+        $validated = $request->validate(Arr::except((new ReportTemplate())->getRules(), 'options'));
 
         $report = $request->user()->reportTemplates()->create([
             'name' => $validated['name'],
@@ -56,7 +56,7 @@ class ReportTemplatesController extends Controller
         $this->authorize('reports.view');
 
         // Ignore "options" rules since data does not come in under that key...
-        $validated = $request->validate(Arr::except((new ReportTemplate)->getRules(), 'options'));
+        $validated = $request->validate(Arr::except((new ReportTemplate())->getRules(), 'options'));
 
         $reportTemplate->update([
             'name' => $validated['name'],
