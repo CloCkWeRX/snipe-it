@@ -57,7 +57,6 @@ class ImportSuppliersTest extends ImportDataTestCase implements TestsPermissions
             ->sole();
 
         $this->assertEquals($row['name'], $newSupplier->name);
-
     }
 
     #[Test]
@@ -137,5 +136,4 @@ class ImportSuppliersTest extends ImportDataTestCase implements TestsPermissions
             Arr::except($updatedSupplier->attributesToArray(), array_merge($updatedAttributes, $supplier->getDates())),
         );
     }
-
 }

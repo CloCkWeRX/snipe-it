@@ -258,7 +258,8 @@ class AssetTest extends TestCase
         $undeployable = Asset::factory()->create(
             [
                 'status_id' => $undeployableStatus->id
-            ]);
+            ]
+        );
 
         $bulk_assets = new BulkAssetsController();
 
@@ -277,7 +278,8 @@ class AssetTest extends TestCase
         $undeployable = Asset::factory()->create(
             [
                 'status_id' => $undeployableStatus->id
-            ]);
+            ]
+        );
 
         $bulk_assets = new BulkAssetsController();
 

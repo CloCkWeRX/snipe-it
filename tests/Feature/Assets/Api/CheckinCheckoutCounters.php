@@ -75,7 +75,7 @@ class CheckinCheckoutCounters extends TestCase
 
         //check the counters, again.
         $asset->refresh();
-        $this->assertEquals(1, $asset->checkin_counter); 
+        $this->assertEquals(1, $asset->checkin_counter);
         $this->assertEquals(1, $asset->checkout_counter);
     }
 }

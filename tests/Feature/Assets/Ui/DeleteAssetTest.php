@@ -68,7 +68,6 @@ class DeleteAssetTest extends TestCase
             'item_type' => Asset::class,
             'item_id' => $asset->id,
         ]);
-
     }
 
     public function testAssetIsCheckedInWhenDeleted()

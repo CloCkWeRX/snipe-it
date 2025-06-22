@@ -28,8 +28,8 @@ class CheckinCheckoutCounters extends TestCase
         $asset = Asset::where('asset_tag', '1234')->sole();
 
         //ensure counters are initialized properly
-        $this->assertEquals(0,$asset->checkout_counter);
-        $this->assertEquals(0,$asset->checkin_counter);
+        $this->assertEquals(0, $asset->checkout_counter);
+        $this->assertEquals(0, $asset->checkin_counter);
 
         //perform a checkout
         $this->actingAs($admin)
@@ -45,8 +45,8 @@ class CheckinCheckoutCounters extends TestCase
 
         $asset->refresh();
 //        dump($asset);
-        $this->assertEquals(1,$asset->checkout_counter);
-        $this->assertEquals(0,$asset->checkin_counter);
+        $this->assertEquals(1, $asset->checkout_counter);
+        $this->assertEquals(0, $asset->checkin_counter);
 
         //perform a check-in
         $this->actingAs($admin)
@@ -59,7 +59,7 @@ class CheckinCheckoutCounters extends TestCase
 
         $asset->refresh();
 //        dump($asset);
-        $this->assertEquals(1,$asset->checkout_counter);
-        $this->assertEquals(1,$asset->checkin_counter);
+        $this->assertEquals(1, $asset->checkout_counter);
+        $this->assertEquals(1, $asset->checkin_counter);
     }
 }

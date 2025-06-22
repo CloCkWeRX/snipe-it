@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ApiRateLimitTest extends TestCase
 {
-
     public function testRateLimit()
     {
         config(['app.api_throttle_per_minute' => 10]);
@@ -25,12 +24,10 @@ class ApiRateLimitTest extends TestCase
         $admin = User::factory()->create();
 
         for ($x = 0; $x < 5; $x++) {
-
             $this->actingAsForApi($admin)
                 ->getJson(route('api.users.me'))
                 ->assertOk()
                 ->assertHeader('X-Ratelimit-Remaining', $expected_remaining--);
-
         }
 
         $this->actingAsForApi($admin)
@@ -46,12 +43,10 @@ class ApiRateLimitTest extends TestCase
         $admin = User::factory()->create();
 
         for ($x = 0; $x < 5; $x++) {
-
             $this->actingAsForApi($admin)
                 ->getJson(route('api.users.me'))
                 ->assertOk()
                 ->assertHeader('X-Ratelimit-Remaining', $expected_remaining--);
-
         }
 
         $this->actingAsForApi($admin)
@@ -59,5 +54,4 @@ class ApiRateLimitTest extends TestCase
             ->assertStatus(200)
             ->assertHeader('Retry-After', 60);
     }
-
 }

@@ -56,7 +56,6 @@ class ImportCategoriesTest extends ImportDataTestCase implements TestsPermission
             ->sole();
 
         $this->assertEquals($row['name'], $newCategory->name);
-
     }
 
     #[Test]
@@ -131,5 +130,4 @@ class ImportCategoriesTest extends ImportDataTestCase implements TestsPermission
             Arr::except($updatedCategory->attributesToArray(), array_merge($updatedAttributes, $category->getDates())),
         );
     }
-
 }
