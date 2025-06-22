@@ -455,20 +455,20 @@ class UsersController extends Controller
     {
         $this->authorize('update', User::class);
 
-            $this->authorize('update', $user);
+        $this->authorize('update', $user);
 
-            /**
-             * This is a janky hack to prevent people from changing admin demo user data on the public demo.
-             * The $ids 1 and 2 are special since they are seeded as superadmins in the demo seeder.
-             *  Thanks, jerks. You are why we can't have nice things. - snipe
-             *
-             */
+        /**
+         * This is a janky hack to prevent people from changing admin demo user data on the public demo.
+         * The $ids 1 and 2 are special since they are seeded as superadmins in the demo seeder.
+         *  Thanks, jerks. You are why we can't have nice things. - snipe
+         *
+         */
 
         if ((($user->id == 1) || ($user->id == 2)) && (config('app.lock_passwords'))) {
-                return response()->json(Helper::formatStandardApiResponse('error', null, 'Permission denied. You cannot update user information via API on the demo.'));
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'Permission denied. You cannot update user information via API on the demo.'));
         }
 
-            $user->fill($request->all());
+        $user->fill($request->all());
 
         if ($request->filled('company_id')) {
             $user->company_id = Company::getIdForCurrentUser($request->input('company_id'));
@@ -482,9 +482,9 @@ class UsersController extends Controller
             $user->password = bcrypt($request->input('password'));
         }
 
-            // We need to use has()  instead of filled()
-            // here because we need to overwrite permissions
-            // if someone needs to null them out
+        // We need to use has()  instead of filled()
+        // here because we need to overwrite permissions
+        // if someone needs to null them out
         if ($request->has('permissions')) {
             $permissions_array = $request->input('permissions');
 
@@ -501,7 +501,7 @@ class UsersController extends Controller
             Asset::where('assigned_type', User::class)
                 ->where('assigned_to', $user->id)->update(['location_id' => $request->input('location_id', null)]);
         }
-            app('App\Http\Requests\ImageUploadRequest')->handleImages($user, 600, 'image', 'avatars', 'avatar');
+        app('App\Http\Requests\ImageUploadRequest')->handleImages($user, 600, 'image', 'avatars', 'avatar');
 
         if ($user->save()) {
             // Check if the request has groups passed and has a value, AND that the user us a superuser
@@ -519,7 +519,7 @@ class UsersController extends Controller
             }
             return response()->json(Helper::formatStandardApiResponse('success', (new UsersTransformer())->transformUser($user), trans('admin/users/message.success.update')));
         }
-            return response()->json(Helper::formatStandardApiResponse('error', null, $user->getErrors()));
+        return response()->json(Helper::formatStandardApiResponse('error', null, $user->getErrors()));
     }
 
     /**

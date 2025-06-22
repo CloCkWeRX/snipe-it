@@ -173,7 +173,7 @@ class AssetsController extends Controller
          * Handle due and overdue audits and checkin dates
          */
         switch ($action) {
-                // Audit (singular) is left over from earlier legacy APIs
+            // Audit (singular) is left over from earlier legacy APIs
             case 'audits':
                 switch ($upcoming_status) {
                     case 'due':
@@ -382,6 +382,7 @@ class AssetsController extends Controller
                 break;
             case 'location':
                 $assets->OrderLocation($order);
+                // no break
             case 'rtd_location':
                 $assets->OrderRtdLocation($order);
                 break;
@@ -1159,7 +1160,7 @@ class AssetsController extends Controller
              * @see \App\Models\Asset::save()
              */
 
-             $asset->unsetEventDispatcher();
+            $asset->unsetEventDispatcher();
 
 
             /**
@@ -1306,7 +1307,7 @@ class AssetsController extends Controller
         try {
             $this->authorize('view', Asset::class);
 
-             // Validate that asset tags were provided in the request
+            // Validate that asset tags were provided in the request
             if (!$request->filled('asset_tags')) {
                 return response()->json(Helper::formatStandardApiResponse(
                     'error',
@@ -1315,11 +1316,11 @@ class AssetsController extends Controller
                 ), 400);
             }
 
-             // Convert asset tags from request into collection and fetch matching assets
+            // Convert asset tags from request into collection and fetch matching assets
             $asset_tags = collect($request->input('asset_tags'));
             $assets = Asset::whereIn('asset_tag', $asset_tags)->get();
 
-             // Return error if no assets were found for the provided tags
+            // Return error if no assets were found for the provided tags
             if ($assets->isEmpty()) {
                 return response()->json(Helper::formatStandardApiResponse(
                     'error',

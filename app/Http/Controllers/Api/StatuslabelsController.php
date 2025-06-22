@@ -194,12 +194,12 @@ class StatuslabelsController extends Controller
 
 
 
-     /**
-     * Show a count of assets by status label for pie chart
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
-     */
+    /**
+    * Show a count of assets by status label for pie chart
+    *
+    * @author [A. Gianotto] [<snipe@snipe.net>]
+    * @since [v3.0]
+    */
     public function getAssetCountByStatuslabel(): array
     {
         $this->authorize('view', Statuslabel::class);
