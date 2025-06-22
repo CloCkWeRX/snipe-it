@@ -20,7 +20,7 @@ class GoogleAuthController extends Controller
     {
         parent::__construct();
         $setting = Setting::getSettings();
-        config(['services.google.redirect' => config('app.url').'/google/callback']);
+        config(['services.google.redirect' => config('app.url') . '/google/callback']);
         config(['services.google.client_id' => $setting->google_client_id]);
         config(['services.google.client_secret' => $setting->google_client_secret]);
     }
@@ -30,7 +30,7 @@ class GoogleAuthController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function handleGoogleCallback() : RedirectResponse
+    public function handleGoogleCallback(): RedirectResponse
     {
         try {
             $socialUser = Socialite::driver('google')->user();
@@ -52,7 +52,7 @@ class GoogleAuthController extends Controller
 
 
         if ($user) {
-            Log::debug('Google user '.$socialUser->getEmail().' found in Snipe-IT');
+            Log::debug('Google user ' . $socialUser->getEmail() . ' found in Snipe-IT');
             $user->update([
                 'avatar'   => $socialUser->avatar,
             ]);
@@ -61,7 +61,7 @@ class GoogleAuthController extends Controller
             return redirect()->route('home');
         }
 
-        Log::debug('Google user '.$socialUser->getEmail().' NOT found in Snipe-IT');
+        Log::debug('Google user ' . $socialUser->getEmail() . ' NOT found in Snipe-IT');
         return redirect()->route('login')
             ->withErrors(
                 [
