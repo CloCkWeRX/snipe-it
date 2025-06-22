@@ -3,12 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use \App\Models\User;
-
+use App\Models\User;
 
 class CreateAdmin extends Command
 {
-
     /** @mixin User **/
     /**
      * App\Console\CreateAdmin
@@ -62,7 +60,7 @@ class CreateAdmin extends Command
         if (($first_name == '') || ($last_name == '') || ($username == '') || ($email == '') || ($password == '')) {
             $this->info('ERROR: All fields are required.');
         } else {
-            $user = new User;
+            $user = new User();
             $user->first_name = $first_name;
             $user->last_name = $last_name;
             $user->username = $username;
@@ -87,7 +85,7 @@ class CreateAdmin extends Command
                 $errors = $user->getErrors();
 
                 foreach ($errors->all() as $error) {
-                    $this->info('ERROR:'.$error);
+                    $this->info('ERROR:' . $error);
                 }
             }
         }

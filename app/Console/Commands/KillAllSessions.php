@@ -46,14 +46,13 @@ class KillAllSessions extends Command
 
         $count = 0;
         foreach ($session_files as $file) {
-
-            if (is_file($file))
+            if (is_file($file)) {
                 unlink($file);
+            }
                 $count++;
         }
         \DB::table('users')->update(['remember_token' => null]);
 
-        $this->info($count. ' sessions cleared!');
-
+        $this->info($count . ' sessions cleared!');
     }
 }

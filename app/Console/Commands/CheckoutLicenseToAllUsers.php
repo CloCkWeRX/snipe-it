@@ -62,19 +62,18 @@ class CheckoutLicenseToAllUsers extends Command
             $this->info('You do not have enough free seats to complete this task, so we will check out as many as we can. ');
         }
 
-        $this->info('Checking out '.$users->count().' of '.$license->getAvailSeatsCountAttribute().' seats for '.$license->name);
+        $this->info('Checking out ' . $users->count() . ' of ' . $license->getAvailSeatsCountAttribute() . ' seats for ' . $license->name);
 
         if (! $notify) {
             $this->info('No mail will be sent.');
         }
 
         foreach ($users as $user) {
-
             // Check to make sure this user doesn't already have this license checked out
             // to them
 
             if ($user->licenses->where('id', '=', $license_id)->count()) {
-                $this->info($user->username.' already has this license checked out to them. Skipping... ');
+                $this->info($user->username . ' already has this license checked out to them. Skipping... ');
                 continue;
             }
 
@@ -85,14 +84,13 @@ class CheckoutLicenseToAllUsers extends Command
                 return false;
             }
 
-            $this->info($license->availCount()->count().' seats left');
+            $this->info($license->availCount()->count() . ' seats left');
             // Get the seat ID
             $licenseSeat = $license->freeSeat();
 
             // Update the seat with checkout info,
             $licenseSeat->assigned_to = $user->id;
             if ($licenseSeat->save()) {
-
                 // Temporarily null the user's email address so we don't send mail if we're not supposed to
                 if (! $notify) {
                     $user->email = null;
@@ -100,7 +98,7 @@ class CheckoutLicenseToAllUsers extends Command
 
                 // Log the checkout
                 $licenseSeat->logCheckout('Checked out via cli tool', $user);
-                $this->info('License '.$license_id.' seat '.$licenseSeat->id.' checked out to '.$user->username);
+                $this->info('License ' . $license_id . ' seat ' . $licenseSeat->id . ' checked out to ' . $user->username);
             }
         }
     }
