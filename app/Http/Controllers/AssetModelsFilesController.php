@@ -9,7 +9,7 @@ use App\Models\AssetModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use \Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class AssetModelsFilesController extends Controller
@@ -24,7 +24,7 @@ class AssetModelsFilesController extends Controller
      *@since [v1.0]
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
-    public function store(UploadFileRequest $request, $modelId = null) : RedirectResponse
+    public function store(UploadFileRequest $request, $modelId = null): RedirectResponse
     {
         if (! $model = AssetModel::find($modelId)) {
             return redirect()->route('models.index')->with('error', trans('admin/hardware/message.does_not_exist'));
@@ -38,8 +38,7 @@ class AssetModelsFilesController extends Controller
             }
 
             foreach ($request->file('file') as $file) {
-
-                $file_name = $request->handleFile('private_uploads/assetmodels/','model-'.$model->id,$file);
+                $file_name = $request->handleFile('private_uploads/assetmodels/', 'model-' . $model->id, $file);
 
                 $model->logUpload($file_name, $request->get('notes'));
             }
@@ -58,33 +57,32 @@ class AssetModelsFilesController extends Controller
      * @param  int $fileId
      * @since [v1.0]
      */
-    public function show(AssetModel $model, $fileId = null) : StreamedResponse | Response | RedirectResponse | BinaryFileResponse
+    public function show(AssetModel $model, $fileId = null): StreamedResponse | Response | RedirectResponse | BinaryFileResponse
     {
 
-            $this->authorize('view', $model);
+        $this->authorize('view', $model);
 
-            if (! $log = Actionlog::find($fileId)) {
-                return response('No matching record for that model/file', 500)
-                    ->header('Content-Type', 'text/plain');
-            }
+        if (! $log = Actionlog::find($fileId)) {
+            return response('No matching record for that model/file', 500)
+                ->header('Content-Type', 'text/plain');
+        }
 
-            $file = 'private_uploads/assetmodels/'.$log->filename;
+        $file = 'private_uploads/assetmodels/' . $log->filename;
 
-            if (! Storage::exists($file)) {
-                return response('File '.$file.' not found on server', 404)
-                    ->header('Content-Type', 'text/plain');
-            }
+        if (! Storage::exists($file)) {
+            return response('File ' . $file . ' not found on server', 404)
+                ->header('Content-Type', 'text/plain');
+        }
 
-            if (request('inline') == 'true') {
+        if (request('inline') == 'true') {
+            $headers = [
+                'Content-Disposition' => 'inline',
+            ];
 
-                $headers = [
-                    'Content-Disposition' => 'inline',
-                ];
+            return Storage::download($file, $log->filename, $headers);
+        }
 
-                return Storage::download($file, $log->filename, $headers);
-            }
-
-            return StorageHelper::downloader($file);
+        return StorageHelper::downloader($file);
     }
 
     /**
@@ -95,21 +93,18 @@ class AssetModelsFilesController extends Controller
      * @param  int $fileId
      * @since [v1.0]
      */
-    public function destroy(AssetModel $model, $fileId = null) : RedirectResponse
+    public function destroy(AssetModel $model, $fileId = null): RedirectResponse
     {
         $rel_path = 'private_uploads/assetmodels';
         $this->authorize('update', $model);
         $log = Actionlog::find($fileId);
         if ($log) {
-            if (Storage::exists($rel_path.'/'.$log->filename)) {
-                Storage::delete($rel_path.'/'.$log->filename);
+            if (Storage::exists($rel_path . '/' . $log->filename)) {
+                Storage::delete($rel_path . '/' . $log->filename);
             }
             $log->delete();
-
-            return redirect()->back()->withFragment('files')->with('success', trans('admin/hardware/message.deletefile.success'));
         }
 
         return redirect()->back()->withFragment('files')->with('success', trans('admin/hardware/message.deletefile.success'));
-
     }
 }
