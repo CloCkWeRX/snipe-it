@@ -49,7 +49,7 @@ class KillAllSessions extends Command
             if (is_file($file)) {
                 unlink($file);
             }
-                $count++;
+            $count++;
         }
         \DB::table('users')->update(['remember_token' => null]);
 
