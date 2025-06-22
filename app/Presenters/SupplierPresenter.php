@@ -57,8 +57,8 @@ class SupplierPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('general.id'),
                 'visible' => false,
-            ],
-            [
+             ],
+             [
                 'field' => 'name',
                 'searchable' => true,
                 'sortable' => true,
@@ -66,7 +66,7 @@ class SupplierPresenter extends Presenter
                 'title' => trans('general.name'),
                 'visible' => true,
                 'formatter' => 'suppliersLinkFormatter',
-            ], [
+             ], [
                 'field' => 'image',
                 'searchable' => false,
                 'sortable' => true,
@@ -74,8 +74,8 @@ class SupplierPresenter extends Presenter
                 'title' => trans('general.image'),
                 'visible' => true,
                 'formatter' => 'imageFormatter',
-            ],
-            [
+             ],
+             [
                 'field' => 'assets_count',
                 'searchable' => false,
                 'sortable' => true,
@@ -84,7 +84,7 @@ class SupplierPresenter extends Presenter
                 'titleTooltip' =>  trans('general.assets'),
                 'visible' => true,
                 'class' => 'css-barcode',
-            ],  [
+             ],  [
                 'field' => 'accessories_count',
                 'searchable' => false,
                 'sortable' => true,
@@ -93,8 +93,8 @@ class SupplierPresenter extends Presenter
                 'titleTooltip' =>  trans('general.accessories'),
                 'visible' => true,
                 'class' => 'css-accessory',
-            ],
-            [
+             ],
+             [
                 'field' => 'licenses_count',
                 'searchable' => false,
                 'sortable' => true,
@@ -103,7 +103,7 @@ class SupplierPresenter extends Presenter
                 'titleTooltip' =>  trans('general.licenses'),
                 'visible' => true,
                 'class' => 'css-license',
-            ], [
+             ], [
                 'field' => 'components_count',
                 'searchable' => false,
                 'sortable' => true,
@@ -112,7 +112,7 @@ class SupplierPresenter extends Presenter
                 'titleTooltip' =>  trans('general.components'),
                 'visible' => true,
                 'class' => 'css-component',
-            ], [
+             ], [
                 'field' => 'consumables_count',
                 'searchable' => false,
                 'sortable' => true,
@@ -121,7 +121,7 @@ class SupplierPresenter extends Presenter
                 'titleTooltip' =>  trans('general.consumables'),
                 'visible' => true,
                 'class' => 'css-consumable',
-            ], [
+             ], [
                 'field' => 'url',
                 'searchable' => false,
                 'sortable' => true,
@@ -129,49 +129,49 @@ class SupplierPresenter extends Presenter
                 'title' => trans('general.url'),
                 'visible' => true,
                 'formatter' => 'externalLinkFormatter',
-            ], [
+             ], [
                 'field' => 'address',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.address'),
                 'visible' => true,
-            ], [
+             ], [
                 'field' => 'address2',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.address2'),
                 'visible' => false,
-            ], [
+             ], [
                 'field' => 'city',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.city'),
                 'visible' => true,
-            ], [
+             ], [
                 'field' => 'state',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.state'),
                 'visible' => true,
-            ], [
+             ], [
                 'field' => 'zip',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.zip'),
                 'visible' => false,
-            ], [
+             ], [
                 'field' => 'country',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
                 'title' =>  trans('admin/locations/table.country'),
                 'visible' => false,
-            ], [
+             ], [
                 'field' => 'phone',
                 'searchable' => true,
                 'sortable' => true,
@@ -179,7 +179,7 @@ class SupplierPresenter extends Presenter
                 'title' => trans('admin/users/table.phone'),
                 'visible' => false,
                 'formatter'    => 'phoneFormatter',
-            ], [
+             ], [
                 'field' => 'fax',
                 'searchable' => true,
                 'sortable' => true,
@@ -187,13 +187,13 @@ class SupplierPresenter extends Presenter
                 'title' => trans('admin/suppliers/table.fax'),
                 'visible' => false,
                 'formatter'    => 'phoneFormatter',
-            ], [
+             ], [
                 'field' => 'notes',
                 'searchable' => true,
                 'sortable' => true,
                 'visible' => false,
                 'title' => trans('general.notes'),
-            ], [
+             ], [
                 'field' => 'created_at',
                 'searchable' => true,
                 'sortable' => true,
@@ -201,7 +201,7 @@ class SupplierPresenter extends Presenter
                 'title' => trans('general.created_at'),
                 'visible' => false,
                 'formatter' => 'dateDisplayFormatter',
-            ],  [
+             ],  [
                 'field' => 'created_by',
                 'searchable' => true,
                 'sortable' => true,
@@ -209,7 +209,7 @@ class SupplierPresenter extends Presenter
                 'title' => trans('general.created_by'),
                 'visible' => false,
                 'formatter' => 'usersLinkObjFormatter',
-            ], [
+             ], [
                 'field' => 'actions',
                 'searchable' => false,
                 'sortable' => false,
@@ -218,12 +218,12 @@ class SupplierPresenter extends Presenter
                 'visible' => true,
                 'formatter' => 'suppliersActionsFormatter',
                 'printIgnore' => true,
-            ],
+             ],
         ];
 
         return json_encode($layout);
     }
-    
+
 
     /**
      * Link to this supplier name
