@@ -32,7 +32,7 @@ class LocationsController extends Controller
      * @see LocationsController::getDatatable() method that generates the JSON response
      * @since [v1.0]
      */
-    public function index() : View
+    public function index(): View
     {
         // Grab all the locations
         $this->authorize('view', Location::class);
@@ -47,7 +47,7 @@ class LocationsController extends Controller
      * @see LocationsController::postCreate() method that validates and stores the data
      * @since [v1.0]
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Location::class);
 
@@ -64,7 +64,7 @@ class LocationsController extends Controller
      * @since [v1.0]
      * @param ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('create', Location::class);
 
@@ -116,7 +116,7 @@ class LocationsController extends Controller
      * @param int $locationId
      * @since [v1.0]
      */
-    public function edit(Location $location) : View | RedirectResponse
+    public function edit(Location $location): View | RedirectResponse
     {
         $this->authorize('update', Location::class);
         return view('locations/edit')->with('item', $location);
@@ -131,7 +131,7 @@ class LocationsController extends Controller
      * @param int $locationId
      * @since [v1.0]
      */
-    public function update(ImageUploadRequest $request, Location $location) : RedirectResponse
+    public function update(ImageUploadRequest $request, Location $location): RedirectResponse
     {
         $this->authorize('update', Location::class);
 
@@ -179,7 +179,7 @@ class LocationsController extends Controller
      * @param int $locationId
      * @since [v1.0]
      */
-    public function destroy($locationId) : RedirectResponse
+    public function destroy($locationId): RedirectResponse
     {
         $this->authorize('delete', Location::class);
 
@@ -217,7 +217,7 @@ class LocationsController extends Controller
      * @param int $id
      * @since [v1.0]
      */
-    public function show(Location $location) : View | RedirectResponse
+    public function show(Location $location): View | RedirectResponse
     {
         $this->authorize('view', Location::class);
 
@@ -242,8 +242,8 @@ class LocationsController extends Controller
                     'zoom' => 18,
                     'zoomControl' => false,
                 ];
-    
-    
+
+
                 $initialMarkers = [
                     [
                         'position' => [
@@ -262,7 +262,7 @@ class LocationsController extends Controller
         return redirect()->route('locations.index')->with('error', trans('admin/locations/message.does_not_exist'));
     }
 
-    public function print_assigned($id) : View | RedirectResponse
+    public function print_assigned($id): View | RedirectResponse
     {
         $this->authorize('view', Location::class);
 
@@ -292,7 +292,7 @@ class LocationsController extends Controller
      * @param int $locationId
      * @since [v6.0.14]
      */
-    public function getClone($locationId = null) : View | RedirectResponse
+    public function getClone($locationId = null): View | RedirectResponse
     {
         $this->authorize('create', Location::class);
 
@@ -320,7 +320,7 @@ class LocationsController extends Controller
      * @since [v1.0]
      * @param int $id
      */
-    public function postRestore($id) : RedirectResponse
+    public function postRestore($id): RedirectResponse
     {
         $this->authorize('create', Location::class);
 
@@ -347,7 +347,7 @@ class LocationsController extends Controller
         return redirect()->back()->with('error', trans('admin/models/message.does_not_exist'));
     }
 
-    public function print_all_assigned($id) : View | RedirectResponse
+    public function print_all_assigned($id): View | RedirectResponse
     {
         $this->authorize('view', Location::class);
         if ($location = Location::where('id', $id)->first()) {
@@ -374,7 +374,7 @@ class LocationsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * @since [v6.3.1]
      */
-    public function postBulkDelete(Request $request) : View | RedirectResponse
+    public function postBulkDelete(Request $request): View | RedirectResponse
     {
         $this->authorize('update', Location::class);
 
@@ -409,7 +409,7 @@ class LocationsController extends Controller
      * @since [v6.3.1]
 
      */
-    public function postBulkDeleteStore(Request $request) : RedirectResponse
+    public function postBulkDeleteStore(Request $request): RedirectResponse
     {
         $this->authorize('delete', Location::class);
 
@@ -442,7 +442,9 @@ class LocationsController extends Controller
             if ($success_count == count($locations_raw_array)) {
                 return redirect()
                     ->route('locations.index')
-                    ->with('success', trans_choice('general.bulk.delete.success', $success_count,
+                    ->with('success', trans_choice(
+                        'general.bulk.delete.success',
+                        $success_count,
                         ['object_type' => trans_choice('general.location_plural', $success_count), 'count' => $success_count]
                     ));
             }

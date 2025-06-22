@@ -9,7 +9,7 @@ use App\Models\Location;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use \Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LocationsFilesController extends Controller
@@ -24,18 +24,17 @@ class LocationsFilesController extends Controller
      *@since [v1.0]
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
-    public function store(UploadFileRequest $request, Location $location) : RedirectResponse
+    public function store(UploadFileRequest $request, Location $location): RedirectResponse
     {
         $this->authorize('update', $location);
 
         if ($request->hasFile('file')) {
-
             if (! Storage::exists('private_uploads/locations')) {
                 Storage::makeDirectory('private_uploads/locations', 775);
             }
 
             foreach ($request->file('file') as $file) {
-                $file_name = $request->handleFile('private_uploads/locations/','location-'.$location->id, $file);
+                $file_name = $request->handleFile('private_uploads/locations/', 'location-' . $location->id, $file);
                 $location->logUpload($file_name, $request->get('notes'));
             }
 
@@ -53,7 +52,7 @@ class LocationsFilesController extends Controller
      * @param  int $fileId
      * @since [v1.0]
      */
-    public function show(Location $location, $fileId = null) : StreamedResponse | Response | RedirectResponse | BinaryFileResponse
+    public function show(Location $location, $fileId = null): StreamedResponse | Response | RedirectResponse | BinaryFileResponse
     {
 
         $this->authorize('view', $location);
@@ -62,14 +61,13 @@ class LocationsFilesController extends Controller
             return redirect()->back()->withFragment('files')->with('error', 'No matching file record');
         }
 
-        $file = 'private_uploads/locations/'.$log->filename;
+        $file = 'private_uploads/locations/' . $log->filename;
 
         if (! Storage::exists($file)) {
             return redirect()->back()->withFragment('files')->with('error', 'No matching file on server');
         }
 
         if (request('inline') == 'true') {
-
             $headers = [
                 'Content-Disposition' => 'inline',
             ];
@@ -88,14 +86,13 @@ class LocationsFilesController extends Controller
      * @param  int $fileId
      * @since [v1.0]
      */
-    public function destroy(Location $location, $fileId = null) : RedirectResponse
+    public function destroy(Location $location, $fileId = null): RedirectResponse
     {
         $rel_path = 'private_uploads/locations';
         $this->authorize('update', $location);
         $log = Actionlog::find($fileId);
 
         if ($log) {
-
             // This should be moved to purge
 //            if (Storage::exists($rel_path.'/'.$log->filename)) {
 //                Storage::delete($rel_path.'/'.$log->filename);
@@ -106,6 +103,5 @@ class LocationsFilesController extends Controller
         }
 
         return redirect()->back()->withFragment('files')->with('success', trans('admin/hardware/message.deletefile.success'));
-
     }
 }
