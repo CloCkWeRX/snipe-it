@@ -122,7 +122,8 @@ class LicenseCheckinController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
 
-    public function bulkCheckin(Request $request, $licenseId) {
+    public function bulkCheckin(Request $request, $licenseId)
+    {
 
         $license = License::findOrFail($licenseId);
         $this->authorize('checkin', $license);
@@ -143,7 +144,7 @@ class LicenseCheckinController extends Controller
             $user_seat->assigned_to = null;
 
             if ($user_seat->save()) {
-                Log::debug('Checking in '.$license->name.' from user '.$user_seat->username);
+                Log::debug('Checking in ' . $license->name . ' from user ' . $user_seat->username);
                 $user_seat->logCheckin($user_seat->user, trans('admin/licenses/general.bulk.checkin_all.log_msg'));
             }
         }
@@ -158,14 +159,12 @@ class LicenseCheckinController extends Controller
             $asset_seat->asset_id = null;
 
             if ($asset_seat->save()) {
-                Log::debug('Checking in '.$license->name.' from asset '.$asset_seat->asset_tag);
+                Log::debug('Checking in ' . $license->name . ' from asset ' . $asset_seat->asset_tag);
                 $asset_seat->logCheckin($asset_seat->asset, trans('admin/licenses/general.bulk.checkin_all.log_msg'));
                 $count++;
             }
         }
 
-        return redirect()->back()->with('success', trans_choice('admin/licenses/general.bulk.checkin_all.success', 2, ['count' => $count] ));
-
+        return redirect()->back()->with('success', trans_choice('admin/licenses/general.bulk.checkin_all.success', 2, ['count' => $count]));
     }
-
 }

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 use App\Services\LinkedDataService;
 
 /**
@@ -30,7 +30,7 @@ class ManufacturersController extends Controller
      * @see Api\ManufacturersController::index() method that generates the JSON response
      * @since [v1.0]
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('index', Manufacturer::class);
         $manufacturer_count = Manufacturer::withTrashed()->count();
@@ -45,7 +45,7 @@ class ManufacturersController extends Controller
      * @see Api\ManufacturersController::index() method that generates the JSON response
      * @since [v1.0]
      */
-    public function seed() : RedirectResponse
+    public function seed(): RedirectResponse
     {
         $this->authorize('index', Manufacturer::class);
 
@@ -66,11 +66,11 @@ class ManufacturersController extends Controller
      * @see ManufacturersController::store()
      * @since [v1.0]
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Manufacturer::class);
 
-        return view('manufacturers/edit')->with('item', new Manufacturer);
+        return view('manufacturers/edit')->with('item', new Manufacturer());
     }
 
     /**
@@ -81,10 +81,10 @@ class ManufacturersController extends Controller
      * @since [v1.0]
      * @param ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('create', Manufacturer::class);
-        $manufacturer = new Manufacturer;
+        $manufacturer = new Manufacturer();
         $manufacturer->name = $request->input('name');
         $manufacturer->created_by = auth()->id();
         $manufacturer->url = $request->input('url');
@@ -111,7 +111,7 @@ class ManufacturersController extends Controller
      * @param int $manufacturerId
      * @since [v1.0]
      */
-    public function edit(Manufacturer $manufacturer) : View | RedirectResponse
+    public function edit(Manufacturer $manufacturer): View | RedirectResponse
     {
         $this->authorize('update', Manufacturer::class);
         return view('manufacturers/edit')->with('item', $manufacturer);
@@ -126,7 +126,7 @@ class ManufacturersController extends Controller
      * @param int $manufacturerId
      * @since [v1.0]
      */
-    public function update(ImageUploadRequest $request, Manufacturer $manufacturer) : RedirectResponse
+    public function update(ImageUploadRequest $request, Manufacturer $manufacturer): RedirectResponse
     {
         $this->authorize('update', Manufacturer::class);
 
@@ -160,7 +160,7 @@ class ManufacturersController extends Controller
      * @param int $manufacturerId
      * @since [v1.0]
      */
-    public function destroy($manufacturerId) : RedirectResponse
+    public function destroy($manufacturerId): RedirectResponse
     {
         $this->authorize('delete', Manufacturer::class);
         if (is_null($manufacturer = Manufacturer::withTrashed()->withCount('models as models_count')->find($manufacturerId))) {
@@ -173,7 +173,7 @@ class ManufacturersController extends Controller
 
         if ($manufacturer->image) {
             try {
-                Storage::disk('public')->delete('manufacturers/'.$manufacturer->image);
+                Storage::disk('public')->delete('manufacturers/' . $manufacturer->image);
             } catch (\Exception $e) {
                 Log::info($e);
             }
@@ -198,7 +198,7 @@ class ManufacturersController extends Controller
      * @param int $manufacturerId
      * @since [v1.0]
      */
-    public function show(Manufacturer $manufacturer) : View | RedirectResponse
+    public function show(Manufacturer $manufacturer): View | RedirectResponse
     {
         $this->authorize('view', Manufacturer::class);
         return view('manufacturers/view', compact('manufacturer'));
@@ -211,12 +211,11 @@ class ManufacturersController extends Controller
      * @since [v4.1.15]
      * @param int $manufacturers_id
      */
-    public function restore($id) : RedirectResponse
+    public function restore($id): RedirectResponse
     {
         $this->authorize('delete', Manufacturer::class);
 
         if ($manufacturer = Manufacturer::withTrashed()->find($id)) {
-
             if ($manufacturer->deleted_at == '') {
                 return redirect()->back()->with('error', trans('general.not_deleted', ['item_type' => trans('general.manufacturer')]));
             }
@@ -244,7 +243,8 @@ class ManufacturersController extends Controller
         return redirect()->route('manufacturers.index')->with('error', trans('admin/manufacturers/message.does_not_exist'));
     }
 
-    public function parse(Manufacturer $manufacturer) {
+    public function parse(Manufacturer $manufacturer)
+    {
         if (empty($manufacturer->url)) {
             return redirect()->route('manufacturers.show', ["manufacturer" => $manufacturer])->with('error', 'No URL provided');
         }
@@ -259,7 +259,7 @@ class ManufacturersController extends Controller
             if (!is_array($json['contactPoint'])) {
                 $json['contactPoint'] = [$json['contactPoint']];
             }
-      
+
             if (empty($manufacturer->support_url)) {
                 $manufacturer->support_url = $json['contactPoint'][0]['url'] ?? null;
             }
@@ -278,6 +278,6 @@ class ManufacturersController extends Controller
         }
         $manufacturer->save();
 
-        return redirect()->route('manufacturers.show')->with('success', "Updated manufacturer with data from {$manufacturer->url}");      
+        return redirect()->route('manufacturers.show')->with('success', "Updated manufacturer with data from {$manufacturer->url}");
     }
 }

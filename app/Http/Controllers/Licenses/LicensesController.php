@@ -59,7 +59,7 @@ class LicensesController extends Controller
         return view('licenses/edit')
             ->with('depreciation_list', Helper::depreciationList())
             ->with('maintained_list', $maintained_list)
-            ->with('item', new License);
+            ->with('item', new License());
     }
 
     /**
@@ -162,7 +162,7 @@ class LicensesController extends Controller
         $license->expiration_date   = $request->input('expiration_date');
         $license->license_email     = $request->input('license_email');
         $license->license_name      = $request->input('license_name');
-        $license->maintained        = $request->input('maintained',0);
+        $license->maintained        = $request->input('maintained', 0);
         $license->name              = $request->input('name');
         $license->notes             = $request->input('notes');
         $license->order_number      = $request->input('order_number');
@@ -249,7 +249,6 @@ class LicensesController extends Controller
             ->with('total_seats_count', $total_seats_count)
             ->with('available_seats_count', $available_seats_count)
             ->with('checkedout_seats_count', $checkedout_seats_count);
-
     }
 
 
@@ -261,7 +260,7 @@ class LicensesController extends Controller
      * @return \Illuminate\Http\RedirectResponse | \Illuminate\Contracts\View\View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function getClone($licenseId = null) : \Illuminate\Contracts\View\View | \Illuminate\Http\RedirectResponse
+    public function getClone($licenseId = null): \Illuminate\Contracts\View\View | \Illuminate\Http\RedirectResponse
     {
         if (is_null($license_to_clone = License::find($licenseId))) {
             return redirect()->route('licenses.index')->with('error', trans('admin/licenses/message.does_not_exist'));
@@ -302,12 +301,14 @@ class LicensesController extends Controller
         $response = new StreamedResponse(function () {
             // Open output stream
             $handle = fopen('php://output', 'w');
-            $licenses= License::with('company',
-                          'manufacturer',
-                          'category',
-                          'supplier',
-                          'adminuser',
-                          'assignedusers')
+            $licenses = License::with(
+                'company',
+                'manufacturer',
+                'category',
+                'supplier',
+                'adminuser',
+                'assignedusers'
+            )
                           ->orderBy('created_at', 'DESC');
             Company::scopeCompanyables($licenses)
                 ->chunk(500, function ($licenses) use ($handle) {
@@ -347,7 +348,7 @@ class LicensesController extends Controller
                         // Add a new row with data
                         $values = [
                             $license->id,
-                            $license->company ? $license->company->name: '',
+                            $license->company ? $license->company->name : '',
                             $license->name,
                             $license->serial,
                             $license->purchase_date,
@@ -356,18 +357,18 @@ class LicensesController extends Controller
                             $license->free_seat_count,
                             $license->seats,
                             ($license->adminuser ? $license->adminuser->present()->fullName() : trans('admin/reports/general.deleted_user')),
-                            $license->depreciation ? $license->depreciation->name: '',
+                            $license->depreciation ? $license->depreciation->name : '',
                             $license->updated_at,
                             $license->deleted_at,
                             $license->email,
                             ( $license->depreciate == '1') ? trans('general.yes') : trans('general.no'),
-                            ($license->supplier) ? $license->supplier->name: '',
+                            ($license->supplier) ? $license->supplier->name : '',
                             $license->expiration_date,
                             $license->purchase_order,
                             $license->termination_date,
                             ( $license->maintained == '1') ? trans('general.yes') : trans('general.no'),
-                            $license->manufacturer ? $license->manufacturer->name: '',
-                            $license->category ? $license->category->name: '',
+                            $license->manufacturer ? $license->manufacturer->name : '',
+                            $license->category ? $license->category->name : '',
                             $license->min_amt,
                             ( $license->reassignable == '1') ? trans('general.yes') : trans('general.no'),
                             $license->notes,
@@ -382,7 +383,7 @@ class LicensesController extends Controller
             fclose($handle);
         }, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="licenses-'.date('Y-m-d-his').'.csv"',
+            'Content-Disposition' => 'attachment; filename="licenses-' . date('Y-m-d-his') . '.csv"',
         ]);
 
         return $response;

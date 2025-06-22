@@ -36,7 +36,7 @@ class LicenseFilesController extends Controller
                 }
 
                 foreach ($request->file('file') as $file) {
-                    $file_name = $request->handleFile('private_uploads/licenses/','license-'.$license->id, $file);
+                    $file_name = $request->handleFile('private_uploads/licenses/', 'license-' . $license->id, $file);
 
                     //Log the upload to the log
                     $license->logUpload($file_name, e($request->input('notes')));
@@ -44,7 +44,6 @@ class LicenseFilesController extends Controller
 
 
                     return redirect()->route('licenses.show', $license->id)->with('success', trans('admin/licenses/message.upload.success'));
-
             }
 
             return redirect()->route('licenses.show', $license->id)->with('error', trans('admin/licenses/message.upload.nofiles'));
@@ -67,20 +66,18 @@ class LicenseFilesController extends Controller
     public function destroy($licenseId = null, $fileId = null)
     {
         if ($license = License::find($licenseId)) {
-
             $this->authorize('update', $license);
 
             if ($log = Actionlog::find($fileId)) {
-
                 // Remove the file if one exists
-                if (Storage::exists('licenses/'.$log->filename)) {
+                if (Storage::exists('licenses/' . $log->filename)) {
                     try {
-                        Storage::delete('licenses/'.$log->filename);
+                        Storage::delete('licenses/' . $log->filename);
                     } catch (\Exception $e) {
                         Log::debug($e);
                     }
                 }
-                
+
                 $log->delete();
 
                 return redirect()->back()
@@ -113,18 +110,17 @@ class LicenseFilesController extends Controller
             $this->authorize('licenses.files', $license);
 
             if ($log = Actionlog::whereNotNull('filename')->where('item_id', $license->id)->find($fileId)) {
-                $file = 'private_uploads/licenses/'.$log->filename;
+                $file = 'private_uploads/licenses/' . $log->filename;
 
                 try {
                     return StorageHelper::showOrDownloadFile($file, $log->filename);
                 } catch (\Exception $e) {
-                    return redirect()->route('licenses.show', ['licenses' => $license])->with('error',  trans('general.file_not_found'));
+                    return redirect()->route('licenses.show', ['licenses' => $license])->with('error', trans('general.file_not_found'));
                 }
             }
 
             // The log record doesn't exist somehow
-            return redirect()->route('licenses.show', ['licenses' => $license])->with('error',  trans('general.log_record_not_found'));
-
+            return redirect()->route('licenses.show', ['licenses' => $license])->with('error', trans('general.log_record_not_found'));
         }
 
         return redirect()->route('licenses.index')->with('error', trans('admin/licenses/message.does_not_exist', ['id' => $fileId]));

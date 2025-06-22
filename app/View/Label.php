@@ -220,12 +220,10 @@ class Label implements View
 
                     $assetData->put('fields', $fieldsWithEmpty->take($template->getSupportFields()));
                     return $assetData;
+                } else {
+                    $assetData->put('fields', $fields->take($template->getSupportFields()));
+                    return $assetData;
                 }
-               else{
-                   $assetData->put('fields', $fields->take($template->getSupportFields()));
-                   return $assetData;
-               }
-
             });
 
         if ($template instanceof Sheet) {
