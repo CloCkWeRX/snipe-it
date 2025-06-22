@@ -34,11 +34,11 @@ class ImageUploadRequest extends Request
     public function rules()
     {
 
-            return [
-                'image' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,avif',
-                'avatar' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,avif',
-                'favicon' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,image/x-icon,image/vnd.microsoft.icon,ico',
-            ];
+        return [
+            'image' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,avif',
+            'avatar' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,avif',
+            'favicon' => 'mimes:png,gif,jpg,jpeg,svg,bmp,svg+xml,webp,image/x-icon,image/vnd.microsoft.icon,ico',
+        ];
     }
 
     public function response(array $errors)
@@ -128,13 +128,13 @@ class ImageUploadRequest extends Request
                     Storage::disk('public')->put($path . '/' . $file_name, (string) $upload->encode());
                 }
 
-                 // Remove Current image if exists
+                // Remove Current image if exists
                 $item = $this->deleteExistingImage($item, $path, $db_fieldname);
                 $item->{$db_fieldname} = $file_name;
             }
 
 
-        // If the user isn't uploading anything new but wants to delete their old image, do so
+            // If the user isn't uploading anything new but wants to delete their old image, do so
         } elseif ($this->input('image_delete') == '1') {
             $item = $this->deleteExistingImage($item, $path, $db_fieldname);
         }

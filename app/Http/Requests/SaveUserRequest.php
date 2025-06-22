@@ -48,7 +48,7 @@ class SaveUserRequest extends FormRequest
                 }
                 break;
 
-            // Save all fields
+                // Save all fields
             case 'PUT':
                 $rules['first_name'] = 'required|string|min:1';
                 $rules['username'] = 'required_unless:ldap_import,1|string|min:1';
@@ -56,7 +56,7 @@ class SaveUserRequest extends FormRequest
                 $rules['company_id'] = [new UserCannotSwitchCompaniesIfItemsAssigned()];
                 break;
 
-            // Save only what's passed
+                // Save only what's passed
             case 'PATCH':
                 $rules['password'] = Setting::passwordComplexityRulesSaving('update');
                 $rules['company_id'] = [new UserCannotSwitchCompaniesIfItemsAssigned()];

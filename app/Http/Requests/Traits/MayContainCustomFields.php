@@ -15,7 +15,7 @@ trait MayContainCustomFields
         if (request()->has('model_id') != '') {
             $asset_model = AssetModel::find(request()->input('model_id'));
 
-        // or if we have it available to route-model-binding
+            // or if we have it available to route-model-binding
         } elseif ((request()->route('asset') && (request()->route('asset')->model_id))) {
             $asset_model = AssetModel::find(request()->route('asset')->model_id);
         } else {
