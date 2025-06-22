@@ -127,7 +127,6 @@ class AssetCheckinController extends Controller
         if (($request->filled('checkin_at')) && ($request->get('checkin_at') != date('Y-m-d'))) {
             $originalValues['action_date'] = $checkin_at;
             $checkin_at = $request->get('checkin_at');
-
         }
         $asset->last_checkin = $checkin_at;
 

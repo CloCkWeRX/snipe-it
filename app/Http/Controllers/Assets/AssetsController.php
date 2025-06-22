@@ -198,7 +198,6 @@ class AssetsController extends Controller
                         return redirect()->back()->withInput()->with('error', trans('admin/hardware/message.create.target_not_found.user'));
                     }
                     $location = $target->location_id;
-
                 } elseif ($assetId = request('assigned_asset')) {
                     $target = Asset::find($assetId);
 
@@ -206,7 +205,6 @@ class AssetsController extends Controller
                         return redirect()->back()->withInput()->with('error', trans('admin/hardware/message.create.target_not_found.asset'));
                     }
                     $location = $target->location_id;
-
                 } elseif ($locationId = request('assigned_location')) {
                     $target = Location::find($locationId);
 
@@ -902,7 +900,7 @@ class AssetsController extends Controller
             return redirect()->route('hardware.edit', $asset)->withErrors($asset->getErrors());
         }
 
-        $dt = Carbon::now()->addMonths( (int) $settings->audit_interval)->toDateString();
+        $dt = Carbon::now()->addMonths((int) $settings->audit_interval)->toDateString();
         return view('hardware/audit')->with('asset', $asset)->with('item', $asset)->with('next_audit_date', $dt)->with('locations_list');
     }
 

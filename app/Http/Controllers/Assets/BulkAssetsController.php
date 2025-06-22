@@ -54,9 +54,8 @@ class BulkAssetsController extends Controller
         $asset_ids = $request->input('ids');
 
         if ($request->input('bulk_actions') === 'checkout') {
-            $status_check =$this->hasUndeployableStatus($asset_ids);
-            if($status_check && $status_check['status'] === true){
-
+            $status_check = $this->hasUndeployableStatus($asset_ids);
+            if ($status_check && $status_check['status'] === true) {
                 $asset_tags = implode(', ', array_column($status_check['tags'], 'asset_tag'));
                 $asset_ids = $status_check['asset_ids'];
 
@@ -231,7 +230,8 @@ class BulkAssetsController extends Controller
         $null_custom_fields_inputs = array_filter($request->all(), function ($key) {
             // filter out all keys that start with 'null_'
             return (strpos($key, 'null_') === 0);
-        }, ARRAY_FILTER_USE_KEY);;
+        }, ARRAY_FILTER_USE_KEY);
+        ;
         // remove 'null' from the keys
         $custom_fields_to_null = [];
         foreach ($null_custom_fields_inputs as $key => $value) {
@@ -682,7 +682,7 @@ class BulkAssetsController extends Controller
             return redirect()->route('hardware.index')->with('success', trans('admin/hardware/message.restore.success'));
         }
     }
-    public function hasUndeployableStatus (array $asset_ids)
+    public function hasUndeployableStatus(array $asset_ids)
     {
         $undeployable = Asset::whereIn('id', $asset_ids)
             ->undeployable()
@@ -698,9 +698,9 @@ class BulkAssetsController extends Controller
         $undeployableIds = array_column($undeployableTags, 'id');
         $filtered_ids = array_diff($asset_ids, $undeployableIds);
 
-         if($undeployable->isNotEmpty()) {
-             return ['status' => true, 'tags' => $undeployableTags, 'asset_ids' => $filtered_ids];
-         }
+        if ($undeployable->isNotEmpty()) {
+            return ['status' => true, 'tags' => $undeployableTags, 'asset_ids' => $filtered_ids];
+        }
         return false;
     }
 }
