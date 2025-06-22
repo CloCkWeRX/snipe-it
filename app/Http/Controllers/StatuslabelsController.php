@@ -7,7 +7,7 @@ use App\Models\Statuslabel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 
 /**
  * This controller handles all actions related to Status Labels for
@@ -20,13 +20,13 @@ class StatuslabelsController extends Controller
     /**
      * Show a list of all the statuslabels.
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('view', Statuslabel::class);
         return view('statuslabels.index');
     }
 
-    public function show(Statuslabel $statuslabel) : View | RedirectResponse
+    public function show(Statuslabel $statuslabel): View | RedirectResponse
     {
         $this->authorize('view', Statuslabel::class);
         return view('statuslabels.view')->with('statuslabel', $statuslabel);
@@ -36,13 +36,13 @@ class StatuslabelsController extends Controller
      * Statuslabel create.
      *
      */
-    public function create() : View
+    public function create(): View
     {
         // Show the page
         $this->authorize('create', Statuslabel::class);
 
         return view('statuslabels/edit')
-            ->with('item', new Statuslabel)
+            ->with('item', new Statuslabel())
             ->with('statuslabel_types', Helper::statusTypeList());
     }
 
@@ -51,7 +51,7 @@ class StatuslabelsController extends Controller
      *
      * @param Request $request
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Statuslabel::class);
         // create a new model instance
@@ -87,7 +87,7 @@ class StatuslabelsController extends Controller
      *
      * @param  int $statuslabelId
      */
-    public function edit(Statuslabel $statuslabel) : View | RedirectResponse
+    public function edit(Statuslabel $statuslabel): View | RedirectResponse
     {
         $this->authorize('update', Statuslabel::class);
 
@@ -103,7 +103,7 @@ class StatuslabelsController extends Controller
      *
      * @param  int $statuslabelId
      */
-    public function update(Request $request, Statuslabel $statuslabel) : RedirectResponse
+    public function update(Request $request, Statuslabel $statuslabel): RedirectResponse
     {
         $this->authorize('update', Statuslabel::class);
 
@@ -136,7 +136,7 @@ class StatuslabelsController extends Controller
      *
      * @param  int $statuslabelId
      */
-    public function destroy($statuslabelId) : RedirectResponse
+    public function destroy($statuslabelId): RedirectResponse
     {
         $this->authorize('delete', Statuslabel::class);
         // Check if the Statuslabel exists

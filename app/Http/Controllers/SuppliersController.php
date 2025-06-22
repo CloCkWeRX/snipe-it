@@ -191,7 +191,8 @@ class SuppliersController extends Controller
         return view('suppliers/view', compact('supplier', 'options', 'initialMarkers'));
     }
 
-    public function parse(Supplier $supplier) {
+    public function parse(Supplier $supplier)
+    {
         if (empty($supplier->url)) {
             return redirect()->route('suppliers.show', ["supplier" => $supplier])->with('error', 'No URL provided');
         }
@@ -206,7 +207,7 @@ class SuppliersController extends Controller
             if (!is_array($json['contactPoint'])) {
                 $json['contactPoint'] = [$json['contactPoint']];
             }
-      
+
             if (empty($supplier->phone)) {
                 $supplier->support_phone = $json['contactPoint'][0]['telephone'] ?? null;
             }
@@ -220,6 +221,6 @@ class SuppliersController extends Controller
         }
         $supplier->save();
 
-        return redirect()->route('suppliers.show', ['supplier' => $supplier])->with('success', "Updated suppliers with data from {$suppliers->url}");      
+        return redirect()->route('suppliers.show', ['supplier' => $supplier])->with('success', "Updated suppliers with data from {$suppliers->url}");
     }
 }
