@@ -7,6 +7,7 @@ use App\Models\Location;
 use App\Models\Setting;
 use App\View\Label;
 use Tests\TestCase;
+
 use function Livewire\invade;
 
 class LabelTest extends TestCase
@@ -27,7 +28,7 @@ class LabelTest extends TestCase
         $assets->first()->update(['location_id' => null]);
 
         // pulled from BulkAssetsController@edit method
-        $label = (new Label)
+        $label = (new Label())
             ->with('assets', $assets)
             ->with('settings', Setting::getSettings())
             ->with('bulkedit', true)

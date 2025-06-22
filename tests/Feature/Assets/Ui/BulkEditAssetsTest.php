@@ -223,12 +223,12 @@ class BulkEditAssetsTest extends TestCase
             'ids'                    => $id_array,
             $ram->db_column          => 16,
             $cpu->db_column          => '4.1',
-            'null'.$phone->db_column => '8304997586',
+            'null' . $phone->db_column => '8304997586',
         ])->assertStatus(302);
 
         $this->actingAs(User::factory()->editAssets()->create())->post(route('hardware/bulksave'), [
             'ids'                  => $id_array,
-            null.$phone->db_column => 1,
+            null . $phone->db_column => 1,
         ]);
 
         Asset::findMany($id_array)->each(function (Asset $asset) use ($ram, $cpu, $phone) {

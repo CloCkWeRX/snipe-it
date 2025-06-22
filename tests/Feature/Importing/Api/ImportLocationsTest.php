@@ -56,7 +56,6 @@ class ImportLocationsTest extends ImportDataTestCase implements TestsPermissions
             ->sole();
 
         $this->assertEquals($row['name'], $newLocation->name);
-
     }
 
     #[Test]
@@ -132,5 +131,4 @@ class ImportLocationsTest extends ImportDataTestCase implements TestsPermissions
             Arr::except($updatedLocation->attributesToArray(), array_merge($updatedAttributes, $location->getDates())),
         );
     }
-
 }
