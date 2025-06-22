@@ -15,7 +15,7 @@ use App\Notifications\RequestAssetNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 use Exception;
 
 /**
@@ -66,14 +66,14 @@ class ViewAssetsController extends Controller
 
         // Regular manager sees only their subordinates + self
         $managedUsers = $authUser->getAllSubordinates();
-        
+
         // If user has subordinates, show them with self at beginning
         if ($managedUsers->count() > 0) {
             return collect([$authUser])->merge($managedUsers)
                 ->sortBy('last_name')
                 ->sortBy('first_name');
         }
-        
+
         // User has no subordinates, only sees themselves
         return collect([$authUser]);
     }
@@ -94,12 +94,12 @@ class ViewAssetsController extends Controller
         }
 
         $requestedUserId = (int) $request->input('user_id');
-        
+
         // Validate if the requested user is allowed
         if ($subordinates->contains('id', $requestedUserId)) {
             return $requestedUserId;
         }
-        
+
         // If invalid ID or not authorized, return default
         return $defaultUserId;
     }
@@ -108,7 +108,7 @@ class ViewAssetsController extends Controller
      * Show user's assigned assets with optional manager view functionality.
      *
      */
-    public function getIndex(Request $request) : View | RedirectResponse
+    public function getIndex(Request $request): View | RedirectResponse
     {
         $authUser = auth()->user();
         $settings = Setting::getSettings();
@@ -152,7 +152,7 @@ class ViewAssetsController extends Controller
     /**
      * Returns view of requestable items for a user.
      */
-    public function getRequestableIndex() : View
+    public function getRequestableIndex(): View
     {
         $assets = Asset::with('model', 'defaultLoc', 'location', 'assignedTo', 'requests')->Hardware()->RequestableAssets();
         $models = AssetModel::with('category', 'requests', 'assets')->RequestableModels()->get();
@@ -163,7 +163,7 @@ class ViewAssetsController extends Controller
     public function getRequestItem(Request $request, $itemType, $itemId = null, $cancel_by_admin = false, $requestingUser = null): RedirectResponse
     {
         $item = null;
-        $fullItemType = 'App\\Models\\'.studly_case($itemType);
+        $fullItemType = 'App\\Models\\' . studly_case($itemType);
 
         if ($itemType == 'asset_model') {
             $itemType = 'model';
@@ -250,7 +250,7 @@ class ViewAssetsController extends Controller
     }
 
 
-    public function getRequestedAssets() : View
+    public function getRequestedAssets(): View
     {
         return view('account/requested');
     }
