@@ -176,16 +176,16 @@ class AssetFilesController extends Controller
             $log = Actionlog::find($fileId);
 
             if ($log) {
-                    // Check the file actually exists, and delete it
+                // Check the file actually exists, and delete it
                 if (Storage::exists($rel_path . '/' . $log->filename)) {
                     Storage::delete($rel_path . '/' . $log->filename);
                 }
 
                 // Delete the record of the file
-                    $log->delete();
+                $log->delete();
 
                 // All deleting done - notify the user of success
-                    return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/hardware/message.deletefile.success')), 200);
+                return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/hardware/message.deletefile.success')), 200);
             }
 
             // The file doesn't seem to really exist, so report an error

@@ -37,7 +37,7 @@ class CheckLocale
                 $language = $request->user()->locale;
                 $this->warn_legacy_locale($language, "username " . $request->user()->username . " (" . $request->user()->id . ") has a language");
 
-            // App setting preference
+                // App setting preference
             } elseif ($settings->locale != '') {
                 $language = $settings->locale;
                 $this->warn_legacy_locale($language, "App Settings is set to");
