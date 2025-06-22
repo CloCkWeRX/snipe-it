@@ -46,7 +46,7 @@ class LicenseSeatsTransformer
             ] : null,
             'location' => ($seat->location()) ? [
                 'id' => (int) $seat->location()->id,
-                'name'=> e($seat->location()->name),
+                'name' => e($seat->location()->name),
                 'created_at' => Helper::getFormattedDateObject($seat->created_at, 'datetime'),
             ] : null,
             'reassignable' => (bool) $seat->license->reassignable,
