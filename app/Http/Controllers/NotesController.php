@@ -27,7 +27,7 @@ class NotesController extends Controller
 
         $this->authorize('update', $item);
 
-        $logaction = new Actionlog;
+        $logaction = new Actionlog();
         $logaction->item_id = $item->id;
         $logaction->item_type = get_class($item);
         $logaction->note = $validated['note'];
