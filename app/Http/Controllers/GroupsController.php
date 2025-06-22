@@ -6,7 +6,7 @@ use App\Helpers\Helper;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\View;
 
 /**
  * This controller handles all actions related to User Groups for
@@ -36,9 +36,9 @@ class GroupsController extends Controller
      * @see GroupsController::postCreate()
      * @since [v1.0]
      */
-    public function create(Request $request) : View
+    public function create(Request $request): View
     {
-        $group = new Group;
+        $group = new Group();
         // Get all the available permissions
         $permissions = config('permissions');
         $groupPermissions = Helper::selectedPermissionsArray($permissions, $permissions);
@@ -55,7 +55,7 @@ class GroupsController extends Controller
      * @see GroupsController::getCreate()
      * @since [v1.0]
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         // create a new group instance
         $group = new Group();
@@ -79,7 +79,7 @@ class GroupsController extends Controller
      * @param int $id
      * @since [v1.0]
      */
-    public function edit(Group $group) : View | RedirectResponse
+    public function edit(Group $group): View | RedirectResponse
     {
         $permissions = config('permissions');
         $groupPermissions = $group->decodePermissions();
@@ -99,7 +99,7 @@ class GroupsController extends Controller
      * @param int $id
      * @since [v1.0]
      */
-    public function update(Request $request, Group $group) : RedirectResponse
+    public function update(Request $request, Group $group): RedirectResponse
     {
         $group->name = $request->input('name');
         $group->permissions = json_encode($request->input('permission'));
@@ -124,7 +124,7 @@ class GroupsController extends Controller
      * @param int $id
      * @since [v1.0]
      */
-    public function destroy($id) : RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         if (! config('app.lock_passwords')) {
             if (! $group = Group::find($id)) {
@@ -145,8 +145,8 @@ class GroupsController extends Controller
      * @param $id
      * @since [v4.0.11]
      */
-    public function show(Group $group) : View | RedirectResponse
+    public function show(Group $group): View | RedirectResponse
     {
-      return view('groups/view', compact('group'));
+        return view('groups/view', compact('group'));
     }
 }
