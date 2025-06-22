@@ -8,8 +8,8 @@ use App\Models\Company;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * This controller handles all actions related to Asset Maintenance for
@@ -19,7 +19,6 @@ use \Illuminate\Http\RedirectResponse;
  */
 class AssetMaintenancesController extends Controller
 {
-
     /**
     *  Returns a view that invokes the ajax tables which actually contains
     * the content for the asset maintenances listing, which is generated in getDatatable.
@@ -30,7 +29,7 @@ class AssetMaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('view', Asset::class);
         return view('asset_maintenances/index');
@@ -45,7 +44,7 @@ class AssetMaintenancesController extends Controller
      * @since [v1.8]
      * @return mixed
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('update', Asset::class);
         $asset = null;
@@ -54,11 +53,11 @@ class AssetMaintenancesController extends Controller
             // We have to set this so that the correct property is set in the select2 ajax dropdown
             $asset->asset_id = $asset->id;
         }
-        
+
         return view('asset_maintenances/edit')
                    ->with('assetMaintenanceType', AssetMaintenance::getImprovementOptions())
                    ->with('asset', $asset)
-                   ->with('item', new AssetMaintenance);
+                   ->with('item', new AssetMaintenance());
     }
 
     /**
@@ -69,7 +68,7 @@ class AssetMaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('update', Asset::class);
 
@@ -77,7 +76,6 @@ class AssetMaintenancesController extends Controller
 
         // Loop through the selected assets
         foreach ($assets as $asset) {
-
             $assetMaintenance = new AssetMaintenance();
             $assetMaintenance->supplier_id = $request->input('supplier_id');
             $assetMaintenance->is_warranty = $request->input('is_warranty');
@@ -92,7 +90,8 @@ class AssetMaintenancesController extends Controller
             $assetMaintenance->completion_date = $request->input('completion_date');
             $assetMaintenance->created_by = auth()->id();
 
-            if (($assetMaintenance->completion_date !== null)
+            if (
+                ($assetMaintenance->completion_date !== null)
                 && ($assetMaintenance->start_date !== '')
                 && ($assetMaintenance->start_date !== '0000-00-00')
             ) {
@@ -110,7 +109,6 @@ class AssetMaintenancesController extends Controller
 
         return redirect()->route('maintenances.index')
             ->with('success', trans('admin/asset_maintenances/message.create.success'));
-
     }
 
     /**
@@ -121,7 +119,7 @@ class AssetMaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function edit(AssetMaintenance $maintenance) : View | RedirectResponse
+    public function edit(AssetMaintenance $maintenance): View | RedirectResponse
     {
         $this->authorize('update', Asset::class);
         $this->authorize('update', $maintenance->asset);
@@ -143,7 +141,7 @@ class AssetMaintenancesController extends Controller
      * @version v1.0
      * @since [v1.8]
      */
-    public function update(Request $request, AssetMaintenance $maintenance) : View | RedirectResponse
+    public function update(Request $request, AssetMaintenance $maintenance): View | RedirectResponse
     {
         $this->authorize('update', Asset::class);
         $this->authorize('update', $maintenance->asset);
@@ -159,18 +157,19 @@ class AssetMaintenancesController extends Controller
 
 
         // Todo - put this in a getter/setter?
-        if (($maintenance->completion_date == null))
-        {
-            if (($maintenance->asset_maintenance_time !== 0)
-              || (! is_null($maintenance->asset_maintenance_time))
+        if (($maintenance->completion_date == null)) {
+            if (
+                ($maintenance->asset_maintenance_time !== 0)
+                || (! is_null($maintenance->asset_maintenance_time))
             ) {
                 $maintenance->asset_maintenance_time = null;
             }
         }
 
-        if (($maintenance->completion_date !== null)
-          && ($maintenance->start_date !== '')
-          && ($maintenance->start_date !== '0000-00-00')
+        if (
+            ($maintenance->completion_date !== null)
+            && ($maintenance->start_date !== '')
+            && ($maintenance->start_date !== '0000-00-00')
         ) {
             $startDate = Carbon::parse($maintenance->start_date);
             $completionDate = Carbon::parse($maintenance->completion_date);
@@ -193,7 +192,7 @@ class AssetMaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function destroy(AssetMaintenance $maintenance) : RedirectResponse
+    public function destroy(AssetMaintenance $maintenance): RedirectResponse
     {
         $this->authorize('update', Asset::class);
         $this->authorize('update', $maintenance->asset);
@@ -212,7 +211,7 @@ class AssetMaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function show(AssetMaintenance $maintenance) : View | RedirectResponse
+    public function show(AssetMaintenance $maintenance): View | RedirectResponse
     {
         return view('asset_maintenances/view')->with('assetMaintenance', $maintenance);
     }
