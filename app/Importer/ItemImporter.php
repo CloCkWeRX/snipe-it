@@ -351,10 +351,17 @@ class ItemImporter extends Importer
      * @param $user_manager string
      * @return int id of company created/found
      */
-    public function fetchManager($user_manager_first_name, $user_manager_last_name)
+    public function fetchManager($user_manager_employee_num = null, $user_manager_username = null, $user_manager_first_name = null, $user_manager_last_name = null)
     {
-        $manager = User::where('first_name', '=', $user_manager_first_name)
-            ->where('last_name', '=', $user_manager_last_name)->first();
+        if ($user_manager_username) {
+            $manager = User::where('username', '=', $user_manager_username)->first();
+        } elseif ($user_manager_employee_num) {
+            $manager = User::where('employee_num', '=', $user_manager_employee_num)->first();
+        } else {
+            $manager = User::where('first_name', '=', $user_manager_first_name)
+                ->where('last_name', '=', $user_manager_last_name)->first();
+        }
+
         if ($manager) {
             $this->log('A matching Manager ' . $user_manager_first_name . ' ' . $user_manager_last_name . ' already exists');
 
