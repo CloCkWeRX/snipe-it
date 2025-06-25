@@ -26,6 +26,8 @@ class CreateCategoriesTest extends TestCase
                 'eula_text' => 'Test EULA',
                 'category_type' => 'accessory',
                 'notes' => 'Test Note',
+                'require_acceptance' => true,
+                'alert_on_response' => true,
             ])
             ->assertOk()
             ->assertStatusMessageIs('success')
@@ -39,6 +41,8 @@ class CreateCategoriesTest extends TestCase
         $this->assertEquals('Test EULA', $category->eula_text);
         $this->assertEquals('Test Note', $category->notes);
         $this->assertEquals('accessory', $category->category_type);
+        $this->assertEquals(1, $category->require_acceptance);
+        $this->assertEquals(1, $category->alert_on_response);
     }
 
     public function testCannotCreateCategoryWithoutCategoryType()

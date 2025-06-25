@@ -17,6 +17,7 @@ class CheckoutAcceptance extends Model
     protected $casts = [
         'accepted_at' => 'datetime',
         'declined_at' => 'datetime',
+        'alert_on_response_id' => 'integer',
     ];
 
     /**
