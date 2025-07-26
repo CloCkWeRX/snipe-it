@@ -89,7 +89,6 @@ class AssetModelFilesTest extends TestCase
             )
             ->assertOk()
             ->assertStatusMessageIs('error');
-        >> >> >> > c6ecc0d8e88cf2ad8975e1ac6e9e81414ac33b91
     }
 
     public function testAssetModelApiDownloadsFile()
@@ -154,6 +153,7 @@ class AssetModelFilesTest extends TestCase
                 'deleted_at',
                 'note',
                 'available_actions'
+                ]
                 ]
                 ]
             )
