@@ -416,19 +416,12 @@
             <table
                   data-cookie-id-table="userAssignedAssets"
                   data-toolbar="#userAssetToolbar"
-
                   data-id-table="userAssets"
-
-
-
                   data-side-pagination="client"
-
-
                   data-show-footer="true"
                   data-sort-order="asc"
                   id="userAssets"
                   class="table table-striped snipe-table"
-
                   data-export-options='{
                   "fileName": "my-assets-{{ date('Y-m-d') }}",
                   "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
@@ -569,18 +562,11 @@
               <table
                       data-toolbar="#userLicensesToolbar"
                       data-cookie-id-table="userLicenses"
-
                       data-id-table="userLicenses"
-
-
-
                       data-side-pagination="client"
-
-
                       data-show-refresh="false"
                       data-sort-order="asc"
                       id="userLicenses"
-
                       class="table table-striped snipe-table"
                       data-export-options='{
                     "fileName": "my-licenses-{{ date('Y-m-d') }}",
@@ -640,14 +626,7 @@
                       data-cookie-id-table="userAccessoryTable"
                       data-id-table="userAccessoryTable"
                       id="userAccessoryTable"
-
-
-
-
                       data-side-pagination="client"
-
-
-
                       data-show-footer="true"
                       data-show-refresh="false"
                       data-sort-order="asc"
@@ -698,14 +677,7 @@
                       data-cookie-id-table="userConsumableTable"
                       data-id-table="userConsumableTable"
                       id="userConsumableTable"
-
-
-
-
                       data-side-pagination="client"
-
-
-
                       data-show-footer="true"
                       data-show-refresh="false"
                       data-sort-order="asc"
@@ -752,12 +724,7 @@
                     data-cookie-id-table="userEULATable"
                     data-id-table="userEULATable"
                     id="userEULATable"
-
-
                     data-side-pagination="client"
-
-
-
                     data-show-footer="true"
                     data-show-refresh="false"
                     data-sort-order="asc"

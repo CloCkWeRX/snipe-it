@@ -1257,23 +1257,7 @@
                         <div class="row{{($asset->assignedAssets->count() > 0 ) ? '' : ' hidden-print'}}">
                             <div class="col-md-12">
 
-                                    <form
-                                        method="POST"
-                                        action="{{ route('hardware/bulkedit') }}"
-                                        accept-charset="UTF-8"
-                                        class="form-inline"
-                                        id="bulkForm"
-                                    >
-                                    @csrf
-                                    <div id="toolbar">
-                                        <label for="bulk_actions"><span class="sr-only">{{ trans('general.bulk_actions')}}</span></label>
-                                        <select name="bulk_actions" class="form-control select2" style="width: 150px;" aria-label="bulk_actions">
-                                            <option value="edit">{{ trans('button.edit') }}</option>
-                                            <option value="delete">{{ trans('button.delete')}}</option>
-                                            <option value="labels">{{ trans_choice('button.generate_labels', 2) }}</option>
-                                        </select>
-                                        <button class="btn btn-primary" id="{{ (isset($id_button)) ? $id_button : 'bulkAssetEditButton' }}" disabled>{{ trans('button.go') }}</button>
-                                    </div>
+                                @include('partials.asset-bulk-actions')
 
                                     <!-- checked out assets table -->
                                     <div class="table-responsive">
@@ -1281,18 +1265,12 @@
                                         <table
                                                 data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
                                                 data-cookie-id-table="assetsTable"
-
                                                 data-id-table="assetsTable"
-
-
-
                                                 data-side-pagination="server"
-
-
-
-
                                                 data-sort-order="asc"
+                                                data-toolbar="#assetsBulkEditToolbar"
                                                 data-bulk-button-id="#bulkAssetEditButton"
+                                                data-bulk-form-id="#assetsBulkForm"
                                                 id="assetsListingTable"
                                                 class="table table-striped snipe-table"
                                                 data-url="{{route('api.assets.index',['assigned_to' => $asset->id, 'assigned_type' => 'App\Models\Asset']) }}"
@@ -1302,9 +1280,6 @@
                               }'>
 
                                         </table>
-
-
-                                        </form>
                                     </div>
 
 
@@ -1325,17 +1300,9 @@
                         <table
                                 data-columns="{{ \App\Presenters\AssetPresenter::assignedAccessoriesDataTableLayout() }}"
                                 data-cookie-id-table="accessoriesAssignedListingTable"
-
                                 data-id-table="accessoriesAssignedListingTable"
-
-
-
                                 data-side-pagination="server"
-
-
-
                                 data-sort-order="asc"
-
                                 id="accessoriesAssignedListingTable"
                                 class="table table-striped snipe-table"
                                 data-url="{{ route('api.assets.assigned_accessories', ['asset' => $asset]) }}"

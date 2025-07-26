@@ -105,15 +105,10 @@
           <table
                   data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
                   data-cookie-id-table="assetsListingTable"
-
                   data-id-table="assetsListingTable"
                   data-toolbar="#assetsBulkEditToolbar"
                   data-bulk-button-id="#bulkAssetEditButton"
                   data-bulk-form-id="#assetsBulkForm"
-                  data-search="true"
-                  data-search-highlight="true"
-                  data-show-print="true"
-                  data-side-pagination="server"
                   data-side-pagination="server"
                   data-sort-order="asc"
                   id="assetsListingTable"
@@ -133,13 +128,10 @@
           <table
                   data-columns="{{ \App\Presenters\LicensePresenter::dataTableLayout() }}"
                   data-cookie-id-table="licensesTable"
-
                   data-id-table="licensesTable"
-
-
-
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
 <<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
@@ -150,6 +142,8 @@
 
 
 >>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
+=======
+>>>>>>> ec17c168ea2acc4df4341a644b9e40af4df1da84
                   data-sort-order="asc"
                   id="licensesTable"
                   class="table table-striped snipe-table"
@@ -168,13 +162,10 @@
           <table
                   data-columns="{{ \App\Presenters\AccessoryPresenter::dataTableLayout() }}"
                   data-cookie-id-table="accessoriesTable"
-
                   data-id-table="accessoriesTable"
-
-
-
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
 <<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
@@ -185,6 +176,8 @@
 
 
 >>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
+=======
+>>>>>>> ec17c168ea2acc4df4341a644b9e40af4df1da84
                   data-sort-order="asc"
                   id="accessoriesTable"
                   class="table table-striped snipe-table"
@@ -203,13 +196,10 @@
           <table
                   data-columns="{{ \App\Presenters\ConsumablePresenter::dataTableLayout() }}"
                   data-cookie-id-table="consumablesTable"
-
                   data-id-table="consumablesTable"
-
-
-
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
 <<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
@@ -220,6 +210,8 @@
 
 
 >>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
+=======
+>>>>>>> ec17c168ea2acc4df4341a644b9e40af4df1da84
                   data-sort-order="asc"
                   id="consumablesTable"
                   class="table table-striped snipe-table"
@@ -237,13 +229,10 @@
           <table
                   data-columns="{{ \App\Presenters\ComponentPresenter::dataTableLayout() }}"
                   data-cookie-id-table="componentsTable"
-
                   data-id-table="componentsTable"
-
-
-
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
 <<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
@@ -254,6 +243,8 @@
 
 
 >>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
+=======
+>>>>>>> ec17c168ea2acc4df4341a644b9e40af4df1da84
                   data-sort-order="asc"
                   id="componentsTable"
                   class="table table-striped snipe-table"

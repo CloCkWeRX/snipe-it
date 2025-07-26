@@ -112,22 +112,13 @@
               <table
                       data-cookie-id-table="suppliersAssetsTable"
                       data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-
                       data-id-table="suppliersAssetsTable"
-
-
-
                       data-show-footer="true"
                       data-side-pagination="server"
-
-
-
-
                       data-sort-order="asc"
                       data-toolbar="#assetsBulkEditToolbar"
                       data-bulk-button-id="#bulkAssetEditButton"
                       data-bulk-form-id="#assetsBulkForm"
-
                       id="suppliersAssetsTable"
                       class="table table-striped snipe-table"
                       data-url="{{route('api.assets.index', ['supplier_id' => $supplier->id]) }}"
@@ -148,16 +139,8 @@
               <table
                       data-columns="{{ \App\Presenters\AccessoryPresenter::dataTableLayout() }}"
                       data-cookie-id-table="accessoriesListingTable"
-
                       data-id-table="accessoriesListingTable"
-
-
-
                       data-side-pagination="server"
-
-
-
-
                       data-sort-order="asc"
                       id="accessoriesListingTable"
                       class="table table-striped snipe-table"
@@ -178,16 +161,8 @@
               <table
                       data-columns="{{ \App\Presenters\LicensePresenter::dataTableLayout() }}"
                       data-cookie-id-table="licensesListingTable"
-
                       data-id-table="licensesListingTable"
-
-
-
                       data-side-pagination="server"
-
-
-
-
                       data-sort-order="asc"
                       id="licensesListingTable"
                       class="table table-striped snipe-table"
@@ -207,16 +182,8 @@
                     <table
                             data-columns="{{ \App\Presenters\ComponentPresenter::dataTableLayout() }}"
                             data-cookie-id-table="componentsListingTable"
-
                             data-id-table="componentsListingTable"
-
-
-
                             data-side-pagination="server"
-
-
-
-
                             data-sort-order="asc"
                             id="accessoriesListingTable"
                             class="table table-striped snipe-table"
@@ -235,16 +202,8 @@
                 <table
                         data-columns="{{ \App\Presenters\ConsumablePresenter::dataTableLayout() }}"
                         data-cookie-id-table="consumablesListingTable"
-
                         data-id-table="consumablesListingTable"
-
-
-
                         data-side-pagination="server"
-
-
-
-
                         data-sort-order="asc"
                         id="accessoriesListingTable"
                         class="table table-striped snipe-table"
@@ -265,16 +224,8 @@
               <table
                       data-columns="{{ \App\Presenters\AssetMaintenancesPresenter::dataTableLayout() }}"
                       data-cookie-id-table="maintenancesTable"
-
                       data-id-table="maintenancesTable"
-
-
-
                       data-side-pagination="server"
-
-
-
-
                       data-sort-order="asc"
                       id="maintenancesTable"
                       class="table table-striped snipe-table"
