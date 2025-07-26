@@ -123,7 +123,7 @@ class UploadedFilesController extends Controller
      *
      * @param  \App\Http\Requests\UploadFileRequest $request
      * @param  string                               $object_type the type of object to upload the file to
-     * @param  int                                  $id          the ID of the object to store so we can check permisisons
+     * @param  int                                  $id          the ID of the object to store so we can check permissions
      * @since  [v8.1.17]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
@@ -171,7 +171,7 @@ class UploadedFilesController extends Controller
      *
      * @param  \App\Http\Requests\UploadFileRequest $request
      * @param  string                               $object_type the type of object to upload the file to
-     * @param  int                                  $id          the ID of the object to delete from so we can check permisisons
+     * @param  int                                  $id          the ID of the object to delete from so we can check permissions
      * @param  $file_id     the ID of the file to delete from the action_logs table
      * @since  [v8.1.17]
      * @author [A. Gianotto <snipe@snipe.net>]
@@ -214,7 +214,7 @@ class UploadedFilesController extends Controller
      *
      * @param  \App\Http\Requests\UploadFileRequest $request
      * @param  string                               $object_type the type of object to upload the file to
-     * @param  int                                  $id          the ID of the object to delete from so we can check permisisons
+     * @param  int                                  $id          the ID of the object to delete from so we can check permissions
      * @param  $file_id     the ID of the file to delete from the action_logs table
      * @since  [v8.1.17]
      * @author [A. Gianotto <snipe@snipe.net>]
