@@ -26,17 +26,13 @@
                                 <table
                                         data-columns="{{ \App\Presenters\UserPresenter::dataTableLayout() }}"
                                         data-cookie-id-table="departmentsUsersTable"
-                                        data-pagination="true"
+
                                         data-id-table="departmentsUsersTable"
-                                        data-search="true"
-                                        data-search-highlight="true"
-                                        data-show-print="true"
+
+
+
                                         data-show-footer="true"
                                         data-side-pagination="server"
-                                        data-show-columns="true"
-                                        data-show-export="true"
-                                        data-show-refresh="true"
-                                        data-show-fullscreen="true"
                                         data-sort-order="asc"
                                         id="departmentsUsersTable"
                                         class="table table-striped snipe-table"

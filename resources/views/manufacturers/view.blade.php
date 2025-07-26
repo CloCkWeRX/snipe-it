@@ -105,7 +105,7 @@
           <table
                   data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
                   data-cookie-id-table="assetsListingTable"
-                  data-pagination="true"
+
                   data-id-table="assetsListingTable"
                   data-toolbar="#assetsBulkEditToolbar"
                   data-bulk-button-id="#bulkAssetEditButton"
@@ -114,10 +114,7 @@
                   data-search-highlight="true"
                   data-show-print="true"
                   data-side-pagination="server"
-                  data-show-columns="true"
-                  data-show-export="true"
-                  data-show-refresh="true"
-                  data-show-fullscreen="true"                 
+                  data-side-pagination="server"
                   data-sort-order="asc"
                   id="assetsListingTable"
                   class="table table-striped snipe-table"
@@ -136,17 +133,23 @@
           <table
                   data-columns="{{ \App\Presenters\LicensePresenter::dataTableLayout() }}"
                   data-cookie-id-table="licensesTable"
-                  data-pagination="true"
+
                   data-id-table="licensesTable"
-                  data-search="true"
-                  data-search-highlight="true"
-                  data-show-print="true"
+
+
+
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
                   data-show-refresh="true"
                   data-show-fullscreen="true"
+=======
+
+
+
+>>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
                   data-sort-order="asc"
                   id="licensesTable"
                   class="table table-striped snipe-table"
@@ -165,17 +168,23 @@
           <table
                   data-columns="{{ \App\Presenters\AccessoryPresenter::dataTableLayout() }}"
                   data-cookie-id-table="accessoriesTable"
-                  data-pagination="true"
+
                   data-id-table="accessoriesTable"
-                  data-search="true"
-                  data-search-highlight="true"
-                  data-show-print="true"
+
+
+
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
                   data-show-refresh="true"
                   data-show-fullscreen="true"
+=======
+
+
+
+>>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
                   data-sort-order="asc"
                   id="accessoriesTable"
                   class="table table-striped snipe-table"
@@ -194,17 +203,23 @@
           <table
                   data-columns="{{ \App\Presenters\ConsumablePresenter::dataTableLayout() }}"
                   data-cookie-id-table="consumablesTable"
-                  data-pagination="true"
+
                   data-id-table="consumablesTable"
-                  data-search="true"
-                  data-search-highlight="true"
-                  data-show-print="true"
+
+
+
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
                   data-show-refresh="true"
                   data-show-fullscreen="true"
+=======
+
+
+
+>>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
                   data-sort-order="asc"
                   id="consumablesTable"
                   class="table table-striped snipe-table"
@@ -222,17 +237,23 @@
           <table
                   data-columns="{{ \App\Presenters\ComponentPresenter::dataTableLayout() }}"
                   data-cookie-id-table="componentsTable"
-                  data-pagination="true"
+
                   data-id-table="componentsTable"
-                  data-search="true"
-                  data-search-highlight="true"
-                  data-show-print="true"
+
+
+
                   data-show-footer="true"
                   data-side-pagination="server"
+<<<<<<< HEAD
                   data-show-columns="true"
                   data-show-export="true"
                   data-show-refresh="true"
                   data-show-fullscreen="true"
+=======
+
+
+
+>>>>>>> 9c61d2eb22e545e6b24df1ac7482a36a7fa2eb96
                   data-sort-order="asc"
                   id="componentsTable"
                   class="table table-striped snipe-table"

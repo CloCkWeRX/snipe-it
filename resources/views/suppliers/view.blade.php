@@ -112,22 +112,22 @@
               <table
                       data-cookie-id-table="suppliersAssetsTable"
                       data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                      data-pagination="true"
+
                       data-id-table="suppliersAssetsTable"
-                      data-search="true"
-                      data-search-highlight="true"
-                      data-show-print="true"
+
+
+
                       data-show-footer="true"
                       data-side-pagination="server"
-                      data-show-columns="true"
-                      data-show-export="true"
-                      data-show-refresh="true"
-                      data-show-fullscreen="true"
+
+
+
+
                       data-sort-order="asc"
                       data-toolbar="#assetsBulkEditToolbar"
                       data-bulk-button-id="#bulkAssetEditButton"
                       data-bulk-form-id="#assetsBulkForm"
-                      data-click-to-select="true"
+
                       id="suppliersAssetsTable"
                       class="table table-striped snipe-table"
                       data-url="{{route('api.assets.index', ['supplier_id' => $supplier->id]) }}"
@@ -148,16 +148,16 @@
               <table
                       data-columns="{{ \App\Presenters\AccessoryPresenter::dataTableLayout() }}"
                       data-cookie-id-table="accessoriesListingTable"
-                      data-pagination="true"
+
                       data-id-table="accessoriesListingTable"
-                      data-search="true"
-                      data-search-highlight="true"
-                      data-show-print="true"
+
+
+
                       data-side-pagination="server"
-                      data-show-columns="true"
-                      data-show-fullscreen="true"
-                      data-show-export="true"
-                      data-show-refresh="true"
+
+
+
+
                       data-sort-order="asc"
                       id="accessoriesListingTable"
                       class="table table-striped snipe-table"
@@ -178,16 +178,16 @@
               <table
                       data-columns="{{ \App\Presenters\LicensePresenter::dataTableLayout() }}"
                       data-cookie-id-table="licensesListingTable"
-                      data-pagination="true"
+
                       data-id-table="licensesListingTable"
-                      data-search="true"
-                      data-search-highlight="true"
-                      data-show-print="true"
+
+
+
                       data-side-pagination="server"
-                      data-show-columns="true"
-                      data-show-fullscreen="true"
-                      data-show-export="true"
-                      data-show-refresh="true"
+
+
+
+
                       data-sort-order="asc"
                       id="licensesListingTable"
                       class="table table-striped snipe-table"
@@ -207,16 +207,16 @@
                     <table
                             data-columns="{{ \App\Presenters\ComponentPresenter::dataTableLayout() }}"
                             data-cookie-id-table="componentsListingTable"
-                            data-pagination="true"
+
                             data-id-table="componentsListingTable"
-                            data-search="true"
-                            data-search-highlight="true"
-                            data-show-print="true"
+
+
+
                             data-side-pagination="server"
-                            data-show-columns="true"
-                            data-show-fullscreen="true"
-                            data-show-export="true"
-                            data-show-refresh="true"
+
+
+
+
                             data-sort-order="asc"
                             id="accessoriesListingTable"
                             class="table table-striped snipe-table"
@@ -235,16 +235,16 @@
                 <table
                         data-columns="{{ \App\Presenters\ConsumablePresenter::dataTableLayout() }}"
                         data-cookie-id-table="consumablesListingTable"
-                        data-pagination="true"
+
                         data-id-table="consumablesListingTable"
-                        data-search="true"
-                        data-search-highlight="true"
-                        data-show-print="true"
+
+
+
                         data-side-pagination="server"
-                        data-show-columns="true"
-                        data-show-fullscreen="true"
-                        data-show-export="true"
-                        data-show-refresh="true"
+
+
+
+
                         data-sort-order="asc"
                         id="accessoriesListingTable"
                         class="table table-striped snipe-table"
@@ -265,16 +265,16 @@
               <table
                       data-columns="{{ \App\Presenters\AssetMaintenancesPresenter::dataTableLayout() }}"
                       data-cookie-id-table="maintenancesTable"
-                      data-pagination="true"
+
                       data-id-table="maintenancesTable"
-                      data-search="true"
-                      data-search-highlight="true"
-                      data-show-print="true"
+
+
+
                       data-side-pagination="server"
-                      data-show-columns="true"
-                      data-show-fullscreen="true"
-                      data-show-export="true"
-                      data-show-refresh="true"
+
+
+
+
                       data-sort-order="asc"
                       id="maintenancesTable"
                       class="table table-striped snipe-table"
