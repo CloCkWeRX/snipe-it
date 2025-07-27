@@ -45,7 +45,10 @@ class CompaniesController extends Controller
 
         $companies = Company::withCount(['assets as assets_count'  => function ($query) {
             $query->AssetsForShow();
-        }])->withCount('licenses as licenses_count', 'accessories as accessories_count', 'consumables as consumables_count', 'components as components_count', 'users as users_count');
+        }])
+            ->with('adminuser')
+            ->withCount('licenses as licenses_count', 'accessories as accessories_count', 'consumables as consumables_count', 'components as components_count', 'users as users_count');
+
 
         if ($request->filled('search')) {
             $companies->TextSearch($request->input('search'));
@@ -124,6 +127,7 @@ class CompaniesController extends Controller
     {
         $this->authorize('view', Company::class);
         $company = Company::findOrFail($id);
+        $this->authorize('view', $company);
         return (new CompaniesTransformer())->transformCompany($company);
     }
 
@@ -140,6 +144,7 @@ class CompaniesController extends Controller
     {
         $this->authorize('update', Company::class);
         $company = Company::findOrFail($id);
+        $this->authorize('update', $company);
         $company->fill($request->all());
         $company = $request->handleImages($company);
 
@@ -191,6 +196,7 @@ class CompaniesController extends Controller
             'companies.email',
             'companies.image',
         ]);
+
 
         if ($request->filled('search')) {
             $companies = $companies->where('companies.name', 'LIKE', '%' . $request->get('search') . '%');

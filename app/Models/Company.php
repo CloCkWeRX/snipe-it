@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Schema;
 final class Company extends SnipeModel
 {
     use HasFactory;
+    use CompanyableTrait;
+
 
     protected $table = 'companies';
 
@@ -151,10 +153,10 @@ final class Company extends SnipeModel
         if (!is_string($companyable)) {
             $company_table = $companyable->getModel()->getTable();
             try {
-                // This is primary for the gate:allows-check in location->isDeletable()
+                // This is primarily for the gate:allows-check in location->isDeletable()
                 // Locations don't have a company_id so without this it isn't possible to delete locations with FullMultipleCompanySupport enabled
                 // because this function is called by SnipePermissionsPolicy->before()
-                if (!$companyable instanceof Company && !Schema::hasColumn($company_table, 'company_id')) {
+                if (!Schema::hasColumn($company_table, 'company_id')) {
                     return true;
                 }
             } catch (\Exception $e) {
@@ -166,8 +168,15 @@ final class Company extends SnipeModel
         if (auth()->user()) {
             $current_user_company_id = auth()->user()->company_id;
             $companyable_company_id = $companyable->company_id;
-            return $current_user_company_id == null || $current_user_company_id == $companyable_company_id || auth()->user()->isSuperUser();
+
+            // Set this to check companyable on company
+            if ($companyable instanceof Company) {
+                $companyable_company_id = $companyable->id;
+            }
+            return ($current_user_company_id == null) || ($current_user_company_id == $companyable_company_id) || auth()->user()->isSuperUser();
         }
+
+        return false;
     }
 
     public static function isCurrentUserAuthorized()
@@ -265,7 +274,7 @@ final class Company extends SnipeModel
      */
     public static function scopeCompanyables($query, $column = 'company_id', $table_name = null)
     {
-        // If not logged in and hitting this, assume we are on the command line and don't scope?'
+        // If not logged in and hitting this, assume we are on the command line and don't scope?
         if (! static::isFullMultipleCompanySupportEnabled() || (Auth::hasUser() && auth()->user()->isSuperUser()) || (! Auth::hasUser())) {
             return $query;
         } else {
@@ -282,11 +291,16 @@ final class Company extends SnipeModel
     private static function scopeCompanyablesDirectly($query, $column = 'company_id', $table_name = null)
     {
 
+        $company_id = null;
         // Get the company ID of the logged-in user, or set it to null if there is no company associated with the user
         if (Auth::hasUser()) {
             $company_id = auth()->user()->company_id;
-        } else {
-            $company_id = null;
+        }
+
+
+        // If we are scoping the companies table itself, look for the company.id
+        if ($query->getModel()->getTable() == 'companies') {
+            return $query->where('companies.id', '=', $company_id);
         }
 
 
@@ -324,7 +338,6 @@ final class Company extends SnipeModel
             return $query;
         } else {
             $f = function ($q) {
-                Log::debug('scopeCompanyablesDirectly firing ');
                 static::scopeCompanyablesDirectly($q);
             };
 
