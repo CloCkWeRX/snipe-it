@@ -521,7 +521,7 @@ class UsersController extends Controller
                 }
             }
 
-            if (Gate::allows('editCurrentUser', $user)) {
+            if (Gate::allows('canEditSensitiveFieldsForCurrentUser', $user)) {
 
                 if ($request->filled('password')) {
                     $user->password = bcrypt($request->input('password'));
