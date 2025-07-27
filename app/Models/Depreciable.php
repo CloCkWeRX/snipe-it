@@ -91,12 +91,11 @@ class Depreciable extends SnipeModel
 
     public function getMonthlyDepreciation()
     {
-
         return ($this->purchase_cost - $this->calculateDepreciation()) / $this->get_depreciation()->months;
     }
 
     /**
-     * @param onlyHalfFirstYear Boolean always applied only second half of the first year
+     * @param  onlyHalfFirstYear Boolean always applied only second half of the first year
      * @return float|int
      */
     public function getHalfYearDepreciatedValue($onlyHalfFirstYear = false)
@@ -127,7 +126,7 @@ class Depreciable extends SnipeModel
     }
 
     /**
-     * @param \DateTime $date
+     * @param  \DateTime $date
      * @return int
      */
     protected function get_fiscal_year($date)
@@ -142,7 +141,7 @@ class Depreciable extends SnipeModel
     }
 
     /**
-     * @param \DateTime $date
+     * @param  \DateTime $date
      * @return bool
      */
     protected function is_first_half_of_year($date)

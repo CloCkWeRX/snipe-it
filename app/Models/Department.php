@@ -81,7 +81,7 @@ class Department extends SnipeModel
      * Establishes the department -> company relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
+     * @since  [v4.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function company()
@@ -93,7 +93,7 @@ class Department extends SnipeModel
      * Establishes the department -> users relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
+     * @since  [v4.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function users()
@@ -105,7 +105,7 @@ class Department extends SnipeModel
      * Establishes the department -> manager relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
+     * @since  [v4.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function manager()
@@ -117,7 +117,7 @@ class Department extends SnipeModel
      * Establishes the department -> location relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
+     * @since  [v4.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function location()
@@ -128,8 +128,8 @@ class Department extends SnipeModel
     /**
      * Query builder scope to order on location name
      *
-     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
+     * @param \Illuminate\Database\Query\Builder $query Query builder instance
+     * @param text                               $order Order
      *
      * @return \Illuminate\Database\Query\Builder          Modified query builder
      */
@@ -141,8 +141,8 @@ class Department extends SnipeModel
     /**
      * Query builder scope to order on manager name
      *
-     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
+     * @param \Illuminate\Database\Query\Builder $query Query builder instance
+     * @param text                               $order Order
      *
      * @return \Illuminate\Database\Query\Builder          Modified query builder
      */
@@ -154,8 +154,8 @@ class Department extends SnipeModel
     /**
      * Query builder scope to order on company
      *
-     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
+     * @param \Illuminate\Database\Query\Builder $query Query builder instance
+     * @param text                               $order Order
      *
      * @return \Illuminate\Database\Query\Builder          Modified query builder
      */

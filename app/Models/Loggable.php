@@ -15,8 +15,8 @@ trait Loggable
     public ?bool $imported = false;
 
     /**
-     * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
-     * @since [v3.4]
+     * @author Daniel Meltzer <dmeltzer.devel@gmail.com>
+     * @since  [v3.4]
      * @return \App\Models\Actionlog
      */
     public function log()
@@ -30,8 +30,8 @@ trait Loggable
     }
 
     /**
-     * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
-     * @since [v3.4]
+     * @author Daniel Meltzer <dmeltzer.devel@gmail.com>
+     * @since  [v3.4]
      * @return \App\Models\Actionlog
      */
     public function logCheckout($note, $target, $action_date = null, $originalValues = [])
@@ -134,8 +134,8 @@ trait Loggable
     }
 
     /**
-     * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
-     * @since [v3.4]
+     * @author Daniel Meltzer <dmeltzer.devel@gmail.com>
+     * @since  [v3.4]
      * @return \App\Models\Actionlog
      */
     public function logCheckin($target, $note, $action_date = null, $originalValues = [])
@@ -212,8 +212,8 @@ trait Loggable
     }
 
     /**
-     * @author  A. Gianotto <snipe@snipe.net>
-     * @since [v4.0]
+     * @author A. Gianotto <snipe@snipe.net>
+     * @since  [v4.0]
      * @return \App\Models\Actionlog
      */
     public function logAudit($note, $location_id, $filename = null, $originalValues = [])
@@ -284,8 +284,8 @@ trait Loggable
     }
 
     /**
-     * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
-     * @since [v3.5]
+     * @author Daniel Meltzer <dmeltzer.devel@gmail.com>
+     * @since  [v3.5]
      * @return \App\Models\Actionlog
      */
     public function logCreate($note = null)
@@ -313,8 +313,8 @@ trait Loggable
     }
 
     /**
-     * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
-     * @since [v3.4]
+     * @author Daniel Meltzer <dmeltzer.devel@gmail.com>
+     * @since  [v3.4]
      * @return \App\Models\Actionlog
      */
     public function logUpload($filename, $note)
@@ -345,7 +345,7 @@ trait Loggable
      * Returns the latest acceptance ActionLog that contains a signature
      * from $user or null if there is none
      *
-     * @param User $user
+     * @param  User $user
      * @return null|Actionlog
      **/
     public function getLatestSignedAcceptance(User $user)

@@ -20,6 +20,7 @@ class CustomFieldset extends Model
 
     /**
      * Validation rules
+     *
      * @var array
      */
     public $rules = [
@@ -39,7 +40,7 @@ class CustomFieldset extends Model
      * Establishes the fieldset -> field relationship
      *
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
-     * @since [v3.0]
+     * @since  [v3.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function fields()
@@ -51,7 +52,7 @@ class CustomFieldset extends Model
      * Establishes the fieldset -> models relationship
      *
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
-     * @since [v3.0]
+     * @since  [v3.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function models()
@@ -63,7 +64,7 @@ class CustomFieldset extends Model
      * Establishes the fieldset -> admin user relationship
      *
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
-     * @since [v3.0]
+     * @since  [v3.0]
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function user()
@@ -94,7 +95,7 @@ class CustomFieldset extends Model
      * custom field format
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
+     * @since  [v3.0]
      * @return array
      */
     public function validation_rules()
@@ -104,8 +105,8 @@ class CustomFieldset extends Model
             $rule = [];
 
             if (
-                ($field->field_encrypted != '1') ||
-                  (($field->field_encrypted == '1') && (Gate::allows('admin')))
+                ($field->field_encrypted != '1')
+                || (($field->field_encrypted == '1') && (Gate::allows('admin')))
             ) {
                     $rule[] = ($field->pivot->required == '1') ? 'required' : 'nullable';
             }

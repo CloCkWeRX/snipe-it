@@ -21,9 +21,11 @@ trait Requestable
 
     public function scopeRequestedBy($query, User $user)
     {
-        return $query->whereHas('requests', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        });
+        return $query->whereHas(
+            'requests', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }
+        );
     }
 
     public function request($qty = 1)

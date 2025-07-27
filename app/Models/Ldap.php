@@ -31,7 +31,7 @@ class Ldap extends Model
      * Makes a connection to LDAP using the settings in Admin > Settings.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
+     * @since  [v3.0]
      * @return connection
      */
     public static function connectToLdap()
@@ -81,10 +81,10 @@ class Ldap extends Model
      * Binds/authenticates the user to LDAP, and returns their attributes.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
-     * @param $username
-     * @param $password
-     * @param bool|false $user
+     * @since  [v3.0]
+     * @param  $username
+     * @param  $password
+     * @param  bool|false $user
      * @return bool true    if the username and/or password provided are valid
      *              false   if the username and/or password provided are invalid
      *         array of ldap_attributes if $user is true
@@ -160,8 +160,8 @@ class Ldap extends Model
      * Here we also return a better error if the app key is donked.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
-     * @param bool|false $user
+     * @since  [v3.0]
+     * @param  bool|false $user
      * @return bool true    if the username and/or password provided are valid
      *              false   if the username and/or password provided are invalid
      */
@@ -197,9 +197,9 @@ class Ldap extends Model
      * Parse and map LDAP attributes based on settings
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
+     * @since  [v3.0]
      *
-     * @param $ldapatttibutes
+     * @param  $ldapatttibutes
      * @return array|bool
      */
     public static function parseAndMapLdapAttributes($ldapattributes)
@@ -238,8 +238,8 @@ class Ldap extends Model
      * Create user from LDAP attributes
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
-     * @param $ldapatttibutes
+     * @since  [v3.0]
+     * @param  $ldapatttibutes
      * @return User | bool
      */
     public static function createUserFromLdap($ldapatttibutes, $password)
@@ -279,11 +279,11 @@ class Ldap extends Model
      * Searches LDAP
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
-     * @param $base_dn
-     * @param $count
-     * @param $filter
-     * @param $attributes
+     * @since  [v3.0]
+     * @param  $base_dn
+     * @param  $count
+     * @param  $filter
+     * @param  $attributes
      * @return array|bool
      */
     public static function findLdapUsers($base_dn = null, $count = -1, $filter = null, $attributes = [])

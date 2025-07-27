@@ -18,8 +18,8 @@ trait Searchable
     /**
      * Performs a search on the model, using the provided search terms
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query The query to start the search on
-     * @param  string $search
+     * @param  \Illuminate\Database\Eloquent\Builder $query  The query to start the search on
+     * @param  string                                $search
      * @return \Illuminate\Database\Eloquent\Builder A query with added "where" clauses
      */
     public function scopeTextSearch($query, $search)
@@ -51,6 +51,7 @@ trait Searchable
 
     /**
      * Prepares the search term, splitting and cleaning it up
+     *
      * @param  string $search The search term
      * @return array         An array of search terms
      */
@@ -63,7 +64,7 @@ trait Searchable
      * Searches the models attributes for the search terms
      *
      * @param  Illuminate\Database\Eloquent\Builder $query
-     * @param  array  $terms
+     * @param  array                                $terms
      * @return Illuminate\Database\Eloquent\Builder
      */
     private function searchAttributes(Builder $query, array $terms)
@@ -87,7 +88,7 @@ trait Searchable
                  * We need to form the query properly, starting with a "where",
                  * otherwise the generated select is wrong.
                  *
-                 * @todo  This does the job, but is inelegant and fragile
+                 * @todo This does the job, but is inelegant and fragile
                  */
                 if (! $firstConditionAdded) {
                     $query = $query->where($table . '.' . $column, 'LIKE', '%' . $term . '%');
@@ -107,7 +108,7 @@ trait Searchable
      * Searches the models custom fields for the search terms
      *
      * @param  Illuminate\Database\Eloquent\Builder $query
-     * @param  array  $terms
+     * @param  array                                $terms
      * @return Illuminate\Database\Eloquent\Builder
      */
     private function searchCustomFields(Builder $query, array $terms)
@@ -135,23 +136,25 @@ trait Searchable
      * Searches the models relations for the search terms
      *
      * @param  Illuminate\Database\Eloquent\Builder $query
-     * @param  array  $terms
+     * @param  array                                $terms
      * @return Illuminate\Database\Eloquent\Builder
      */
     private function searchRelations(Builder $query, array $terms)
     {
         foreach ($this->getSearchableRelations() as $relation => $columns) {
-            $query = $query->orWhereHas($relation, function ($query) use ($relation, $columns, $terms) {
-                $table = $this->getRelationTable($relation);
+            $query = $query->orWhereHas(
+                $relation, function ($query) use ($relation, $columns, $terms) {
+                    $table = $this->getRelationTable($relation);
 
-                /**
-                 * We need to form the query properly, starting with a "where",
-                 * otherwise the generated nested select is wrong.
-                 *
-                 * @todo  This does the job, but is inelegant and fragile
-                 */
-                $firstConditionAdded = false;
+                    /**
+                     * We need to form the query properly, starting with a "where",
+                     * otherwise the generated nested select is wrong.
+                     *
+                     * @todo This does the job, but is inelegant and fragile
+                     */
+                    $firstConditionAdded = false;
 
+<<<<<<< HEAD
                 foreach ($columns as $column) {
                     foreach ($terms as $term) {
                         if (! $firstConditionAdded) {
@@ -173,7 +176,7 @@ trait Searchable
                         ["%{$term}%"]
                     );
                 }
-            });
+            );
         }
 
         return $query;
@@ -185,7 +188,7 @@ trait Searchable
      * This is a noop in this trait, but can be overridden in the implementing model, to allow more advanced searches
      *
      * @param  Illuminate\Database\Eloquent\Builder $query
-     * @param  array  $terms The search terms
+     * @param  array                                $terms The search terms
      * @return Illuminate\Database\Eloquent\Builder
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -268,7 +271,7 @@ trait Searchable
     /**
      * Builds a search string for either MySQL or sqlite by separating the provided columns with a space.
      *
-     * @param array $columns Columns to include in search string.
+     * @param  array $columns Columns to include in search string.
      * @return string
      */
     private function buildMultipleColumnSearch(array $columns): string
@@ -288,9 +291,9 @@ trait Searchable
     /**
      * Search a string across multiple columns separated with a space.
      *
-     * @param Builder $query
-     * @param array $columns - Columns to include in search string.
-     * @param $term
+     * @param  Builder $query
+     * @param  array   $columns - Columns to include in search string.
+     * @param  $term
      * @return Builder
      */
     public function scopeOrWhereMultipleColumns($query, array $columns, $term)

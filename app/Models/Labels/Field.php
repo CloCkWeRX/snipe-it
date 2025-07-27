@@ -25,8 +25,6 @@ class Field
         return Field::makeArray($this, $asset);
     }
 
-    /* Static functions */
-
     public static function makeArray(Field $field, Asset $asset)
     {
         return $field->getOptions()

@@ -124,9 +124,9 @@ abstract class Sheet extends Label
 
     /**
      * Returns label position based on its index
-     *
-     * @param  int  $index
-     *
+     * 
+     * @param int $index
+     * 
      * @return array  [x,y]
      */
     abstract public function getLabelPosition(int $index);
@@ -188,7 +188,7 @@ abstract class Sheet extends Label
      *
      * @return string
      */
-    final public function getLabelOrientation()
+    public final function getLabelOrientation()
     {
         return ($this->getLabelWidth() >= $this->getLabelHeight()) ? 'L' : 'P';
     }
@@ -198,7 +198,7 @@ abstract class Sheet extends Label
      *
      * @return object [ 'x1'=>0.00, 'y1'=>0.00, 'x2'=>0.00, 'y2'=>0.00, 'w'=>0.00, 'h'=>0.00 ]
      */
-    final public function getLabelPrintableArea()
+    public final function getLabelPrintableArea()
     {
         return (object)[
             'x1' => $this->getLabelMarginLeft(),
@@ -217,7 +217,7 @@ abstract class Sheet extends Label
      */
     public function getLabelIndexOffset()
     {
-        return $this->indexOffset;
+        return $this->indexOffset; 
     }
 
     /**
