@@ -165,16 +165,6 @@
           <div class="row">
 
         <div class="info-stack-container">
-
-            @if ($user->deleted_at!='')
-              <div class="col-md-12">
-                <div class="callout callout-warning">
-                  <i class="icon fas fa-exclamation-triangle"></i>
-                  {{ trans('admin/users/message.user_deleted_warning') }}
-                </div>
-              </div>
-            @endif
-
             <!-- Start button column -->
             <div class="col-md-3 col-xs-12 col-sm-push-9 info-stack">
 
@@ -241,7 +231,7 @@
                 @endcan
 
                 @can('update', $user)
-                  @if (($user->activated == '1') && ($user->ldap_import == '0'))
+                  @if ((($user->deleted_at=='')) && ($user->activated == '1') && ($user->ldap_import == '0'))
                   <div class="col-md-12" style="padding-top: 5px;">
                     @if (($user->email != '') && ($user->activated=='1'))
                       <form action="{{ route('users.password',['userId'=> $user->id]) }}" method="POST">
