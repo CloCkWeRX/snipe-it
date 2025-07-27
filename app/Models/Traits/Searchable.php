@@ -154,26 +154,29 @@ trait Searchable
                      */
                     $firstConditionAdded = false;
 
-                foreach ($columns as $column) {
-                    foreach ($terms as $term) {
-                        if (! $firstConditionAdded) {
-                            $query->where($table . '.' . $column, 'LIKE', '%' . $term . '%');
-                            $firstConditionAdded = true;
-                            continue;
-                        }
+                    foreach ($columns as $column) {
+                        foreach ($terms as $term) {
+                            if (! $firstConditionAdded) {
+                                $query->where($table.'.'.$column, 'LIKE', '%'.$term.'%');
+                                $firstConditionAdded = true;
+                                continue;
+                            }
 
-                        $query->orWhere($table . '.' . $column, 'LIKE', '%' . $term . '%');
+                            $query->orWhere($table.'.'.$column, 'LIKE', '%'.$term.'%');
+                        }
                     }
-                }
-                // I put this here because I only want to add the concat one time in the end of the user relation search
-                if (($relation == 'adminuser') || ($relation == 'user')) {
-                    $query->orWhereRaw(
-                        $this->buildMultipleColumnSearch([
+                    // I put this here because I only want to add the concat one time in the end of the user relation search
+                    if(($relation == 'adminuser') || ($relation == 'user')) {
+                        $query->orWhereRaw(
+                            $this->buildMultipleColumnSearch(
+                                [
                                 'users.first_name',
                                 'users.last_name',
-                            ]),
-                        ["%{$term}%"]
-                    );
+                                ]
+                            ),
+                            ["%{$term}%"]
+                        );
+                    }
                 }
             );
         }
