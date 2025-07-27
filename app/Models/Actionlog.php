@@ -118,7 +118,6 @@ class Actionlog extends SnipeModel
                 if ($actionlog->action_date == '') {
                     $actionlog->action_date = Carbon::now();
                 }
-
             }
         );
     }
@@ -456,24 +455,24 @@ class Actionlog extends SnipeModel
     {
 
         switch ($this->item_type) {
-        case Accessory::class:
-            return route('show.accessoryfile', [$this->item_id, $this->id]);
-        case Asset::class:
-            return route('show/assetfile', [$this->item_id, $this->id]);
-        case AssetModel::class:
-            return route('show/modelfile', [$this->item_id, $this->id]);
-        case Consumable::class:
-            return route('show/locationsfile', [$this->item_id, $this->id]);
-        case Component::class:
-            return route('show.componentfile', [$this->item_id, $this->id]);
-        case License::class:
-            return route('show.licensefile', [$this->item_id, $this->id]);
-        case Location::class:
-            return route('show/locationsfile', [$this->item_id, $this->id]);
-        case User::class:
-            return route('show/userfile', [$this->item_id, $this->id]);
-        default:
-            return null;
+            case Accessory::class:
+                return route('show.accessoryfile', [$this->item_id, $this->id]);
+            case Asset::class:
+                return route('show/assetfile', [$this->item_id, $this->id]);
+            case AssetModel::class:
+                return route('show/modelfile', [$this->item_id, $this->id]);
+            case Consumable::class:
+                return route('show/locationsfile', [$this->item_id, $this->id]);
+            case Component::class:
+                return route('show.componentfile', [$this->item_id, $this->id]);
+            case License::class:
+                return route('show.licensefile', [$this->item_id, $this->id]);
+            case Location::class:
+                return route('show/locationsfile', [$this->item_id, $this->id]);
+            case User::class:
+                return route('show/userfile', [$this->item_id, $this->id]);
+            default:
+                return null;
         }
     }
 
@@ -481,24 +480,24 @@ class Actionlog extends SnipeModel
     {
 
         switch ($this->item_type) {
-        case Accessory::class:
-            return 'private_uploads/accessories/'.$this->filename;
-        case Asset::class:
-            return 'private_uploads/assets/'.$this->filename;
-        case AssetModel::class:
-            return 'private_uploads/assetmodels/'.$this->filename;
-        case Consumable::class:
-            return 'private_uploads/consumables/'.$this->filename;
-        case Component::class:
-            return 'private_uploads/components/'.$this->filename;
-        case License::class:
-            return 'private_uploads/licenses/'.$this->filename;
-        case Location::class:
-            return 'private_uploads/locations/'.$this->filename;
-        case User::class:
-            return 'private_uploads/users/'.$this->filename;
-        default:
-            return null;
+            case Accessory::class:
+                return 'private_uploads/accessories/' . $this->filename;
+            case Asset::class:
+                return 'private_uploads/assets/' . $this->filename;
+            case AssetModel::class:
+                return 'private_uploads/assetmodels/' . $this->filename;
+            case Consumable::class:
+                return 'private_uploads/consumables/' . $this->filename;
+            case Component::class:
+                return 'private_uploads/components/' . $this->filename;
+            case License::class:
+                return 'private_uploads/licenses/' . $this->filename;
+            case Location::class:
+                return 'private_uploads/locations/' . $this->filename;
+            case User::class:
+                return 'private_uploads/users/' . $this->filename;
+            default:
+                return null;
         }
     }
 

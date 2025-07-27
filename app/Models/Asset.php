@@ -31,11 +31,17 @@ class Asset extends Depreciable
 
     use CompanyableTrait;
     use HasUploads;
-    use HasFactory, Loggable, Requestable, Presentable, SoftDeletes, ValidatingTrait, UniqueUndeletedTrait;
+    use HasFactory;
+    use Loggable;
+    use Requestable;
+    use Presentable;
+    use SoftDeletes;
+    use ValidatingTrait;
+    use UniqueUndeletedTrait;
 
-public const LOCATION = 'location';
-public const ASSET = 'asset';
-public const USER = 'user';
+    public const LOCATION = 'location';
+    public const ASSET = 'asset';
+    public const USER = 'user';
 
     use Acceptable;
 
@@ -45,13 +51,13 @@ public const USER = 'user';
      * @param User   $acceptedBy
      * @param string $signature
      */
-public function declinedCheckout(User $declinedBy, $signature)
-{
-    $this->assigned_to = null;
-    $this->assigned_type = null;
-    $this->accepted = null;
-    $this->save();
-}
+    public function declinedCheckout(User $declinedBy, $signature)
+    {
+        $this->assigned_to = null;
+        $this->assigned_type = null;
+        $this->accepted = null;
+        $this->save();
+    }
 
     /**
      * The database table used by the model.
@@ -1615,14 +1621,16 @@ public function declinedCheckout(User $declinedBy, $signature)
     public function scopeCheckedOutToTargetInDepartment($query, $search)
     {
         return $query->leftJoin(
-            'users as assets_dept_users', function ($leftJoin) {
+            'users as assets_dept_users',
+            function ($leftJoin) {
                 $leftJoin->on('assets_dept_users.id', '=', 'assets.assigned_to')
                     ->where('assets.assigned_type', '=', User::class);
             }
         )->where(
             function ($query) use ($search) {
                     $query->whereIn('assets_dept_users.department_id', $search);
-        })->withTrashed()->whereNull('assets.deleted_at'); //workaround for laravel bug
+            }
+        )->withTrashed()->whereNull('assets.deleted_at'); //workaround for laravel bug
     }
 
 
@@ -1983,4 +1991,4 @@ public function declinedCheckout(User $declinedBy, $signature)
         return $query->join('models', 'assets.model_id', '=', 'models.id')
             ->join('depreciations', 'models.depreciation_id', '=', 'depreciations.id')->where('models.depreciation_id', '=', $search);
     }
-    }
+}

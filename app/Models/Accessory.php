@@ -24,7 +24,8 @@ class Accessory extends SnipeModel
     protected $presenter = \App\Presenters\AccessoryPresenter::class;
     use CompanyableTrait;
     use HasUploads;
-    use Loggable, Presentable;
+    use Loggable;
+    use Presentable;
     use SoftDeletes;
 
     protected $table = 'accessories';
@@ -363,7 +364,7 @@ class Accessory extends SnipeModel
 
     /**
      * Run after the checkout acceptance was declined by the user
-     * 
+     *
      * @param User   $acceptedBy
      * @param string $signature
      */
