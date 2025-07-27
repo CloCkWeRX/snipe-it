@@ -23,6 +23,7 @@ use App\Notifications\CurrentInventory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -517,6 +518,34 @@ class UsersController extends Controller
 
                 if ($validator->fails()) {
                     return response()->json(Helper::formatStandardApiResponse('error', null, $validator->errors()));
+                }
+            }
+
+            if (Gate::allows('editCurrentUser', $user)) {
+
+                if ($request->filled('password')) {
+                    $user->password = bcrypt($request->input('password'));
+                }
+
+                if ($request->filled('username')) {
+                    $user->username = $request->input('username');
+                }
+
+                if ($request->filled('email')) {
+                    $user->username = $request->input('username');
+                }
+
+            }
+
+            // We need to use has()  instead of filled()
+            // here because we need to overwrite permissions
+            // if someone needs to null them out
+            if ($request->has('permissions')) {
+                $permissions_array = $request->input('permissions');
+
+                // Strip out the individual superuser permission if the API user isn't a superadmin
+                if (!auth()->user()->isSuperUser()) {
+                    unset($permissions_array['superuser']);
                 }
 
                 // Sync the groups since the user is a superuser and the groups pass validation
