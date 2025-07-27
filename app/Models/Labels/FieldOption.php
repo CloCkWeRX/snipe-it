@@ -40,7 +40,6 @@ class FieldOption
         if ($dataPath[0] === 'purchase_date') {
             return $asset->purchase_date ? $asset->purchase_date->format('Y-m-d') : null;
         }
-<<<<<<< HEAD
 
         return $dataPath->reduce(function ($myValue, $path) {
             try {
