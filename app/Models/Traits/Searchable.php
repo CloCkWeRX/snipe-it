@@ -154,7 +154,6 @@ trait Searchable
                      */
                     $firstConditionAdded = false;
 
-<<<<<<< HEAD
                 foreach ($columns as $column) {
                     foreach ($terms as $term) {
                         if (! $firstConditionAdded) {
