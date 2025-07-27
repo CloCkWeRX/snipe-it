@@ -267,9 +267,8 @@ class UsersController extends Controller
             ->where('assigned_to', $user->id)
             ->update(['location_id' => $request->input('location_id', null)]);
 
-
-        // check for permissions related fields and pull them out if the current user cannot edit them
-        if (auth()->user()->can('editSensitiveUserFields') && auth()->user()->can('editableOnDemo')) {
+        // check for permissions related fields and only set them if the user has permission to edit them
+        if (auth()->user()->can('canEditAuthFields', $user) && auth()->user()->can('editableOnDemo')) {
 
             $user->username = trim($request->input('username'));
             $user->email = trim($request->input('email'));
@@ -302,9 +301,6 @@ class UsersController extends Controller
             ->where('assigned_to', $user->id)
             ->update(['location_id' => $user->location_id]);
 
-
-
-        \Log::error(print_r($user->permissions, true));
 
         // Handle uploaded avatar
         app(ImageUploadRequest::class)->handleImages($user, 600, 'avatar', 'avatars', 'avatar');

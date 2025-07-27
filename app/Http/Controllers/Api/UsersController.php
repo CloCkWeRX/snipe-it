@@ -522,7 +522,7 @@ class UsersController extends Controller
             }
 
             // check for permissions related fields and pull them out if the current user cannot edit them
-            if (auth()->user()->can('editSensitiveUserFields') && auth()->user()->can('editableOnDemo')) {
+            if (auth()->user()->can('canEditAuthFields', $user) && auth()->user()->can('editableOnDemo')) {
 
                 if ($request->filled('password')) {
                     $user->password = bcrypt($request->input('password'));
