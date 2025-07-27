@@ -20,7 +20,8 @@ class LocationFileTest extends TestCase
         //Upload a file
         $this->actingAsForApi($user)
             ->post(
-                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]), [
+                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)]
                 ]
             )
@@ -101,7 +102,8 @@ class LocationFileTest extends TestCase
         // Upload a file
         $this->actingAsForApi($user)
             ->post(
-                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]), [
+                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)],
                 ]
             )
@@ -116,7 +118,8 @@ class LocationFileTest extends TestCase
         // Upload a file with notes
         $this->actingAsForApi($user)
             ->post(
-                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]), [
+                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)],
                 'notes' => 'manual'
                 ]
@@ -138,7 +141,7 @@ class LocationFileTest extends TestCase
             ->assertJsonStructure(
                 [
                 'total',
-                'rows'=>[
+                'rows' => [
                     '*' => [
                         'id',
                         'filename',
@@ -159,7 +162,8 @@ class LocationFileTest extends TestCase
         $this->actingAsForApi($user)
             ->get(
                 route(
-                    'api.files.show', [
+                    'api.files.show',
+                    [
                     'object_type' => 'locations',
                     'id' => $location->id,
                     'file_id' => $result->decodeResponseJson()->json()["rows"][0]["id"],
@@ -182,7 +186,8 @@ class LocationFileTest extends TestCase
         //Upload a file
         $this->actingAsForApi($user)
             ->post(
-                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]), [
+                route('api.files.store', ['object_type' => 'locations', 'id' => $location->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)]
                 ]
             )
@@ -199,7 +204,8 @@ class LocationFileTest extends TestCase
         $this->actingAsForApi($user)
             ->delete(
                 route(
-                    'api.files.destroy', [
+                    'api.files.destroy',
+                    [
                     'object_type' => 'locations',
                     'id' => $location->id,
                     'file_id' => $result->decodeResponseJson()->json()["rows"][0]["id"],

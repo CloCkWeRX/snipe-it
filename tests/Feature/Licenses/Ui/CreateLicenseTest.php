@@ -60,7 +60,6 @@ class CreateLicenseTest extends TestCase
         $this->assertDatabaseHas('action_logs', ['action_type' => 'add seats', 'item_id' => $license->id, 'item_type' => License::class]);
         $this->assertEquals($license->licenseseats()->count(), 10);
         //test log entries? Sure.
-
     }
 
     public function testTooManySeatsLicenseCreate()
@@ -79,8 +78,5 @@ class CreateLicenseTest extends TestCase
 //        $this->assertDatabaseMissing('action_logs', ['action_type' => 'create', 'item_id' => $license->id, 'item_type' => License::class]);
 //        $this->assertDatabaseMissing('action_logs', ['action_type' => 'add seats', 'item_id' => $license->id, 'item_type' => License::class]);
         //test log entries? Sure.
-
     }
-
-
 }

@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class IndexCompaniesTest extends TestCase
 {
-
     public function testViewingCompanyIndexRequiresPermission()
     {
         $this->actingAsForApi(User::factory()->create())
@@ -30,7 +29,8 @@ class IndexCompaniesTest extends TestCase
                     'order' => 'asc',
                     'offset' => '0',
                     'limit' => '20',
-                ]))
+                ])
+            )
             ->assertOk()
             ->assertJsonStructure([
                 'total',
@@ -39,7 +39,6 @@ class IndexCompaniesTest extends TestCase
             ->assertJson([
                 'total' => 1,
             ]);
-
     }
 
     public function testAdheresToFullMultipleCompaniesSupportScoping()
@@ -71,6 +70,4 @@ class IndexCompaniesTest extends TestCase
             ->assertResponseContainsInRows($companyA)
             ->assertResponseContainsInRows($companyB);
     }
-
-
 }

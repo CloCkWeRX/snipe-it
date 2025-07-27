@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class ComponentCheckinTest extends TestCase
 {
-
     public function testCheckingInComponentRequiresCorrectPermission()
     {
         $component = Component::factory()->checkedOutToAsset()->create();
@@ -69,6 +68,5 @@ class ComponentCheckinTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('components.show', $component));
         $this->assertHasTheseActionLogs($component, ['create', 'checkin from']);
-
     }
 }

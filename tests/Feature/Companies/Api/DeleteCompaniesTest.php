@@ -73,6 +73,5 @@ class DeleteCompaniesTest extends TestCase implements TestsPermissionsRequiremen
             ->deleteJson(route('api.companies.destroy', $companyB))
             ->assertStatus(200)
             ->assertStatusMessageIs('success');
-
     }
 }

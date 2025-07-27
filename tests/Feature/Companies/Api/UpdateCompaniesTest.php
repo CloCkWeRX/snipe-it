@@ -100,6 +100,5 @@ class UpdateCompaniesTest extends TestCase
             ])
             ->assertStatus(200)
             ->assertStatusMessageIs('success');
-
     }
 }

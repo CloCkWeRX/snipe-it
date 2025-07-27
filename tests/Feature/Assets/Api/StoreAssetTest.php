@@ -17,7 +17,6 @@ use Tests\TestCase;
 
 class StoreAssetTest extends TestCase
 {
-
     public function testRequiresPermissionToCreateAsset()
     {
         $this->actingAsForApi(User::factory()->create())

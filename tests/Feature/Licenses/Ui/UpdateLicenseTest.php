@@ -99,6 +99,4 @@ class UpdateLicenseTest extends TestCase
         $this->assertEquals($license->licenseseats()->count(), $license->seats);
         $this->assertEquals($license->licenseseats()->count(), 5000);
     }
-
-
 }

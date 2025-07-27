@@ -19,7 +19,8 @@ class UserFileTest extends TestCase
         //Upload a file
         $this->actingAsForApi($admin)
             ->post(
-                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]), [
+                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)]
                 ]
             )
@@ -100,7 +101,8 @@ class UserFileTest extends TestCase
         // Upload a file
         $this->actingAsForApi($admin)
             ->post(
-                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]), [
+                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)],
                 ]
             )
@@ -115,7 +117,8 @@ class UserFileTest extends TestCase
         // Upload a file with notes
         $this->actingAsForApi($admin)
             ->post(
-                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]), [
+                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)],
                 'notes' => 'manual'
                 ]
@@ -137,7 +140,7 @@ class UserFileTest extends TestCase
             ->assertJsonStructure(
                 [
                 'total',
-                'rows'=>[
+                'rows' => [
                     '*' => [
                         'id',
                         'filename',
@@ -158,7 +161,8 @@ class UserFileTest extends TestCase
         $this->actingAsForApi($admin)
             ->get(
                 route(
-                    'api.files.show', [
+                    'api.files.show',
+                    [
                     'object_type' => 'users',
                     'id' => $user->id,
                     'file_id' => $result->decodeResponseJson()->json()["rows"][0]["id"],
@@ -181,7 +185,8 @@ class UserFileTest extends TestCase
         //Upload a file
         $this->actingAsForApi($admin)
             ->post(
-                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]), [
+                route('api.files.store', ['object_type' => 'users', 'id' => $user->id]),
+                [
                 'file' => [UploadedFile::fake()->create("test.jpg", 100)]
                 ]
             )
@@ -198,7 +203,8 @@ class UserFileTest extends TestCase
         $this->actingAsForApi($admin)
             ->delete(
                 route(
-                    'api.files.destroy', [
+                    'api.files.destroy',
+                    [
                     'object_type' => 'users',
                     'id' => $user->id,
                     'file_id' => $result->decodeResponseJson()->json()["rows"][0]["id"],
