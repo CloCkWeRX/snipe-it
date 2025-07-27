@@ -138,7 +138,8 @@ class CustomField extends Model
 
                 // Update the column name in the assets table
                 Schema::table(
-                    self::$table_name, function ($table) use ($custom_field) {
+                    self::$table_name,
+                    function ($table) use ($custom_field) {
                         $table->text($custom_field->convertUnicodeDbSlug())->nullable();
                     }
                 );
@@ -160,7 +161,8 @@ class CustomField extends Model
 
                     // Rename the field if the name has changed
                     Schema::table(
-                        self::$table_name, function ($table) use ($custom_field) {
+                        self::$table_name,
+                        function ($table) use ($custom_field) {
                             $table->renameColumn($custom_field->convertUnicodeDbSlug($custom_field->getOriginal('name')), $custom_field->convertUnicodeDbSlug());
                         }
                     );
@@ -180,7 +182,8 @@ class CustomField extends Model
         self::deleting(
             function ($custom_field) {
                 return Schema::table(
-                    self::$table_name, function ($table) use ($custom_field) {
+                    self::$table_name,
+                    function ($table) use ($custom_field) {
                         $table->dropColumn($custom_field->db_column);
                     }
                 );
@@ -227,12 +230,12 @@ class CustomField extends Model
     public function displayFieldInCurrentForm($form_type = null)
     {
         switch ($form_type) {
-        case 'audit':
-            return $this->displayFieldInAuditForm();
-        case 'checkin':
-            return $this->displayFieldInCheckinForm();
-        case 'checkout':
-            return $this->displayFieldInCheckoutForm();
+            case 'audit':
+                return $this->displayFieldInAuditForm();
+            case 'checkin':
+                return $this->displayFieldInCheckinForm();
+            case 'checkout':
+                return $this->displayFieldInCheckoutForm();
         }
     }
 

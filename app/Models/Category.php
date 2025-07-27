@@ -181,18 +181,18 @@ class Category extends SnipeModel
         }
 
         switch ($this->category_type) {
-        case 'asset':
-            return $this->assets->count();
-        case 'accessory':
-            return $this->accessories->count();
-        case 'component':
-            return $this->components->count();
-        case 'consumable':
-            return $this->consumables->count();
-        case 'license':
-            return $this->licenses->count();
-        default:
-            return 0;
+            case 'asset':
+                return $this->assets->count();
+            case 'accessory':
+                return $this->accessories->count();
+            case 'component':
+                return $this->components->count();
+            case 'consumable':
+                return $this->consumables->count();
+            case 'license':
+                return $this->licenses->count();
+            default:
+                return 0;
         }
     }
 

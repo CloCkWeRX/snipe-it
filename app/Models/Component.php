@@ -24,7 +24,8 @@ class Component extends SnipeModel
     protected $presenter = \App\Presenters\ComponentPresenter::class;
     use CompanyableTrait;
     use HasUploads;
-    use Loggable, Presentable;
+    use Loggable;
+    use Presentable;
     use SoftDeletes;
     protected $casts = [
         'purchase_date' => 'datetime',

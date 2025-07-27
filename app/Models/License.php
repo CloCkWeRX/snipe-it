@@ -23,7 +23,8 @@ class License extends Depreciable
     use SoftDeletes;
     use CompanyableTrait;
     use HasUploads;
-    use Loggable, Presentable;
+    use Loggable;
+    use Presentable;
     protected $injectUniqueIdentifier = true;
     use ValidatingTrait;
 
@@ -179,7 +180,6 @@ class License extends Depreciable
         // On Create, we just make one for each of the seats.
         $change = abs($oldSeats - $newSeats);
         if ($oldSeats > $newSeats) {
-
             // Need to delete seats... lets see if if we have enough.
             $seatsAvailableForDelete = $license->licenseseats()->whereNull('assigned_to')->whereNull('asset_id')->limit($change);
 

@@ -145,7 +145,5 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
                     );
             }
         );
-
     }
-
 }

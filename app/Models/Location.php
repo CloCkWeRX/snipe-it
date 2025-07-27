@@ -162,7 +162,8 @@ class Location extends SnipeModel
     {
         return $this->hasMany(\App\Models\Asset::class, 'location_id')
             ->whereHas(
-                'assetstatus', function ($query) {
+                'assetstatus',
+                function ($query) {
                     $query->where('status_labels.deployable', '=', 1)
                         ->orWhere('status_labels.pending', '=', 1)
                         ->orWhere('status_labels.archived', '=', 0);
