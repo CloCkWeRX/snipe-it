@@ -36,6 +36,7 @@ class AssetCheckoutTest extends TestCase
         $this->actingAsForApi(User::factory()->create())
             ->post(route('api.assets.requests.store', $nonRequestable->id))
             ->assertStatusMessageIs('error');
+        $this->assertHasTheseActionLogs($requestable, ['create', 'requested', 'update']); //FIXME - is this right?!
     }
 
     public function testCheckingOutAssetRequiresCorrectPermission()
