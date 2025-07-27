@@ -29,7 +29,6 @@ class AcceptanceAssetAcceptedToUserNotification extends Notification
         $this->company_name = $params['company_name'];
         $this->settings = Setting::getSettings();
         $this->file = $params['file'] ?? null;
-
     }
 
     /**
@@ -44,7 +43,6 @@ class AcceptanceAssetAcceptedToUserNotification extends Notification
         $notifyBy = ['mail'];
 
         return $notifyBy;
-
     }
 
     /**
@@ -55,8 +53,9 @@ class AcceptanceAssetAcceptedToUserNotification extends Notification
      */
     public function toMail()
     {
-        $pdf_path = storage_path('private_uploads/eula-pdfs/'.$this->file);
-        $message = (new MailMessage)->markdown('notifications.markdown.asset-acceptance',
+        $pdf_path = storage_path('private_uploads/eula-pdfs/' . $this->file);
+        $message = (new MailMessage())->markdown(
+            'notifications.markdown.asset-acceptance',
             [
                 'item_tag'      => $this->item_tag,
                 'item_model'    => $this->item_model,
@@ -67,13 +66,11 @@ class AcceptanceAssetAcceptedToUserNotification extends Notification
                 'assigned_to'   => $this->assigned_to,
                 'company_name'  => $this->company_name,
                 'intro_text'    => trans('mail.acceptance_asset_accepted_to_user', ['site_name' => $this->company_name ?? $this->settings->site_name]),
-            ])
+            ]
+        )
             ->attach($pdf_path)
             ->subject(trans('mail.acceptance_asset_accepted_to_user', ['site_name' => $this->settings->site_name]));
 
         return $message;
     }
-
-
-
 }
