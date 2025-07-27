@@ -156,7 +156,8 @@ class UsersController extends Controller
                 $user->notify(new WelcomeNotification($data));
             }
 
-            return redirect()->to(Helper::getRedirectOption($request, $user->id, 'Users'))->with('success', trans('admin/users/message.success.create'));
+            return Helper::getRedirectOption($request, $user->id, 'Users')
+                ->with('success', trans('admin/users/message.success.create'));
         }
 
         return redirect()->back()->withInput()->withErrors($user->getErrors());
@@ -188,6 +189,7 @@ class UsersController extends Controller
     {
 
         $this->authorize('update', User::class);
+        session()->put('back_url', url()->previous());
         $user = User::with(['assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc'])->withTrashed()->find($user->id);
 
         if ($user) {
@@ -314,7 +316,7 @@ class UsersController extends Controller
 
         if ($user->save()) {
             // Redirect to the user page
-            return redirect()->to(Helper::getRedirectOption($request, $user->id, 'Users'))
+            return Helper::getRedirectOption($request, $user->id, 'Users')
                 ->with('success', trans('admin/users/message.success.update'));
         }
         return redirect()->back()->withInput()->withErrors($user->getErrors());
