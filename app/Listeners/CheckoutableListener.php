@@ -245,7 +245,7 @@ class CheckoutableListener
         if ($category?->alert_on_response) {
             $acceptance->alert_on_response_id = auth()->id();
         }
-        
+
         $acceptance->save();
 
         return $acceptance;
@@ -307,7 +307,7 @@ class CheckoutableListener
                 break;
             case Component::class:
                 $notificationClass = CheckoutComponentNotification::class;
-            break;
+                break;
         }
 
 

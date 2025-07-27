@@ -1704,7 +1704,7 @@ class Helper
     }
 
 
-    public static function getRedirectOption($request, $id, $table, $item_id = null) : RedirectResponse
+    public static function getRedirectOption($request, $id, $table, $item_id = null): RedirectResponse
     {
 
         $redirect_option = Session::get('redirect_option') ?? $request->redirect_option;
@@ -1718,7 +1718,7 @@ class Helper
             if ($backUrl === route('home')) {
                 return redirect()->to($backUrl)
                 ->with('warning', trans('general.page_error'));
-             }
+            }
 
             return redirect()->to($backUrl);
         }

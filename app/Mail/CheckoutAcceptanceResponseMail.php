@@ -13,7 +13,8 @@ use Illuminate\Queue\SerializesModels;
 
 class CheckoutAcceptanceResponseMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public CheckoutAcceptance $acceptance;
     public User $recipient;

@@ -35,14 +35,14 @@ class CleanIncorrectCheckoutAcceptances extends Command
         $this->withProgressBar(CheckoutAcceptance::all(), function ($checkoutAcceptance) use (&$deletions, &$skips) {
             $item = $checkoutAcceptance->checkoutable;
             $checkout_to_id = $checkoutAcceptance->assigned_to_id;
-            if(is_null($item)) {
+            if (is_null($item)) {
                 $this->info("'Checkoutable' Item is null, going to next record");
                 return; //'false' allegedly breaks execution entirely, so 'true' maybe doesn't? hrm. just straight return maybe?
             }
-            if(get_class($item) == LicenseSeat::class) {
+            if (get_class($item) == LicenseSeat::class) {
                 $item = $item->license;
             }
-            foreach($item->assetlog()->where('action_type','checkout')->get() as $assetlog) {
+            foreach ($item->assetlog()->where('action_type', 'checkout')->get() as $assetlog) {
                 if ($assetlog->target_id == $checkout_to_id && $assetlog->target_type != User::class) {
                     //We have a checkout-to an ID for a non-User, which matches to an ID in the checkout_acceptances table
 
