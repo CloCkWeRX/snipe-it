@@ -484,8 +484,23 @@ class UsersController extends Controller
             return response()->json(Helper::formatStandardApiResponse('error', null, 'You cannot be your own manager'));
         }
 
-        if ($request->filled('password')) {
-            $user->password = bcrypt($request->input('password'));
+        // check for permissions related fields and pull them out if the current user cannot edit them
+        if (auth()->user()->can('canEditAuthFields', $user) && auth()->user()->can('editableOnDemo')) {
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+
+            if ($request->filled('username')) {
+                $user->username = $request->input('username');
+            }
+
+            if ($request->filled('email')) {
+                $user->email = $request->input('email');
+            }
+
+            if ($request->filled('activated')) {
+                $user->activated = $request->input('activated');
+            }
         }
 
         // We need to use has()  instead of filled()
@@ -518,39 +533,6 @@ class UsersController extends Controller
 
                 if ($validator->fails()) {
                     return response()->json(Helper::formatStandardApiResponse('error', null, $validator->errors()));
-                }
-            }
-
-            // check for permissions related fields and pull them out if the current user cannot edit them
-            if (auth()->user()->can('canEditAuthFields', $user) && auth()->user()->can('editableOnDemo')) {
-
-                if ($request->filled('password')) {
-                    $user->password = bcrypt($request->input('password'));
-                }
-
-                if ($request->filled('username')) {
-                    $user->username = $request->input('username');
-                }
-
-                if ($request->filled('email')) {
-                    $user->email = $request->input('email');
-                }
-
-                if ($request->filled('activated')) {
-                    $user->activated = $request->input('activated');
-                }
-
-            }
-
-            // We need to use has()  instead of filled()
-            // here because we need to overwrite permissions
-            // if someone needs to null them out
-            if ($request->has('permissions')) {
-                $permissions_array = $request->input('permissions');
-
-                // Strip out the individual superuser permission if the API user isn't a superadmin
-                if (!auth()->user()->isSuperUser()) {
-                    unset($permissions_array['superuser']);
                 }
 
                 // Sync the groups since the user is a superuser and the groups pass validation
