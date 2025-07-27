@@ -261,7 +261,7 @@
                 @endcan
 
 
-            @can('delete', $user)
+            @can('update', $user)
                   @if ($user->deleted_at=='')
                     <div class="col-md-12" style="padding-top: 30px;">
                         @if ($user->isDeletable())
