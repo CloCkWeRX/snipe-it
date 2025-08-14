@@ -1477,7 +1477,7 @@
     @endcan
 
     @can('create', \App\Models\Component::class)
-    // Compoment table buttons
+    // Component table buttons
     window.componentButtons = () => ({
         btnAdd: {
             text: '{{ trans('general.create') }}',

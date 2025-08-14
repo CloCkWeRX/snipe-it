@@ -365,7 +365,7 @@ class AcceptanceController extends Controller
                         $recipient,
                         $request->input('asset_acceptance') === 'accepted',
                     ));
-                    Log::debug('Send email notification sucess on checkout acceptance response.');
+                    Log::debug('Send email notification success on checkout acceptance response.');
                 }
             } catch (Exception $e) {
                 Log::error($e->getMessage());
