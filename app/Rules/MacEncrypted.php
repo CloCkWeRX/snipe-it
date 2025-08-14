@@ -2,14 +2,13 @@
 
 namespace App\Rules;
 
+use App\Models\CustomField;
 use Closure;
-use Egulias\EmailValidator\Validation\RFCValidation;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Concerns\ValidatesAttributes;
 
-class NumericEncrypted implements ValidationRule
+class MacEncrypted implements ValidationRule
 {
     use ValidatesAttributes;
 
@@ -23,11 +22,11 @@ class NumericEncrypted implements ValidationRule
         try {
             $attributeName = trim(preg_replace('/_+|snipeit|\d+/', ' ', $attribute));
             $decrypted = Crypt::decrypt($value);
-            if (!$this->validateNumeric($attributeName, $decrypted) && !is_null($decrypted)) {
-                $fail(trans('validation.numeric', ['attribute' => $attributeName]));
+            if (!$this->validateRegex($attributeName, $decrypted, ['/^[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}:[a-fA-F0-9]{2}$/']) && !is_null($decrypted)) {
+                $fail(trans('validation.mac_address', ['attribute' => $attributeName]));
             }
         } catch (\Exception $e) {
-            report($e->getMessage());
+            report($e);
             $fail(trans('general.something_went_wrong'));
         }
     }
