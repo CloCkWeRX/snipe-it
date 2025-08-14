@@ -10,6 +10,7 @@ use Illuminate\Validation\Concerns\ValidatesAttributes;
 class AlphaEncrypted implements ValidationRule
 {
     use ValidatesAttributes;
+
     /**
      * Run the validation rule.
      *

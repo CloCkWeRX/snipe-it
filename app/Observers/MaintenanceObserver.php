@@ -24,7 +24,7 @@ class MaintenanceObserver
         $logAction->created_at = date('Y-m-d H:i:s');
         $logAction->action_date = date('Y-m-d H:i:s');
         $logAction->created_by = auth()->id();
-        if($maintenance->imported) {
+        if ($maintenance->imported) {
             $logAction->setActionSource('importer');
         }
         $logAction->logaction('update');
@@ -47,7 +47,7 @@ class MaintenanceObserver
         $logAction->created_at = date('Y-m-d H:i:s');
         $logAction->action_date = date('Y-m-d H:i:s');
         $logAction->created_by = auth()->id();
-        if($maintenance->imported) {
+        if ($maintenance->imported) {
             $logAction->setActionSource('importer');
         }
         $logAction->logaction('create');
