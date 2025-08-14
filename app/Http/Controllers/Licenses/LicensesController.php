@@ -303,15 +303,16 @@ class LicensesController extends Controller
         $response = new StreamedResponse(function () {
             // Open output stream
             $handle = fopen('php://output', 'w');
-            $licenses = License::with(
-                'company',
-                'manufacturer',
-                'category',
-                'supplier',
-                'adminuser',
-                'assignedusers'
-            )
-                          ->orderBy('created_at', 'DESC');
+            $licenses = License::with('company',
+                          'manufacturer',
+                          'category',
+                          'supplier',
+                          'adminuser',
+                          'assignedusers');
+            if (request()->filled('category_id')) {
+                $licenses = $licenses->where('category_id', request()->input('category_id'));
+            }
+            $licenses = $licenses->orderBy('created_at', 'DESC');
             Company::scopeCompanyables($licenses)
                 ->chunk(500, function ($licenses) use ($handle) {
                     $headers = [
