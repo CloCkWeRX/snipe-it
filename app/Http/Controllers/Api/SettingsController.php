@@ -143,8 +143,8 @@ class SettingsController extends Controller
                 Notification::send(Setting::first(), new MailTest());
                 return response()->json(['message' => 'Mail sent to ' . config('mail.reply_to.address')], 200);
             } catch (\Exception $e) {
+                Log::error('Mail sent error using '.config('mail.reply_to.address') .': '. $e->getMessage());
                 Log::debug($e);
-                Log::error('Mail sent to '.config('mail.reply_to.address') . $e->getMessage());
                 return response()->json(['message' => $e->getMessage()], 500);
             }
         }
