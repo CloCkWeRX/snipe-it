@@ -160,12 +160,11 @@ class AssetsController extends Controller
             if ($request->has('use_cloned_image')) {
                 $cloned_model_img = Asset::select('image')->find($request->input('clone_image_from_id'));
                 if ($cloned_model_img) {
-                    $new_image_name = 'clone-'.date('U').'-'.$cloned_model_img->image;
-                    $new_image = 'assets/'.$new_image_name;
-                    Storage::disk('public')->copy('assets/'.$cloned_model_img->image, $new_image);
+                    $new_image_name = 'clone-' . date('U') . '-' . $cloned_model_img->image;
+                    $new_image = 'assets/' . $new_image_name;
+                    Storage::disk('public')->copy('assets/' . $cloned_model_img->image, $new_image);
                     $asset->image = $new_image_name;
                 }
-
             } else {
                 $asset = $request->handleImages($asset);
             }
@@ -231,7 +230,7 @@ class AssetsController extends Controller
                 $failures[] = join(",", $asset->getErrors()->all());
             }
         }
-        if($request->get('redirect_option') === 'back'){
+        if ($request->get('redirect_option') === 'back') {
             session()->put(['redirect_option' => 'index']);
         } else {
             session()->put(['redirect_option' => $request->get('redirect_option')]);

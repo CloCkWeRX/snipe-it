@@ -80,17 +80,16 @@ class AccessoriesController extends Controller
         if ($request->has('use_cloned_image')) {
             $cloned_model_img = Accessory::select('image')->find($request->input('clone_image_from_id'));
             if ($cloned_model_img) {
-                $new_image_name = 'clone-'.date('U').'-'.$cloned_model_img->image;
-                $new_image = 'accessories/'.$new_image_name;
-                Storage::disk('public')->copy('accessories/'.$cloned_model_img->image, $new_image);
+                $new_image_name = 'clone-' . date('U') . '-' . $cloned_model_img->image;
+                $new_image = 'accessories/' . $new_image_name;
+                Storage::disk('public')->copy('accessories/' . $cloned_model_img->image, $new_image);
                 $accessory->image = $new_image_name;
             }
-
         } else {
             $accessory = $request->handleImages($accessory);
         }
 
-        if($request->get('redirect_option') === 'back'){
+        if ($request->get('redirect_option') === 'back') {
             session()->put(['redirect_option' => 'index']);
         } else {
             session()->put(['redirect_option' => $request->get('redirect_option')]);

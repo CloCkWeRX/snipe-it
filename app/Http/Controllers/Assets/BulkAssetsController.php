@@ -353,7 +353,7 @@ class BulkAssetsController extends Controller
                     }
                 }
 
-                if ($request->input('null_notes')=='1') {
+                if ($request->input('null_notes') == '1') {
                     $this->update_array['notes'] = null;
                 }
 
@@ -518,7 +518,7 @@ class BulkAssetsController extends Controller
 
             if ($has_errors > 0) {
                 session()->put('bulkedit_ids', $request->input('ids'));
-                session()->put('bulk_asset_errors',$error_array);
+                session()->put('bulk_asset_errors', $error_array);
 
                 return redirect()
                     ->route('hardware.bulkedit')

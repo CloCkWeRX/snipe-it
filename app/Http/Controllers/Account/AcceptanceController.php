@@ -158,9 +158,9 @@ class AcceptanceController extends Controller
                 case 'App\Models\Asset':
                         $pdf_view_route = 'account.accept.accept-asset-eula';
                         $asset_model = AssetModel::find($item->model_id);
-                        if (!$asset_model) {
-                            return redirect()->back()->with('error', trans('admin/models/message.does_not_exist'));
-                        }
+                    if (!$asset_model) {
+                        return redirect()->back()->with('error', trans('admin/models/message.does_not_exist'));
+                    }
                         $display_model = $asset_model->name;
                         $assigned_to = User::find($acceptance->assigned_to_id)->present()->fullName;
                     break;
@@ -247,8 +247,7 @@ class AcceptanceController extends Controller
             $acceptance->accept($sig_filename, $item->getEula(), $pdf_filename, $request->input('note'));
 
             // Send the PDF to the signing user
-            if (($request->input('send_copy') == '1') && ($assigned_user->email !='')) {
-
+            if (($request->input('send_copy') == '1') && ($assigned_user->email != '')) {
                 // Add the attachment for the signing user into the $data array
                 $data['file'] = $pdf_filename;
 

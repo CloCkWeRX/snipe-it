@@ -92,12 +92,11 @@ class AssetModelsController extends Controller
         if ($request->has('use_cloned_image')) {
             $cloned_model_img = AssetModel::select('image')->find($request->input('clone_image_from_id'));
             if ($cloned_model_img) {
-                $new_image_name = 'clone-'.date('U').'-'.$cloned_model_img->image;
-                $new_image = 'models/'.$new_image_name;
-                Storage::disk('public')->copy('models/'.$cloned_model_img->image, $new_image);
+                $new_image_name = 'clone-' . date('U') . '-' . $cloned_model_img->image;
+                $new_image = 'models/' . $new_image_name;
+                Storage::disk('public')->copy('models/' . $cloned_model_img->image, $new_image);
                 $model->image = $new_image_name;
             }
-
         } else {
             $model = $request->handleImages($model);
         }
