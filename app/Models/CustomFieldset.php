@@ -3,7 +3,14 @@
 namespace App\Models;
 
 use App\Rules\AlphaEncrypted;
+use App\Rules\DateEncrypted;
+use App\Rules\EmailEncrypted;
+use App\Rules\IPEncrypted;
+use App\Rules\IPv4Encrypted;
+use App\Rules\IPv6Encrypted;
+use App\Rules\MACEncrypted;
 use App\Rules\NumericEncrypted;
+use App\Rules\UrlEncrypted;
 use Gate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -98,7 +105,7 @@ class CustomFieldset extends Model
      * @since  [v3.0]
      * @return array
      */
-    public function validation_rules()
+    public function validation_rules(): array
     {
         $rules = [];
         foreach ($this->fields as $field) {
@@ -133,6 +140,43 @@ class CustomFieldset extends Model
                 $alphaKey = array_search('alpha', $rules[$field->db_column_name()]);
                 $rules[$field->db_column_name()][$alphaKey] = new AlphaEncrypted();
             }
+
+            if ($field->format === 'EMAIL' && $field->field_encrypted) {
+                $emailKey = array_search('email', $rules[$field->db_column_name()]);
+                $rules[$field->db_column_name()][$emailKey] = new EmailEncrypted;
+            }
+
+            if ($field->format === 'DATE' && $field->field_encrypted) {
+                $dateKey = array_search('date', $rules[$field->db_column_name()]);
+                $rules[$field->db_column_name()][$dateKey] = new DateEncrypted;
+            }
+
+            if ($field->format === 'URL' && $field->field_encrypted) {
+                $urlKey = array_search('url', $rules[$field->db_column_name()]);
+                $rules[$field->db_column_name()][$urlKey] = new UrlEncrypted;
+            }
+
+            if ($field->format === 'IP' && $field->field_encrypted) {
+                $ipKey = array_search('ip', $rules[$field->db_column_name()]);
+                $rules[$field->db_column_name()][$ipKey] = new IpEncrypted;
+            }
+
+            if ($field->format === 'IPV4' && $field->field_encrypted) {
+                $ipKey = array_search('ipv4', $rules[$field->db_column_name()]);
+                $rules[$field->db_column_name()][$ipKey] = new IPv4Encrypted;
+            }
+
+            if ($field->format === 'IPV6' && $field->field_encrypted) {
+                $ipKey = array_search('ipv6', $rules[$field->db_column_name()]);
+                $rules[$field->db_column_name()][$ipKey] = new IPv6Encrypted;
+            }
+
+            // hm, the format on these is just the regex string, so gonna have to figure out how to filter to get it...
+            if ($field->format === 'MAC' && $field->field_encrypted) {
+                $macKey = array_search('mac', $rules[$field->db_column_name()]);
+                $rules[$field->db_column_name()][$macKey] = new MacEncrypted;
+            }
+
 
             // add not_array to rules for all fields but checkboxes
             if ($field->element != 'checkbox') {
