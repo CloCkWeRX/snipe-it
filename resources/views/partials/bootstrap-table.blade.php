@@ -1271,7 +1271,7 @@
                 window.location.href = '{{ (request()->input('admins') == "true") ? route('users.index') : route('users.index', ['admins' => 'true']) }}';
             },
             attributes: {
-                title: 'Show only admins',
+                title: '{{ trans('general.show_admins') }}',
 
             }
         },
