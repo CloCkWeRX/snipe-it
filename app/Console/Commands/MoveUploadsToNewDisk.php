@@ -102,7 +102,6 @@ class MoveUploadsToNewDisk extends Command
         $private_uploads['users'] = glob('storage/private_uploads/users' . "/*.*");
         $private_uploads['backups'] = glob('storage/private_uploads/backups' . "/*.*");
 
-
         foreach ($private_uploads as $private_type => $private_upload) {
             {
                 $this->info('- There are ' . count($private_upload) . ' PRIVATE ' . $private_type . ' files.');
