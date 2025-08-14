@@ -839,7 +839,7 @@ class UsersController extends Controller
         $ldap_results = json_decode($ldap_results_json, true);
 
         if (!$ldap_results) {
-            return response()->json(Helper::formatStandardApiResponse('error', null,trans('general.no_results')), 200);
+            return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.no_results')), 200);
         }
 
         // Direct user to appropriate status page.
@@ -848,6 +848,5 @@ class UsersController extends Controller
         }
 
         return response()->json(Helper::formatStandardApiResponse('success', null, $ldap_results['summary']), 200);
-
     }
 }

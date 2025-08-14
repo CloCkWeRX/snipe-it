@@ -14,11 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-
 class UploadedFilesController extends Controller
 {
-
-
     /**
      * List files for an object
      *
@@ -28,7 +25,7 @@ class UploadedFilesController extends Controller
      * @since  [v8.1.17]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
-    public function index(Request $request, $object_type, $id) : JsonResponse | array
+    public function index(Request $request, $object_type, $id): JsonResponse | array
     {
 
         // Check the permissions to make sure the user can view the object
@@ -67,7 +64,6 @@ class UploadedFilesController extends Controller
         // We could use the normal Actionlogs text scope, but it's a very heavy query since it's searching across all relations
         // and we generally won't need that here
         if ($request->filled('search')) {
-
             $uploads->where(
                 function ($query) use ($request) {
                     $query->where('filename', 'LIKE', '%' . $request->input('search') . '%')
@@ -92,7 +88,7 @@ class UploadedFilesController extends Controller
      * @since  [v8.1.17]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
-    public function store(UploadFileRequest $request, $object_type, $id) : JsonResponse
+    public function store(UploadFileRequest $request, $object_type, $id): JsonResponse
     {
 
         // Check the permissions to make sure the user can view the object
@@ -112,7 +108,7 @@ class UploadedFilesController extends Controller
         if ($request->hasFile('file')) {
             // Loop over the attached files and add them to the object
             foreach ($request->file('file') as $file) {
-                $file_name = $request->handleFile(self::$map_storage_path[$object_type], self::$map_file_prefix[$object_type].'-'.$object->id, $file);
+                $file_name = $request->handleFile(self::$map_storage_path[$object_type], self::$map_file_prefix[$object_type] . '-' . $object->id, $file);
                 $files[] = $file_name;
                 $object->logUpload($file_name, $request->get('notes'));
             }
@@ -122,7 +118,7 @@ class UploadedFilesController extends Controller
                 ->where('item_id', '=', $id)->whereIn('filename', $files)
                 ->get();
 
-            return response()->json(Helper::formatStandardApiResponse('success', (new UploadedFilesTransformer())->transformFiles($files, count($files)), trans_choice('general.file_upload_status.upload.success',  count($files))));
+            return response()->json(Helper::formatStandardApiResponse('success', (new UploadedFilesTransformer())->transformFiles($files, count($files)), trans_choice('general.file_upload_status.upload.success', count($files))));
         }
 
         // No files were submitted
@@ -141,7 +137,7 @@ class UploadedFilesController extends Controller
      * @since  [v8.1.17]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
-    public function show($object_type, $id, $file_id) : JsonResponse | StreamedResponse | Storage | StorageHelper | BinaryFileResponse
+    public function show($object_type, $id, $file_id): JsonResponse | StreamedResponse | Storage | StorageHelper | BinaryFileResponse
     {
         // Check the permissions to make sure the user can view the object
         $object = self::$map_object_type[$object_type]::find($id);
@@ -153,13 +149,14 @@ class UploadedFilesController extends Controller
 
 
         // Check that the file being requested exists for the object
-        if (! $log = Actionlog::whereNotNull('filename')->where('item_type', self::$map_object_type[$object_type])->where('item_id', $object->id)->find($file_id)
+        if (
+            ! $log = Actionlog::whereNotNull('filename')->where('item_type', self::$map_object_type[$object_type])->where('item_id', $object->id)->find($file_id)
         ) {
             return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.file_upload_status.invalid_id')), 200);
         }
 
 
-        if (! Storage::exists(self::$map_storage_path[$object_type].'/'.$log->filename)) {
+        if (! Storage::exists(self::$map_storage_path[$object_type] . '/' . $log->filename)) {
             return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.file_upload_status.file_not_found'), 200));
         }
 
@@ -167,11 +164,10 @@ class UploadedFilesController extends Controller
             $headers = [
                 'Content-Disposition' => 'inline',
             ];
-            return Storage::download(self::$map_storage_path[$object_type].'/'.$log->filename, $log->filename, $headers);
+            return Storage::download(self::$map_storage_path[$object_type] . '/' . $log->filename, $log->filename, $headers);
         }
 
-        return StorageHelper::downloader(self::$map_storage_path[$object_type].'/'.$log->filename);
-
+        return StorageHelper::downloader(self::$map_storage_path[$object_type] . '/' . $log->filename);
     }
 
     /**
@@ -184,7 +180,7 @@ class UploadedFilesController extends Controller
      * @since  [v8.1.17]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
-    public function destroy($object_type, $id, $file_id) : JsonResponse
+    public function destroy($object_type, $id, $file_id): JsonResponse
     {
 
         // Check the permissions to make sure the user can view the object
@@ -202,19 +198,16 @@ class UploadedFilesController extends Controller
 
         if ($log) {
             // Check the file actually exists, and delete it
-            if (Storage::exists(self::$map_storage_path[$object_type].'/'.$log->filename)) {
-                Storage::delete(self::$map_storage_path[$object_type].'/'.$log->filename);
+            if (Storage::exists(self::$map_storage_path[$object_type] . '/' . $log->filename)) {
+                Storage::delete(self::$map_storage_path[$object_type] . '/' . $log->filename);
             }
             // Delete the record of the file
             if ($log->delete()) {
                 return response()->json(Helper::formatStandardApiResponse('success', null, trans_choice('general.file_upload_status.delete.success', 1)), 200);
             }
-
-
         }
 
         // The file doesn't seem to really exist, so report an error
         return response()->json(Helper::formatStandardApiResponse('error', null, trans_choice('general.file_upload_status.delete.error', 1)), 500);
-
     }
 }

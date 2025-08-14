@@ -33,7 +33,7 @@ class MaintenancesController extends Controller
         $this->authorize('view', Asset::class);
 
         $maintenances = Maintenance::select('maintenances.*')
-            ->with('asset', 'asset.model', 'asset.location', 'asset.defaultLoc', 'supplier', 'asset.company',  'asset.assetstatus', 'adminuser');
+            ->with('asset', 'asset.model', 'asset.location', 'asset.defaultLoc', 'supplier', 'asset.company', 'asset.assetstatus', 'adminuser');
 
         if ($request->filled('search')) {
             $maintenances = $maintenances->TextSearch($request->input('search'));
@@ -123,7 +123,7 @@ class MaintenancesController extends Controller
      * @version v1.0
      * @since [v1.8]
      */
-    public function store(ImageUploadRequest $request) : JsonResponse | array
+    public function store(ImageUploadRequest $request): JsonResponse | array
     {
         $this->authorize('update', Asset::class);
 
@@ -184,7 +184,7 @@ class MaintenancesController extends Controller
      * @version v1.0
      * @since [v4.0]
      */
-    public function destroy($maintenanceId) : JsonResponse | array
+    public function destroy($maintenanceId): JsonResponse | array
     {
         $this->authorize('update', Asset::class);
         // Check if the asset maintenance exists
@@ -204,7 +204,7 @@ class MaintenancesController extends Controller
      * @version v1.0
      * @since [v4.0]
      */
-    public function show($maintenanceId) : JsonResponse | array
+    public function show($maintenanceId): JsonResponse | array
     {
         $this->authorize('view', Asset::class);
         $maintenance = Maintenance::findOrFail($maintenanceId);
