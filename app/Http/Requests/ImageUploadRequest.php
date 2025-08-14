@@ -83,7 +83,6 @@ class ImageUploadRequest extends Request
             if ($type == 'user') {
                 $path = 'avatars';
             }
-
         }
 
 
@@ -100,39 +99,39 @@ class ImageUploadRequest extends Request
         if (isset($image)) {
                 $ext = $image->guessExtension();
                 $file_name = $type . '-' . $form_fieldname . ($item->id ?? '-' . $item->id) . '-' . str_random(10) . '.' . $ext;
-                
-                if (($image->getMimeType() == 'image/vnd.microsoft.icon') || ($image->getMimeType() == 'image/x-icon') || ($image->getMimeType() == 'image/avif') || ($image->getMimeType() == 'image/webp')) {
-                    // If the file is an icon, webp or avif, we need to just move it since gd doesn't support resizing
-                    // icons or avif, and webp support and needs to be compiled into gd for resizing to be available
-                    Storage::disk('public')->put($path . '/' . $file_name, file_get_contents($image));
-                } elseif ($image->getMimeType() == 'image/svg+xml') {
-                    // If the file is an SVG, we need to clean it and NOT encode it
-                    $sanitizer = new Sanitizer();
-                    $dirtySVG = file_get_contents($image->getRealPath());
-                    $cleanSVG = $sanitizer->sanitize($dirtySVG);
 
-                    try {
-                        Storage::disk('public')->put($path . '/' . $file_name, $cleanSVG);
-                    } catch (\Exception $e) {
-                        Log::debug($e);
-                    }
-                } else {
-                    try {
-                        $upload = Image::make($image->getRealPath())->setFileInfoFromPath($image->getRealPath())->resize(null, $w, function ($constraint) {
-                            $constraint->aspectRatio();
-                            $constraint->upsize();
-                        })->orientate();
-                    } catch (NotReadableException $e) {
-                        Log::debug($e);
-                        $validator = Validator::make([], []);
-                        $validator->errors()->add($form_fieldname, trans('general.unaccepted_image_type', ['mimetype' => $image->getClientMimeType()]));
+            if (($image->getMimeType() == 'image/vnd.microsoft.icon') || ($image->getMimeType() == 'image/x-icon') || ($image->getMimeType() == 'image/avif') || ($image->getMimeType() == 'image/webp')) {
+                // If the file is an icon, webp or avif, we need to just move it since gd doesn't support resizing
+                // icons or avif, and webp support and needs to be compiled into gd for resizing to be available
+                Storage::disk('public')->put($path . '/' . $file_name, file_get_contents($image));
+            } elseif ($image->getMimeType() == 'image/svg+xml') {
+                // If the file is an SVG, we need to clean it and NOT encode it
+                $sanitizer = new Sanitizer();
+                $dirtySVG = file_get_contents($image->getRealPath());
+                $cleanSVG = $sanitizer->sanitize($dirtySVG);
 
-                        throw new \Illuminate\Validation\ValidationException($validator);
-                    }
-
-                    // This requires a string instead of an object, so we use ($string)
-                    Storage::disk('public')->put($path . '/' . $file_name, (string) $upload->encode());
+                try {
+                    Storage::disk('public')->put($path . '/' . $file_name, $cleanSVG);
+                } catch (\Exception $e) {
+                    Log::debug($e);
                 }
+            } else {
+                try {
+                    $upload = Image::make($image->getRealPath())->setFileInfoFromPath($image->getRealPath())->resize(null, $w, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    })->orientate();
+                } catch (NotReadableException $e) {
+                    Log::debug($e);
+                    $validator = Validator::make([], []);
+                    $validator->errors()->add($form_fieldname, trans('general.unaccepted_image_type', ['mimetype' => $image->getClientMimeType()]));
+
+                    throw new \Illuminate\Validation\ValidationException($validator);
+                }
+
+                // This requires a string instead of an object, so we use ($string)
+                Storage::disk('public')->put($path . '/' . $file_name, (string) $upload->encode());
+            }
 
                 // Remove Current image if exists
                 $item = $this->deleteExistingImage($item, $path, $db_fieldname);

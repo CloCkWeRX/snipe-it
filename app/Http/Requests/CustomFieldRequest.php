@@ -34,7 +34,7 @@ class CustomFieldRequest extends FormRequest
                 {
                     $rules['name'] = 'required|unique:custom_fields';
                     break;
-                }
+            }
 
                 // Save all fields
             case 'PUT':
@@ -46,7 +46,7 @@ class CustomFieldRequest extends FormRequest
                 {
                     $rules['name'] = 'required';
                     break;
-                }
+            }
 
             default:
                 break;

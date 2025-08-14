@@ -6,7 +6,7 @@ use App\Http\Traits\ConvertsBase64ToFiles;
 use enshrined\svgSanitize\Sanitizer;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use \App\Helpers\Helper;
+use App\Helpers\Helper;
 
 class UploadFileRequest extends Request
 {
@@ -32,7 +32,7 @@ class UploadFileRequest extends Request
         $max_file_size = Helper::file_upload_max_size();
 
         return [
-            'file.*' => 'required|mimes:'.config('filesystems.allowed_upload_extensions_for_validator').'|max:'.$max_file_size,
+            'file.*' => 'required|mimes:' . config('filesystems.allowed_upload_extensions_for_validator') . '|max:' . $max_file_size,
         ];
     }
 
@@ -54,7 +54,7 @@ class UploadFileRequest extends Request
         }
 
         try {
-            Storage::put($dirname.$file_name, $uploaded_file);
+            Storage::put($dirname . $file_name, $uploaded_file);
         } catch (\Exception $e) {
             Log::debug($e);
         }
@@ -82,23 +82,17 @@ class UploadFileRequest extends Request
         $attributes = [];
 
         if (($this->file) && (is_array($this->file))) {
-
             for ($i = 0; $i < count($this->file); $i++) {
-
                 try {
-
                     if ($this->file[$i]) {
-                        $attributes['file.'.$i] = $this->file[$i]->getClientOriginalName();
+                        $attributes['file.' . $i] = $this->file[$i]->getClientOriginalName();
                     }
-
                 } catch (\Exception $e) {
-                    $attributes['file.'.$i] = 'Invalid file';
+                    $attributes['file.' . $i] = 'Invalid file';
                 }
-
             }
         }
 
         return $attributes;
-
     }
 }
