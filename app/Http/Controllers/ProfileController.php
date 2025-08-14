@@ -248,7 +248,7 @@ class ProfileController extends Controller
 
 
 
-    public function getStoredEula($filename) : Response | BinaryFileResponse | RedirectResponse
+    public function getStoredEula($filename): Response | BinaryFileResponse | RedirectResponse
     {
 
         $logentry = Actionlog::where('filename', $filename)->first();
@@ -259,14 +259,13 @@ class ProfileController extends Controller
         }
 
         if (config('filesystems.default') == 's3_private') {
-            return redirect()->away(Storage::disk('s3_private')->temporaryUrl('private_uploads/eula-pdfs/'.$filename, now()->addMinutes(5)));
+            return redirect()->away(Storage::disk('s3_private')->temporaryUrl('private_uploads/eula-pdfs/' . $filename, now()->addMinutes(5)));
         }
 
-        if (Storage::exists('private_uploads/eula-pdfs/'.$filename)) {
-            return response()->download(config('app.private_uploads').'/eula-pdfs/'.$filename);
+        if (Storage::exists('private_uploads/eula-pdfs/' . $filename)) {
+            return response()->download(config('app.private_uploads') . '/eula-pdfs/' . $filename);
         }
 
-        return redirect()->back()->with('error',  trans('general.file_does_not_exist'));
-
+        return redirect()->back()->with('error', trans('general.file_does_not_exist'));
     }
 }

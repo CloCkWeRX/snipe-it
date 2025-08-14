@@ -102,12 +102,11 @@ class LocationsController extends Controller
         if ($request->has('use_cloned_image')) {
             $cloned_model_img = Location::select('image')->find($request->input('clone_image_from_id'));
             if ($cloned_model_img) {
-                $new_image_name = 'clone-'.date('U').'-'.$cloned_model_img->image;
-                $new_image = 'locations/'.$new_image_name;
-                Storage::disk('public')->copy('locations/'.$cloned_model_img->image, $new_image);
+                $new_image_name = 'clone-' . date('U') . '-' . $cloned_model_img->image;
+                $new_image = 'locations/' . $new_image_name;
+                Storage::disk('public')->copy('locations/' . $cloned_model_img->image, $new_image);
                 $location->image = $new_image_name;
             }
-
         } else {
             $location = $request->handleImages($location);
         }

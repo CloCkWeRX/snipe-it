@@ -88,7 +88,7 @@ class ComponentsController extends Controller
 
         $component = $request->handleImages($component);
 
-        if($request->get('redirect_option') === 'back'){
+        if ($request->get('redirect_option') === 'back') {
             session()->put(['redirect_option' => 'index']);
         } else {
             session()->put(['redirect_option' => $request->get('redirect_option')]);

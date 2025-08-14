@@ -102,7 +102,7 @@ class LicensesController extends Controller
         $license->created_by           = auth()->id();
         $license->min_amt           = $request->input('min_amt');
 
-        if($request->get('redirect_option') === 'back'){
+        if ($request->get('redirect_option') === 'back') {
             session()->put(['redirect_option' => 'index']);
         } else {
             session()->put(['redirect_option' => $request->get('redirect_option')]);
@@ -307,12 +307,14 @@ class LicensesController extends Controller
         $response = new StreamedResponse(function () {
             // Open output stream
             $handle = fopen('php://output', 'w');
-            $licenses = License::with('company',
-                          'manufacturer',
-                          'category',
-                          'supplier',
-                          'adminuser',
-                          'assignedusers');
+            $licenses = License::with(
+                'company',
+                'manufacturer',
+                'category',
+                'supplier',
+                'adminuser',
+                'assignedusers'
+            );
             if (request()->filled('category_id')) {
                 $licenses = $licenses->where('category_id', request()->input('category_id'));
             }

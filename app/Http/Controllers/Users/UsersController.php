@@ -129,7 +129,7 @@ class UsersController extends Controller
         // we have to invoke the form request here to handle image uploads
         app(ImageUploadRequest::class)->handleImages($user, 600, 'avatar', 'avatars', 'avatar');
 
-        if($request->get('redirect_option') === 'back'){
+        if ($request->get('redirect_option') === 'back') {
             session()->put(['redirect_option' => 'index']);
         } else {
             session()->put(['redirect_option' => $request->get('redirect_option')]);
@@ -276,7 +276,6 @@ class UsersController extends Controller
 
         // check for permissions related fields and only set them if the user has permission to edit them
         if (auth()->user()->can('canEditAuthFields', $user) && auth()->user()->can('editableOnDemo')) {
-
             $user->username = trim($request->input('username'));
             $user->email = trim($request->input('email'));
             $user->activated = $request->input('activated', $request->user()->is($user) ? 1 : 0);

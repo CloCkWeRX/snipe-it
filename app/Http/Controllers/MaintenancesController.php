@@ -48,11 +48,11 @@ class MaintenancesController extends Controller
             // We have to set this so that the correct property is set in the select2 ajax dropdown
             $asset->asset_id = $asset->id;
         }
-        
+
         return view('maintenances/edit')
                    ->with('maintenanceType', Maintenance::getImprovementOptions())
                    ->with('asset', $asset)
-                   ->with('item', new Maintenance);
+                   ->with('item', new Maintenance());
     }
 
     /**
@@ -63,7 +63,7 @@ class MaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('update', Asset::class);
 
@@ -71,7 +71,6 @@ class MaintenancesController extends Controller
 
         // Loop through the selected assets
         foreach ($assets as $asset) {
-
             $maintenance = new Maintenance();
             $maintenance->supplier_id = $request->input('supplier_id');
             $maintenance->is_warranty = $request->input('is_warranty');
@@ -86,7 +85,8 @@ class MaintenancesController extends Controller
             $maintenance->completion_date = $request->input('completion_date');
             $maintenance->created_by = auth()->id();
 
-            if (($maintenance->completion_date !== null)
+            if (
+                ($maintenance->completion_date !== null)
                 && ($maintenance->start_date !== '')
                 && ($maintenance->start_date !== '0000-00-00')
             ) {
@@ -115,7 +115,7 @@ class MaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function edit(Maintenance $maintenance) : View | RedirectResponse
+    public function edit(Maintenance $maintenance): View | RedirectResponse
     {
         $this->authorize('update', Asset::class);
         $this->authorize('update', $maintenance->asset);
@@ -137,7 +137,7 @@ class MaintenancesController extends Controller
      * @version v1.0
      * @since [v1.8]
      */
-    public function update(ImageUploadRequest $request, Maintenance $maintenance) : View | RedirectResponse
+    public function update(ImageUploadRequest $request, Maintenance $maintenance): View | RedirectResponse
     {
         $this->authorize('update', Asset::class);
         $this->authorize('update', $maintenance->asset);
@@ -188,7 +188,7 @@ class MaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function destroy(Maintenance $maintenance) : RedirectResponse
+    public function destroy(Maintenance $maintenance): RedirectResponse
     {
         $this->authorize('update', Asset::class);
         $this->authorize('update', $maintenance->asset);
@@ -207,7 +207,7 @@ class MaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function show(Maintenance $maintenance) : View | RedirectResponse
+    public function show(Maintenance $maintenance): View | RedirectResponse
     {
         return view('maintenances.view')->with('maintenance', $maintenance);
     }

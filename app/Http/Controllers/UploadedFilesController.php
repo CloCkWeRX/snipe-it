@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class UploadedFilesController extends Controller
 {
-
-
     /**
      * Accepts a POST to upload a file to the server.
      *
@@ -32,7 +30,7 @@ class UploadedFilesController extends Controller
      * @since  [v8.2.2]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
-    public function store(UploadFileRequest $request, $object_type, $id) : RedirectResponse
+    public function store(UploadFileRequest $request, $object_type, $id): RedirectResponse
     {
 
         // Check the permissions to make sure the user can view the object
@@ -40,7 +38,7 @@ class UploadedFilesController extends Controller
         $this->authorize('update', $object);
 
         if (!$object) {
-            return redirect()->back()->withFragment('files')->with('error',trans('general.file_upload_status.invalid_object'));
+            return redirect()->back()->withFragment('files')->with('error', trans('general.file_upload_status.invalid_object'));
         }
 
         // If the file storage directory doesn't exist, create it
@@ -52,7 +50,7 @@ class UploadedFilesController extends Controller
         if ($request->hasFile('file')) {
             // Loop over the attached files and add them to the object
             foreach ($request->file('file') as $file) {
-                $file_name = $request->handleFile(self::$map_storage_path[$object_type], self::$map_file_prefix[$object_type].'-'.$object->id, $file);
+                $file_name = $request->handleFile(self::$map_storage_path[$object_type], self::$map_file_prefix[$object_type] . '-' . $object->id, $file);
                 $files[] = $file_name;
                 $object->logUpload($file_name, $request->get('notes'));
             }
@@ -62,7 +60,7 @@ class UploadedFilesController extends Controller
                 ->where('item_id', '=', $id)->whereIn('filename', $files)
                 ->get();
 
-            return redirect()->back()->withFragment('files')->with('success', trans_choice('general.file_upload_status.upload.success',  count($files)));
+            return redirect()->back()->withFragment('files')->with('success', trans_choice('general.file_upload_status.upload.success', count($files)));
         }
 
         // No files were submitted
@@ -82,26 +80,24 @@ class UploadedFilesController extends Controller
      * @since  [v8.2.2]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
-    public function show($object_type, $id, $file_id) : RedirectResponse | StreamedResponse | Storage | StorageHelper | BinaryFileResponse
+    public function show($object_type, $id, $file_id): RedirectResponse | StreamedResponse | Storage | StorageHelper | BinaryFileResponse
     {
         // Check the permissions to make sure the user can view the object
         $object = self::$map_object_type[$object_type]::find($id);
         $this->authorize('view', $object);
 
         if (!$object) {
-            return redirect()->back()->withFragment('files')->with('error',trans('general.file_upload_status.invalid_object'));
+            return redirect()->back()->withFragment('files')->with('error', trans('general.file_upload_status.invalid_object'));
         }
 
 
         // Check that the file being requested exists for the object
-        if (! $log = Actionlog::whereNotNull('filename')->where('item_type', self::$map_object_type[$object_type])->where('item_id', $object->id)->find($file_id))
-        {
+        if (! $log = Actionlog::whereNotNull('filename')->where('item_type', self::$map_object_type[$object_type])->where('item_id', $object->id)->find($file_id)) {
             return redirect()->back()->withFragment('files')->with('error', trans('general.file_upload_status.invalid_id'));
         }
 
 
-        if (! Storage::exists(self::$map_storage_path[$object_type].'/'.$log->filename))
-        {
+        if (! Storage::exists(self::$map_storage_path[$object_type] . '/' . $log->filename)) {
             return redirect()->back()->withFragment('files')->with('error', trans('general.file_upload_status.file_not_found'));
         }
 
@@ -109,11 +105,10 @@ class UploadedFilesController extends Controller
             $headers = [
                 'Content-Disposition' => 'inline',
             ];
-            return Storage::download(self::$map_storage_path[$object_type].'/'.$log->filename, $log->filename, $headers);
+            return Storage::download(self::$map_storage_path[$object_type] . '/' . $log->filename, $log->filename, $headers);
         }
 
-        return StorageHelper::downloader(self::$map_storage_path[$object_type].'/'.$log->filename);
-
+        return StorageHelper::downloader(self::$map_storage_path[$object_type] . '/' . $log->filename);
     }
 
     /**
@@ -126,7 +121,7 @@ class UploadedFilesController extends Controller
      * @since  [v8.2.2]
      * @author [A. Gianotto <snipe@snipe.net>]
      */
-    public function destroy($object_type, $id, $file_id) : RedirectResponse
+    public function destroy($object_type, $id, $file_id): RedirectResponse
     {
 
         // Check the permissions to make sure the user can view the object
@@ -134,7 +129,7 @@ class UploadedFilesController extends Controller
         $this->authorize('update', self::$map_object_type[$object_type]);
 
         if (!$object) {
-            return redirect()->back()->withFragment('files')->with('error',trans('general.file_upload_status.invalid_object'));
+            return redirect()->back()->withFragment('files')->with('error', trans('general.file_upload_status.invalid_object'));
         }
 
 
@@ -144,19 +139,16 @@ class UploadedFilesController extends Controller
 
         if ($log) {
             // Check the file actually exists, and delete it
-            if (Storage::exists(self::$map_storage_path[$object_type].'/'.$log->filename)) {
-                Storage::delete(self::$map_storage_path[$object_type].'/'.$log->filename);
+            if (Storage::exists(self::$map_storage_path[$object_type] . '/' . $log->filename)) {
+                Storage::delete(self::$map_storage_path[$object_type] . '/' . $log->filename);
             }
             // Delete the record of the file
             if ($log->delete()) {
                 return redirect()->back()->withFragment('files')->with('success', trans_choice('general.file_upload_status.delete.success', 1));
             }
-
         }
 
         // The file doesn't seem to really exist, so report an error
         return redirect()->back()->withFragment('files')->with('success', trans_choice('general.file_upload_status.delete.error', 1));
-
     }
-
 }

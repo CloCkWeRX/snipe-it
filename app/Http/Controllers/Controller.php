@@ -70,7 +70,7 @@ abstract class Controller extends BaseController
         'users' => 'private_uploads/users/',
     ];
 
-    static $map_file_prefix= [
+    static $map_file_prefix = [
         'accessories' => 'accessory',
         'maintenances' => 'maintenance',
         'assets' => 'asset',
