@@ -9,7 +9,7 @@ class MaintenanceTest extends TestCase
 {
     public function testZerosOutWarrantyIfBlank()
     {
-        $c = new Maintenance;
+        $c = new Maintenance();
         $c->is_warranty = '';
         $this->assertTrue($c->is_warranty === 0);
         $c->is_warranty = '4';
@@ -29,7 +29,7 @@ class MaintenanceTest extends TestCase
 
     public function testNullsOutNotesIfBlank()
     {
-        $c = new Maintenance;
+        $c = new Maintenance();
         $c->notes = '';
         $this->assertTrue($c->notes === null);
         $c->notes = 'This is a long note';
@@ -38,7 +38,7 @@ class MaintenanceTest extends TestCase
 
     public function testNullsOutCompletionDateIfBlankOrInvalid()
     {
-        $c = new Maintenance;
+        $c = new Maintenance();
         $c->completion_date = '';
         $this->assertTrue($c->completion_date === null);
         $c->completion_date = '0000-00-00';

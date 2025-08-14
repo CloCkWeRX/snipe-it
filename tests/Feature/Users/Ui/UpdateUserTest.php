@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UpdateUserTest extends TestCase
 {
-
     public function testRequiresPermission()
     {
         $this->actingAs(User::factory()->create())
@@ -113,7 +112,7 @@ class UpdateUserTest extends TestCase
         $admin = User::factory()->editUsers()->create(['activated' => true]);
         $hashed_original = Hash::make('!!094850394680980380kfejlskjfl');
         $hashed_new = Hash::make('!ABCDEFGIJKL123!!!');
-        $user = User::factory()->admin()->create(['username' => 'brandnewuser', 'email'=> 'brandnewemail@example.org', 'password' => $hashed_original, 'activated' => true]);
+        $user = User::factory()->admin()->create(['username' => 'brandnewuser', 'email' => 'brandnewemail@example.org', 'password' => $hashed_original, 'activated' => true]);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -153,7 +152,7 @@ class UpdateUserTest extends TestCase
     {
         $admin = User::factory()->admin()->create(['activated' => true]);
         $hashed_original = Hash::make('my-awesome-password');
-        $user = User::factory()->superuser()->create(['username' => 'brandnewuser', 'email'=> 'brandnewemail@example.org', 'password' => $hashed_original, 'activated' => true]);
+        $user = User::factory()->superuser()->create(['username' => 'brandnewuser', 'email' => 'brandnewemail@example.org', 'password' => $hashed_original, 'activated' => true]);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,

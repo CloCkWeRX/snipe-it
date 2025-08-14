@@ -42,7 +42,8 @@ class BrandingSettingsTest extends TestCase
         $setting = Setting::factory()->create(['logo' => null]);
 
         $response = $this->actingAs(User::factory()->superuser()->create())
-            ->post(route('settings.branding.save',
+            ->post(route(
+                'settings.branding.save',
                 ['logo' => UploadedFile::fake()->image('test_logo.png')]
             ))
             ->assertValid('logo')
@@ -51,7 +52,7 @@ class BrandingSettingsTest extends TestCase
             ->assertSessionHasNoErrors();
 
         // Assert files was stored...
-        Storage::disk('public')->assertExists( $setting->logo);
+        Storage::disk('public')->assertExists($setting->logo);
 
         $this->followRedirects($response)->assertSee('alert-success');
 
@@ -65,7 +66,7 @@ class BrandingSettingsTest extends TestCase
 
         UploadedFile::fake()->image('new_test_logo.png')->storeAs('uploads', 'new_test_logo.png', 'public');
         $setting = Setting::factory()->create(['logo' => 'new_test_logo.png']);
-        Storage::disk('public')->assertExists('uploads/'.$setting->logo);
+        Storage::disk('public')->assertExists('uploads/' . $setting->logo);
 
         $this->assertNotNull($setting->logo);
 
@@ -111,7 +112,7 @@ class BrandingSettingsTest extends TestCase
         Storage::fake('public');
         UploadedFile::fake()->image('new_test_logo.png')->storeAs('uploads', 'new_test_logo.png', 'public');
         $setting = Setting::factory()->create(['email_logo' => 'new_test_logo.png']);
-        Storage::disk('public')->assertExists('uploads/'.$setting->email_logo);
+        Storage::disk('public')->assertExists('uploads/' . $setting->email_logo);
 
         $this->assertNotNull($setting->email_logo);
 
@@ -168,7 +169,7 @@ class BrandingSettingsTest extends TestCase
 
         UploadedFile::fake()->image('new_test_label_logo.png')->storeAs('uploads', 'new_test_label_logo.png', 'public');
         $setting = Setting::factory()->create(['label_logo' => 'new_test_label_logo.png']);
-        Storage::disk('public')->assertExists('uploads/'.$setting->label_logo);
+        Storage::disk('public')->assertExists('uploads/' . $setting->label_logo);
 
         $this->assertNotNull($setting->label_logo);
 

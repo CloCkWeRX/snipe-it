@@ -798,7 +798,7 @@ class StoreAssetTest extends TestCase
                 'asset_tag'                   => '1234',
             ])
             ->assertStatusMessageIs('error')
-            ->assertJsonPath('messages.'.$alphaField->db_column_name(), [trans('validation.alpha', ['attribute' => $cleaned_name])])
+            ->assertJsonPath('messages.' . $alphaField->db_column_name(), [trans('validation.alpha', ['attribute' => $cleaned_name])])
             ->assertOk()
             ->json();
     }

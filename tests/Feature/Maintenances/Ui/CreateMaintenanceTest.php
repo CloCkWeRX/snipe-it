@@ -54,7 +54,7 @@ class CreateMaintenanceTest extends TestCase
         $maintenance = Maintenance::where('name', 'Test Maintenance')->first();
 
         // Assert file was stored...
-        Storage::disk('public')->assertExists(app('maintenances_path').$maintenance->image);
+        Storage::disk('public')->assertExists(app('maintenances_path') . $maintenance->image);
 
 
         $this->assertDatabaseHas('maintenances', [

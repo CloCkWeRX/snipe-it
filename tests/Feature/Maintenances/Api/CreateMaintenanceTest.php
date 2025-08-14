@@ -14,8 +14,6 @@ use Tests\TestCase;
 
 class CreateMaintenanceTest extends TestCase
 {
-
-
     public function testRequiresPermissionToCreateMaintenance()
     {
         $this->actingAsForApi(User::factory()->create())
@@ -51,7 +49,7 @@ class CreateMaintenanceTest extends TestCase
         $maintenance = Maintenance::where('name', 'Test Maintenance')->first();
 
         // Assert file was stored...
-        Storage::disk('public')->assertExists(app('maintenances_path').$maintenance->image);
+        Storage::disk('public')->assertExists(app('maintenances_path') . $maintenance->image);
 
         $this->assertDatabaseHas('maintenances', [
             'asset_id' => $asset->id,
@@ -68,7 +66,4 @@ class CreateMaintenanceTest extends TestCase
 
         $this->assertHasTheseActionLogs($maintenance, ['create']);
     }
-
-
-
 }

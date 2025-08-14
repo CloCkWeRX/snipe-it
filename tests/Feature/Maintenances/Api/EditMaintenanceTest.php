@@ -29,7 +29,7 @@ class EditMaintenanceTest extends TestCase
 
         $response = $this->actingAs($actor)
             ->followingRedirects()
-            ->patch(route('maintenances.update',  $maintenance), [
+            ->patch(route('maintenances.update', $maintenance), [
                 'name' => 'Test Maintenance',
                 'supplier_id' => $supplier->id,
                 'asset_maintenance_type' => 'Maintenance',
@@ -45,7 +45,7 @@ class EditMaintenanceTest extends TestCase
 
         $maintenance->refresh();
         // Assert file was stored...
-        Storage::disk('public')->assertExists(app('maintenances_path').$maintenance->image);
+        Storage::disk('public')->assertExists(app('maintenances_path') . $maintenance->image);
 
 
         $this->assertDatabaseHas('maintenances', [

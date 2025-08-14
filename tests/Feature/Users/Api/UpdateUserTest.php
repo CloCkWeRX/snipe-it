@@ -221,7 +221,7 @@ class UpdateUserTest extends TestCase
         $hashed_original = Hash::make('!!094850394680980380kfejlskjfl');
         $hashed_new = Hash::make('!ABCDEFGIJKL123!!!');
         $admin = User::factory()->editUsers()->create();
-        $user = User::factory()->admin()->create(['username' => 'brandnewuser', 'email'=> 'brandnewemail@example.org', 'password' => $hashed_original, 'activated' => 1]);
+        $user = User::factory()->admin()->create(['username' => 'brandnewuser', 'email' => 'brandnewemail@example.org', 'password' => $hashed_original, 'activated' => 1]);
 
 
         $this->assertDatabaseHas('users', [
@@ -241,7 +241,6 @@ class UpdateUserTest extends TestCase
             ]);
 
         $this->assertEquals(0, $user->refresh()->activated);
-
     }
     public function testUsersScopedToCompanyDuringUpdateWhenMultipleFullCompanySupportEnabled()
     {
