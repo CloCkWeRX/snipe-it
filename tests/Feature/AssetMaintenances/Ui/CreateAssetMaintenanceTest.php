@@ -3,8 +3,11 @@
 namespace Tests\Feature\AssetMaintenances\Ui;
 
 use App\Models\Asset;
+use App\Models\AssetMaintenance;
 use App\Models\Supplier;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CreateAssetMaintenanceTest extends TestCase
@@ -19,6 +22,7 @@ class CreateAssetMaintenanceTest extends TestCase
 
     public function testCanCreateAssetMaintenance()
     {
+        Storage::fake('public');
         $actor = User::factory()->superuser()->create();
 
         $asset = Asset::factory()->create();
@@ -35,9 +39,17 @@ class CreateAssetMaintenanceTest extends TestCase
                 'completion_date' => '2021-01-10',
                 'is_warranty' => '1',
                 'cost' => '100.00',
+                'image' => UploadedFile::fake()->image('test_image.png'),
                 'notes' => 'A note',
             ])
             ->assertOk();
+
+        // Since we rename the file in the ImageUploadRequest, we have to fetch the record from the database
+        $assetMaintenance = AssetMaintenance::where('title', 'Test Maintenance')->first();
+
+        // Assert file was stored...
+        Storage::disk('public')->assertExists(app('asset_maintenances_path').$assetMaintenance->image);
+
 
         $this->assertDatabaseHas('asset_maintenances', [
             'asset_id' => $asset->id,
@@ -50,6 +62,7 @@ class CreateAssetMaintenanceTest extends TestCase
             'asset_maintenance_time' => '9',
             'notes' => 'A note',
             'cost' => '100.00',
+            'image' => $assetMaintenance->image,
             'created_by' => $actor->id,
         ]);
     }

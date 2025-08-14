@@ -1,47 +1,53 @@
 <?php
 
-namespace Tests\Feature\AssetMaintenances\Ui;
+namespace Tests\Feature\AssetMaintenances\Api;
 
 use App\Models\Asset;
 use App\Models\AssetMaintenance;
+use App\Models\Category;
 use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class EditAssetMaintenanceTest extends TestCase
+class CreateAssetMaintenanceTest extends TestCase
 {
-    public function testPageRenders()
-    {
-        $this->actingAs(User::factory()->superuser()->create())
-            ->get(route('maintenances.edit', AssetMaintenance::factory()->create()->id))
-            ->assertOk();
-    }
 
-    public function testCanUpdateAssetMaintenance()
+
+    public function testRequiresPermissionToCreateAssetMaintenance()
     {
+        $this->actingAsForApi(User::factory()->create())
+            ->postJson(route('api.maintenances.store'))
+            ->assertForbidden();
+    }
+    public function testCanCreateAssetMaintenance()
+    {
+
+        Storage::fake('public');
         $actor = User::factory()->superuser()->create();
+
         $asset = Asset::factory()->create();
-        $assetMaintenance = AssetMaintenance::factory()->create(['asset_id' => $asset]);
         $supplier = Supplier::factory()->create();
 
-        $this->actingAs($actor)
-            ->followingRedirects()
-            ->put(route('maintenances.update', $assetMaintenance), [
+        $response = $this->actingAsForApi($actor)
+            ->postJson(route('api.maintenances.store'), [
                 'title' => 'Test Maintenance',
                 'asset_id' => $asset->id,
                 'supplier_id' => $supplier->id,
                 'asset_maintenance_type' => 'Maintenance',
                 'start_date' => '2021-01-01',
                 'completion_date' => '2021-01-10',
-                'is_warranty' => 1,
+                'is_warranty' => '1',
+                'cost' => '100.00',
                 'image' => UploadedFile::fake()->image('test_image.png'),
-                'cost' => '100.99',
                 'notes' => 'A note',
             ])
-            ->assertOk();
+            ->assertOk()
+            ->assertStatus(200);
 
+        \Log::error($response->json());
         // Since we rename the file in the ImageUploadRequest, we have to fetch the record from the database
         $assetMaintenance = AssetMaintenance::where('title', 'Test Maintenance')->first();
 
@@ -56,9 +62,12 @@ class EditAssetMaintenanceTest extends TestCase
             'is_warranty' => 1,
             'start_date' => '2021-01-01',
             'completion_date' => '2021-01-10',
-            'asset_maintenance_time' => '9',
             'notes' => 'A note',
-            'cost' => '100.99',
+            'image' => $assetMaintenance->image,
+            'created_by' => $actor->id,
         ]);
     }
+
+
+
 }

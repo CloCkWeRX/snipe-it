@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImageUploadRequest;
 use App\Models\Asset;
 use App\Models\AssetMaintenance;
 use App\Models\Company;
@@ -68,7 +69,7 @@ class AssetMaintenancesController extends Controller
     * @version v1.0
     * @since [v1.8]
     */
-    public function store(Request $request): RedirectResponse
+    public function store(ImageUploadRequest $request) : RedirectResponse
     {
         $this->authorize('update', Asset::class);
 
@@ -99,6 +100,8 @@ class AssetMaintenancesController extends Controller
                 $completionDate = Carbon::parse($assetMaintenance->completion_date);
                 $assetMaintenance->asset_maintenance_time = (int) $completionDate->diffInDays($startDate, true);
             }
+
+            $assetMaintenance = $request->handleImages($assetMaintenance);
 
             // Was the asset maintenance created?
             if (!$assetMaintenance->save()) {
@@ -140,7 +143,7 @@ class AssetMaintenancesController extends Controller
      * @version v1.0
      * @since [v1.8]
      */
-    public function update(Request $request, AssetMaintenance $maintenance): View | RedirectResponse
+    public function update(ImageUploadRequest $request, AssetMaintenance $maintenance) : View | RedirectResponse
     {
         $this->authorize('update', Asset::class);
         $this->authorize('update', $maintenance->asset);
@@ -173,6 +176,7 @@ class AssetMaintenancesController extends Controller
             $completionDate = Carbon::parse($maintenance->completion_date);
             $maintenance->asset_maintenance_time = (int) $completionDate->diffInDays($startDate, true);
         }
+        $maintenance = $request->handleImages($maintenance);
 
         if ($maintenance->save()) {
             return redirect()->route('maintenances.index')

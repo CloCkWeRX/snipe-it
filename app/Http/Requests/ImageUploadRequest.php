@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ImageUploadRequest extends Request
 {
@@ -70,10 +71,11 @@ class ImageUploadRequest extends Request
     public function handleImages($item, $w = 600, $form_fieldname = 'image', $path = null, $db_fieldname = 'image')
     {
 
-        $type = strtolower(class_basename(get_class($item)));
+        $type = Str::snake(class_basename(get_class($item)));
 
         if (is_null($path)) {
-            $path = str_plural($type);
+            \Log::debug('path is null');
+            $path = Str::of(str_plural($type))->snake();
 
             if ($type == 'assetmodel') {
                 $path = 'models';
@@ -82,6 +84,11 @@ class ImageUploadRequest extends Request
             if ($type == 'user') {
                 $path = 'avatars';
             }
+        }
+
+
+        if (!Storage::exists($path)) {
+            Storage::makeDirectory($path);
         }
 
         if ($this->offsetGet($form_fieldname) instanceof UploadedFile) {
@@ -93,8 +100,8 @@ class ImageUploadRequest extends Request
         if (isset($image)) {
             if (!config('app.lock_passwords')) {
                 $ext = $image->guessExtension();
-                $file_name = $type . '-' . $form_fieldname . '-' . $item->id . '-' . str_random(10) . '.' . $ext;
-
+                $file_name = $type . '-' . $form_fieldname . ($item->id ?? '-' . $item->id) . '-' . str_random(10) . '.' . $ext;
+                
                 if (($image->getMimeType() == 'image/vnd.microsoft.icon') || ($image->getMimeType() == 'image/x-icon') || ($image->getMimeType() == 'image/avif') || ($image->getMimeType() == 'image/webp')) {
                     // If the file is an icon, webp or avif, we need to just move it since gd doesn't support resizing
                     // icons or avif, and webp support and needs to be compiled into gd for resizing to be available
