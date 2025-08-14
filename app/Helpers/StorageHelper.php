@@ -28,7 +28,8 @@ class StorageHelper
         }
     }
 
-    public static function getMediaType($file_with_path) {
+    public static function getMediaType($file_with_path)
+    {
 
         // The file exists and is allowed to be displayed inline
         if (Storage::exists($file_with_path)) {

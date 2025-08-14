@@ -117,16 +117,14 @@ class Handler extends ExceptionHandler
                     default:
                         return response()->json(Helper::formatStandardApiResponse('error', null, $statusCode), $statusCode);
                 }
-
             }
 
             // This handles API validation exceptions that happen at the Form Request level, so they
             // never even get to the controller where we normally  nicely format JSON responses
             if ($e instanceof ValidationException) {
                 $response = $this->invalidJson($request, $e);
-                return response()->json(Helper::formatStandardApiResponse('error', null,  $e->errors()), 200);
+                return response()->json(Helper::formatStandardApiResponse('error', null, $e->errors()), 200);
             }
-
         }
 
 
@@ -136,7 +134,7 @@ class Handler extends ExceptionHandler
             $ids = method_exists($e, 'getIds') ? $e->getIds() : [];
 
             if (in_array('bulkedit', $ids, true)) {
-            $error_array = session()->get('bulk_asset_errors');
+                $error_array = session()->get('bulk_asset_errors');
                 return redirect()
                     ->route('hardware.bulkedit')
                     ->withErrors($error_array, 'bulk_asset_errors')
