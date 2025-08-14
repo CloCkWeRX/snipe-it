@@ -470,7 +470,6 @@
                                   </div>
                               </div>
 
-
                               
                               <!-- Groups -->
                               <div class="form-group{{ $errors->has('groups') ? ' has-error' : '' }}">
