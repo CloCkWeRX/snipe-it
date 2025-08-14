@@ -62,14 +62,14 @@ class Purge extends Command
             $assetcount = $assets->count();
             $this->info($assets->count() . ' assets purged.');
             $asset_assoc = 0;
-            $asset_maintenances = 0;
+            $maintenances = 0;
 
             foreach ($assets as $asset) {
                 $this->info('- Asset "' . $asset->present()->name() . '" deleted.');
                 $asset_assoc += $asset->assetlog()->count();
                 $asset->assetlog()->forceDelete();
-                $asset_maintenances += $asset->assetmaintenances()->count();
-                $asset->assetmaintenances()->forceDelete();
+                $maintenances += $asset->maintenances()->count();
+                $asset->maintenances()->forceDelete();
                 $asset->forceDelete();
             }
 
